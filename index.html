@@ -7,15 +7,43 @@
 <style>
 *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f0f3fa;font-family:Arial,'Malgun Gothic',sans-serif;color:#202942;padding:24px}.card{width:100%;max-width:620px;background:white;border-radius:28px;padding:48px 28px;text-align:center;box-shadow:0 20px 70px #26355a12}.label{font-size:12px;letter-spacing:3px;color:#6755db;font-weight:bold}h1{font-size:30px;letter-spacing:-1px;margin:18px 0 12px}.description{font-size:15px;color:#717b91;line-height:1.7}.sets{display:grid;gap:14px;margin:30px 0}.set{display:flex;align-items:center;gap:12px}.set-label{font-size:13px;font-weight:bold;color:#717b91;min-width:20px}.set .balls{margin:0;flex:1;flex-wrap:nowrap}.balls{display:flex;justify-content:center;gap:12px;margin:36px 0;flex-wrap:wrap}.ball{width:60px;height:60px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;color:white;font-size:24px;font-weight:bold;box-shadow:inset 0 -5px 0 #00000012}.empty{background:#e9edf5;color:#8c96ac}.yellow{background:#e5aa16}.blue{background:#448bd4}.red{background:#dc6470}.gray{background:#7a8495}.green{background:#52a773}button{font:inherit;border:0;border-radius:12px;cursor:pointer;padding:16px 24px;font-weight:bold}button:focus-visible{outline:3px solid #b3a8ff;outline-offset:4px}#generate{background:#6755db;color:white;width:100%;max-width:350px}#generate:hover{background:#5443c4}#copy{display:block;margin:14px auto 0;background:transparent;color:#6755db;padding:10px}#copy:disabled{color:#a1a8b7;cursor:default}.note{font-size:12px;color:#8790a1;margin:25px 0 0;line-height:1.8}#status{min-height:20px;color:#6755db;font-size:13px;margin:12px 0 0}@media(max-width:480px){.card{padding:36px 18px}h1{font-size:26px}.balls{gap:7px}.set{gap:5px}.set-label{min-width:14px}.balls{gap:5px}.ball{width:clamp(27px,8.2vw,42px);height:clamp(27px,8.2vw,42px);font-size:16px}}
 #bonus{display:block;margin:14px auto 0;background:#eeeafa;color:#6755db}#bonus[aria-pressed="true"]{background:#6755db;color:white}.with-bonus .ball{width:48px;height:48px;font-size:21px}.with-bonus .balls{gap:8px}.bonus-group{display:flex;flex-direction:column;align-items:center;gap:4px;border-left:1px solid #e4e7ef;padding-left:12px}.bonus-caption{font-size:10px;color:#717b91;white-space:nowrap}@media(max-width:480px){body{padding:12px}.card{padding-left:12px;padding-right:12px}.with-bonus .ball{width:clamp(23px,7vw,34px);height:clamp(23px,7vw,34px);font-size:14px}.with-bonus .balls{gap:4px}.bonus-group{padding-left:6px}.bonus-caption{font-size:9px}}
-body,.card,#bonus,#theme-toggle{transition:background-color .25s ease,color .25s ease,box-shadow .25s ease,border-color .25s ease}.card{position:relative}#theme-toggle{position:absolute;top:20px;right:20px;padding:8px 14px;font-size:13px;border-radius:999px;background:#f0f3fa;color:#202942;border:1px solid #e4e7ef}#theme-toggle:hover{background:#e4e9f5}[data-theme="dark"] body{background:#0f1420;color:#eef2ff}[data-theme="dark"] .card{background:#1a2234;box-shadow:0 20px 70px #00000066}[data-theme="dark"] .label,[data-theme="dark"] #copy,[data-theme="dark"] #status{color:#9d8df7}[data-theme="dark"] .description,[data-theme="dark"] .set-label,[data-theme="dark"] .bonus-caption{color:#9aa5bc}[data-theme="dark"] .bonus-group{border-left-color:#2d3852}[data-theme="dark"] #bonus{background:#282446;color:#b6a9ff}[data-theme="dark"] #bonus[aria-pressed="true"]{background:#6755db;color:white}[data-theme="dark"] #copy:disabled{color:#535d73}[data-theme="dark"] .note{color:#6b768e}[data-theme="dark"] #theme-toggle{background:#263047;color:#eef2ff;border-color:#364362}[data-theme="dark"] #theme-toggle:hover{background:#313e5b}@media(max-width:480px){#theme-toggle{position:static;margin:0 auto 14px;display:inline-flex;align-items:center;gap:6px}}
+body,.card,#bonus,#theme-toggle,.info-panel,.today-badge{transition:background-color .25s ease,color .25s ease,box-shadow .25s ease,border-color .25s ease}.card{position:relative}#theme-toggle{position:absolute;top:20px;right:20px;padding:8px 14px;font-size:13px;border-radius:999px;background:#f0f3fa;color:#202942;border:1px solid #e4e7ef}#theme-toggle:hover{background:#e4e9f5}
+.today-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:999px;background:#f4f2ff;color:#5443c4;font-size:13px;font-weight:bold}
+.info-panel{margin:22px 0 8px;padding:18px 16px;border-radius:18px;background:#f7f9fd;border:1px solid #e6ebf5;text-align:center}
+.info-header{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;color:#525d75;margin-bottom:12px}
+.info-round{font-weight:bold;color:#6755db;background:#eeeafa;padding:3px 10px;border-radius:999px}
+.info-date{font-weight:bold;color:#202942}
+.mini-balls{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
+.mini-ball{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:white;font-size:14px;font-weight:bold;box-shadow:inset 0 -3px 0 #00000015}
+.mini-plus{font-size:14px;font-weight:bold;color:#717b91;margin:0 2px}
+.info-prize{font-size:14px;color:#202942;padding-top:10px;border-top:1px dashed #dde3f0}
+.info-prize strong{color:#6755db;font-size:16px}
+[data-theme="dark"] body{background:#0f1420;color:#eef2ff}[data-theme="dark"] .card{background:#1a2234;box-shadow:0 20px 70px #00000066}[data-theme="dark"] .label,[data-theme="dark"] #copy,[data-theme="dark"] #status{color:#9d8df7}[data-theme="dark"] .description,[data-theme="dark"] .set-label,[data-theme="dark"] .bonus-caption{color:#9aa5bc}[data-theme="dark"] .bonus-group{border-left-color:#2d3852}[data-theme="dark"] #bonus{background:#282446;color:#b6a9ff}[data-theme="dark"] #bonus[aria-pressed="true"]{background:#6755db;color:white}[data-theme="dark"] #copy:disabled{color:#535d73}[data-theme="dark"] .note{color:#6b768e}[data-theme="dark"] #theme-toggle{background:#263047;color:#eef2ff;border-color:#364362}[data-theme="dark"] #theme-toggle:hover{background:#313e5b}
+[data-theme="dark"] .today-badge{background:#282446;color:#c4baff}
+[data-theme="dark"] .info-panel{background:#131929;border-color:#2a3550}
+[data-theme="dark"] .info-header{color:#9aa5bc}
+[data-theme="dark"] .info-round{background:#282446;color:#b6a9ff}
+[data-theme="dark"] .info-date,[data-theme="dark"] .info-prize{color:#eef2ff}
+[data-theme="dark"] .info-prize{border-top-color:#2a3550}
+[data-theme="dark"] .info-prize strong{color:#b6a9ff}
+@media(max-width:480px){#theme-toggle{position:static;margin:0 auto 14px;display:inline-flex;align-items:center;gap:6px}.mini-ball{width:30px;height:30px;font-size:13px}}
 </style>
 </head>
 <body>
 <main class="card">
 <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크모드 전환">🌙 다크모드</button>
 <div class="label">YOUR LUCKY NUMBERS</div>
+<div id="today-date" class="today-badge" aria-label="오늘 날짜"></div>
 <h1>오늘의 행운을 뽑아보세요 🍀</h1>
 <p class="description">버튼 한 번으로 만나는 나만의 로또 번호.<br>1부터 45까지, 중복 없는 번호 6개를 5세트 추천합니다.</p>
+<section id="last-draw" class="info-panel" aria-label="지난회차 당첨 정보">
+  <div class="info-header">
+    <span id="last-draw-round" class="info-round">지난회차 불러오는 중...</span>
+    <span>당첨 일자: <strong id="last-draw-date" class="info-date">-</strong></span>
+  </div>
+  <div id="last-draw-balls" class="mini-balls" aria-label="지난회차 당첨번호"></div>
+  <div class="info-prize">지난회차 1등 당첨금: <strong id="last-draw-prize">-</strong></div>
+</section>
 <div id="balls" class="sets" role="status" aria-live="polite" aria-label="아직 추천된 번호가 없습니다"><p class="description">버튼을 눌러 추천 번호 5세트를 확인하세요.</p></div>
 <button id="generate" type="button">로또 번호 5세트 추천받기 ↻</button>
 <button id="bonus" type="button" aria-pressed="false">보너스번호 포함</button>
@@ -71,6 +99,78 @@ function recommend() {
 function color(number) {
   return number <= 10 ? 'yellow' : number <= 20 ? 'blue' : number <= 30 ? 'red' : number <= 40 ? 'gray' : 'green';
 }
+function renderTodayDate() {
+  const now = new Date();
+  const formatted = new Intl.DateTimeFormat('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  }).format(now);
+  document.getElementById('today-date').textContent = '📅 오늘 날짜: ' + formatted;
+}
+function formatPrizeKRW(amount, winners) {
+  if (!amount || isNaN(amount)) return '-';
+  const formatted = Number(amount).toLocaleString('ko-KR') + '원';
+  return winners ? formatted + ' (1인당 · ' + winners + '명)' : formatted;
+}
+function formatDrawDate(dateStr) {
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return yyyy + '. ' + mm + '. ' + dd + '.';
+}
+function renderLastDraw(draw) {
+  document.getElementById('last-draw-round').textContent = '지난회차 (제' + draw.round + '회)';
+  document.getElementById('last-draw-date').textContent = formatDrawDate(draw.date);
+  document.getElementById('last-draw-prize').textContent = formatPrizeKRW(draw.firstPrize, draw.winners);
+  const container = document.getElementById('last-draw-balls');
+  const nodes = draw.numbers.map(n => {
+    const el = document.createElement('span');
+    el.className = 'mini-ball ' + color(n);
+    el.textContent = n;
+    return el;
+  });
+  const plus = document.createElement('span');
+  plus.className = 'mini-plus';
+  plus.textContent = '+';
+  const bonusEl = document.createElement('span');
+  bonusEl.className = 'mini-ball ' + color(draw.bonus);
+  bonusEl.textContent = draw.bonus;
+  bonusEl.title = '보너스 번호';
+  container.replaceChildren(...nodes, plus, bonusEl);
+}
+async function loadLastDraw() {
+  // 오프라인이거나 응답 대기 중일 때 즉시 표시할 기본 회차 데이터
+  renderLastDraw({
+    round: 1161,
+    date: '2025-03-01',
+    numbers: [2, 12, 20, 24, 34, 42],
+    bonus: 37,
+    firstPrize: 1792654969,
+    winners: 16
+  });
+  try {
+    const res = await fetch('https://smok95.github.io/lotto/results/latest.json');
+    if (!res.ok) throw new Error('Network error');
+    const data = await res.json();
+    const firstDiv = Array.isArray(data.divisions) && data.divisions[0] ? data.divisions[0] : {};
+    renderLastDraw({
+      round: data.draw_no,
+      date: data.date,
+      numbers: data.numbers,
+      bonus: data.bonus_no,
+      firstPrize: firstDiv.prize,
+      winners: firstDiv.winners
+    });
+  } catch {
+    // 네트워크 제한 시 기본 표시 데이터 유지
+  }
+}
+renderTodayDate();
+loadLastDraw();
 function generateSets() {
   currentNumbers = [];
   const seen = new Set();
