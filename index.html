@@ -203,16 +203,17 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
   </summary>
   <div class="saju-body">
     <p class="saju-intro">
-      생년월일시와 성별(선택)을 입력하면 전통 명리학의 만세력(절입 시각·음양력)과 대운·세운·월운·일진·시진의 오행(재성·식상생재·합충) 상징 기준에 따라 살펴볼 기간 안의 날짜·시간 후보를 찾아드립니다.
+      생년월일시와 성별(선택)을 입력하면 전통 명리학의 만세력(절입 순간·음양력)과 대운·세운·월운·일진·시진의 오행(재성·식상생재·합충) 상징 기준에 따라 살펴볼 기간 안의 날짜·시간 후보를 찾아드립니다. (현재 버전은 <strong>대한민국 출생(양력 1908-04-01 ~ 2050-12-31) 및 대한민국 내 구매(KST 기준)</strong>를 지원합니다)
     </p>
     <form id="saju-form" class="form-grid" novalidate>
       <div class="form-row">
-        <span class="form-label" id="birth-date-label">생년월일 (1900~2050년)</span>
+        <span class="form-label" id="birth-date-label">생년월일 (양력 1908.4.1.~2050.12.31. / 음력 1908.3.1.~2050.11.18.)</span>
         <div class="date-inputs" role="group" aria-labelledby="birth-date-label">
-          <input id="birth-year" class="input-field" type="number" min="1900" max="2050" placeholder="연도 (예: 1990)" aria-label="출생 연도" required>
+          <input id="birth-year" class="input-field" type="number" min="1908" max="2050" placeholder="연도 (예: 1990)" aria-label="출생 연도" required>
           <input id="birth-month" class="input-field" type="number" min="1" max="12" placeholder="월 (1~12)" aria-label="출생 월" required>
           <input id="birth-day" class="input-field" type="number" min="1" max="31" placeholder="일 (1~31)" aria-label="출생 일" required>
         </div>
+        <p class="field-hint">대한제국 근대 법정 표준시 시행일(양력 1908년 4월 1일, 음력 1908년 3월 1일)부터 2050년 12월 31일(음력 2050년 11월 18일)까지 지원하며, 범위 밖의 날짜는 추정값으로 처리하지 않습니다.</p>
       </div>
 
       <div class="form-row">
@@ -235,39 +236,40 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
       </div>
 
       <div class="form-row">
-        <label class="form-label" for="birth-time">출생 시간</label>
+        <label class="form-label" for="birth-time">출생 시간 (출생 당시 대한민국 법정 시각)</label>
         <div class="inline-options">
           <input id="birth-time" class="input-field" type="time" style="max-width:180px" aria-describedby="birth-time-hint">
           <label><input type="checkbox" id="time-unknown"> 시간 모름</label>
         </div>
-        <p id="birth-time-hint" class="field-hint">💡 밤 11시 전후에는 계산 기준에 따라 풀이가 달라질 수 있어요. ‘시간 모름’을 선택하면 시주와 구매 시간대 후보를 제외하며, 대운 시작 시점의 불확실성 범위(±2개월)를 함께 안내합니다.</p>
+        <p id="birth-time-hint" class="field-hint">💡 출생 시각은 출생 당시 법정 시각(역사적 표준시·서머타임 <code>Asia/Seoul</code> 반영)으로 해석해 UTC 출생 순간과 지방평균태양시를 분리 계산합니다. ‘시간 모름’ 선택 시 정오를 실제 출생 시각으로 확정하지 않고 당일 전체 범위를 검토하며, 시주와 구매 시간대 후보를 제외합니다.</p>
       </div>
 
       <div class="form-row">
-        <label class="form-label" for="birth-city">출생 도시 (원국 경도 시차 보정)</label>
+        <label class="form-label" for="birth-city">출생 도시 (대한민국 내 출생지 지방평균태양시 경도 보정)</label>
         <select id="birth-city" class="input-field">
-          <option value="">출생 도시 선택 (선택 안 함: 동경 135° 표준시 그대로 사용)</option>
-          <option value="SEOUL">서울 (동경 126.98° · -32분 경도 보정)</option>
-          <option value="INCHEON">인천 (동경 126.71° · -33분 경도 보정)</option>
-          <option value="SUWON">수원·경기 (동경 127.01° · -32분 경도 보정)</option>
-          <option value="CHUNCHEON">춘천·강원서부 (동경 127.73° · -29분 경도 보정)</option>
-          <option value="GANGNEUNG">강릉·강원동부 (동경 128.89° · -24분 경도 보정)</option>
-          <option value="DAEJEON">대전·세종 (동경 127.38° · -30분 경도 보정)</option>
-          <option value="CHEONGJU">청주·충북 (동경 127.49° · -30분 경도 보정)</option>
-          <option value="JEONJU">전주·전북 (동경 127.15° · -31분 경도 보정)</option>
-          <option value="GWANGJU">광주·전남 (동경 126.85° · -33분 경도 보정)</option>
-          <option value="DAEGU">대구·경북 (동경 128.60° · -26분 경도 보정)</option>
-          <option value="POHANG">포항 (동경 129.37° · -23분 경도 보정)</option>
-          <option value="BUSAN">부산 (동경 129.08° · -24분 경도 보정)</option>
-          <option value="ULSAN">울산 (동경 129.31° · -23분 경도 보정)</option>
-          <option value="CHANGWON">창원·경남 (동경 128.68° · -25분 경도 보정)</option>
-          <option value="JEJU">제주 (동경 126.53° · -34분 경도 보정)</option>
+          <option value="">출생 도시 선택 (출생 시간 입력 시 대한민국 내 도시 선택 필수)</option>
+          <option value="SEOUL">서울특별시 (동경 126.9780° · 현대 KST 대비 표시 약 -32분)</option>
+          <option value="INCHEON">인천광역시 (동경 126.7052° · 현대 KST 대비 표시 약 -33분)</option>
+          <option value="SUWON">수원·경기 (동경 127.0286° · 현대 KST 대비 표시 약 -32분)</option>
+          <option value="CHUNCHEON">춘천·강원서부 (동경 127.7298° · 현대 KST 대비 표시 약 -29분)</option>
+          <option value="GANGNEUNG">강릉·강원동부 (동경 128.8760° · 현대 KST 대비 표시 약 -24분)</option>
+          <option value="DAEJEON">대전·세종 (동경 127.3845° · 현대 KST 대비 표시 약 -30분)</option>
+          <option value="CHEONGJU">청주·충북 (동경 127.4914° · 현대 KST 대비 표시 약 -30분)</option>
+          <option value="JEONJU">전주·전북 (동경 127.1480° · 현대 KST 대비 표시 약 -31분)</option>
+          <option value="GWANGJU">광주·전남 (동경 126.8526° · 현대 KST 대비 표시 약 -33분)</option>
+          <option value="DAEGU">대구·경북 (동경 128.6014° · 현대 KST 대비 표시 약 -26분)</option>
+          <option value="POHANG">포항 (동경 129.3435° · 현대 KST 대비 표시 약 -23분)</option>
+          <option value="BUSAN">부산광역시 (동경 129.0756° · 현대 KST 대비 표시 약 -24분)</option>
+          <option value="ULSAN">울산광역시 (동경 129.3114° · 현대 KST 대비 표시 약 -23분)</option>
+          <option value="CHANGWON">창원·경남 (동경 128.6811° · 현대 KST 대비 표시 약 -25분)</option>
+          <option value="JEJU">제주특별자치도 (동경 126.5312° · 현대 KST 대비 표시 약 -34분)</option>
+          <option value="OVERSEAS_UNSUPPORTED">기타 / 해외 지역 (역사적 시간대 상이로 현재 버전 지원 제한)</option>
         </select>
-        <p class="field-hint">출생지 경도 보정은 출생 원국(시주·일주) 산출에만 사용하며, 구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 실제 구매 지역 기준 한국표준시(KST)로 표시합니다.</p>
+        <p class="field-hint">출생지 경도에 따른 지방평균태양시 보정은 출생 원국의 일주·시주 산출에만 사용하며(연주·월주 절입 및 대운 기산은 UTC 순간 비교), 구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 대한민국 내 구매 기준(KST)으로 표시합니다.</p>
       </div>
 
       <div class="form-row">
-        <span class="form-label">살펴볼 기간 (기본값: 이번 회차 남은 구매 가능 기간)</span>
+        <span class="form-label">살펴볼 기간 (기본값: 이번 회차 남은 구매 가능 기간 · 대한민국 KST 기준)</span>
         <div class="inline-options">
           <label>시작일 <input id="range-start" class="input-field" type="date" style="width:auto"></label>
           <label>종료일 <input id="range-end" class="input-field" type="date" style="width:auto"></label>
@@ -301,13 +303,22 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
         <div class="criteria-content">
           <p><strong>적용 규칙 버전:</strong> 명리 날짜 해석 <code>LOTTO-SAJU-RULE-v2.0</code> · 개인화 번호 생성 <code>LOTTO-NUM-GEN-v1.1</code></p>
           <ul>
-            <li><strong>양력·음력·윤달 변환:</strong> 한국천문연구원(KASI) 한국표준시(UTC+9) 기준 음양력 데이터(지원 범위: 1900년 1월 31일 ~ 2050년 12월 31일)를 사용하여 윤달 여부와 큰달(30일)·작은달(29일)을 검증합니다.</li>
-            <li><strong>연주·월주·세운·월운 절입 기준:</strong> 양력 1월 1일이나 음력 설날이 아닌, VSOP87 태양 황경 천문 계산으로 산출한 <strong>12절기(입춘·경칩·청명·입하·망종·소서·입추·백로·한로·입동·대설·소한)의 분 단위 절입 시각(KST)</strong>을 기준으로 출생 연주·월주와 대상 날짜의 세운(입춘 기준)·월운(12절 기준)을 전환합니다.</li>
-            <li><strong>대운(大運) 계산 기준:</strong> 출생 연주 천간의 음양(갑·병·무·경·임=양년, 을·정·기·신·계=음년)과 성별을 조합해 <strong>양년생 남성·음년생 여성은 순행, 음년생 남성·양년생 여성은 역행</strong>으로 월주에서 대운 간지 배열을 산출합니다. 24절기 중 월 경계가 되는 12절만을 사용해 순행은 <code>출생 시각 → 다음 절입 시각</code>, 역행은 <code>이전 절입 시각 → 출생 시각</code> 간격을 구하고, <strong>3일 = 1년(1일 = 4개월, 1시간 = 5일)</strong> 연속 비례 환산(<code>절입 간격 일수 ÷ 3</code>)으로 대운별 정밀 시작·종료일을 산출합니다. 대운 경계 부근에서 반올림된 정수 대운수 때문에 적용 대운이 잘못 바뀌지 않도록 정밀 전환일 기준으로 판정하며, 성별 미입력 시에는 대운을 제외하고 <strong>‘대운 미반영 간이 풀이’</strong>로 세운·월운·일진을 비교합니다.</li>
-            <li><strong>일주·시주·일진 및 날짜 경계(밤 11시·자정):</strong> 기본 기준은 <strong>자정(00:00, 출생 정보는 경도 보정 후 시각, 대상 일진은 KST 자정)에 날짜(일주·일진)가 바뀌는 방식(야자시 구분)</strong>을 사용합니다. 출생 시각이 밤 11시(23:00)~자정 경계에 걸려 정자시(23:00 일주 전환) 기준이나 보정 전 기준에서 일주·시주가 달라질 수 있는 경우 두 기준을 함께 안내합니다.</li>
-            <li><strong>출생지 경도 보정과 구매 시간대 기준 구분:</strong> 출생 도시에 따른 시간 보정은 대한민국 표준시 자오선(동경 135.0°)과의 차이에 따른 <strong>경도 시차 보정</strong>(예: 서울 -32분, 부산 -24분)만 출생 원국 산출에 적용하며, 균시차 기반 진태양시 보정은 적용하지 않습니다. 반면 <strong>구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 실제 구매 지역 기준인 한국표준시(KST, 동경 135° 시계 시각) 2시간 시진 단위</strong>로 표시합니다.</li>
-            <li><strong>5단계 통합 해석 규칙 및 학파별 한계 명시:</strong> ① 원국(일간·재성 구조), ② 해당 날짜의 대운, ③ 세운, ④ 월운·일진, ⑤ 구매 시진을 함께 비교합니다. 편재나 재성이 강하다는 이유만으로 길일을 확정하지 않으며, 일간 생조·설기 균형, 식상생재, 합·충을 함께 검토합니다. 특히 천간합·지지합이 있다고 해서 곧바로 다른 오행으로 완전히 변하는 ‘합화(合化) 성립’으로 단정하지 않고 조화(완충)와 묶임(합거) 가능성을 함께 안내합니다. 신강·신약 및 용신 판단은 억부·조후·격국 등 학파마다 기준이 다르므로, 원국 오행·십성 비중을 단순 비교한 억부 참고 지표만 보조적으로 사용하며 절대적 판정이 아님을 밝힙니다.</li>
-            <li><strong>개인화 번호 생성 시드 구성(<code>LOTTO-NUM-GEN-v1.1</code>):</strong> 날짜 후보 선정(명리 해석)과 번호 5세트 생성(SHA-256 결정론적 피셔-예이츠 추출)은 분리되어 있습니다. 번호 생성 시드에는 정규화된 입력값(<code>양력 환산 생년월일</code>, <code>양/음력·윤달 구분</code>, <code>출생 시각 또는 UNKNOWN</code>, <code>출생 도시 코드</code>, <code>성별 M/F/NONE</code>, <code>선택 날짜</code>, <code>선택 시간대 코드</code>, <code>규칙 버전</code>)만 포함하고 파생값(대운·세운 간지 등)은 중복 삽입하지 않아 같은 입력과 규칙 버전이면 언제나 동일한 5세트를 반환합니다.</li>
+            <li><strong>1. 시간 계산의 기본 구조 (출생 순간 UTC와 일주·시주 보정 시각의 분리):</strong>
+              출생 입력은 해당 출생지·출생 당시의 대한민국 법정 시각으로 해석하며, 역사적 표준시 변경(1908~1911년 <code>UTC+08:30</code>, 1912~1954년 <code>UTC+09:00</code>, 1954~1961년 <code>UTC+08:30</code>, 1961년 8월 10일 이후 <code>UTC+09:00</code>)과 서머타임(1948~1951년, 1955~1960년, 1987~1988년)을 반영한 <code>IANA tzdb 2026e / ICU 78.3 (Asia/Seoul)</code> 전환 테이블로 출생 순간을 <strong>UTC</strong>로 변환합니다. 출생 연주·월주의 절입 전후 판정과 대운 기산 간격은 모두 <strong>출생 순간(UTC)과 절입 순간(UTC)을 동일한 UTC 기준으로 직접 비교</strong>하며, 경도 보정한 시계 값을 KST 절입 시각과 직접 비교하지 않습니다. 대한제국 근대 법정 표준시 시행(양력 1908년 4월 1일) 이전 기간과 해외 지역은 당시 법정 시각·역사적 시간대를 일관되게 확정할 수 없어 지원 범위를 제한합니다.</li>
+            <li><strong>2. 음양력 변환과 지원 범위 (KASI 대조 검증 및 지원 범위 구분):</strong>
+              음양력·윤달 변환은 <code>.NET System.Globalization.KoreanLunisolarCalendar</code> 기반 비트 패킹 테이블(<code>KR_LUNAR_1900_2050</code>, 취득·검증일 <code>2026-11-03</code>)을 사용하며, 한국천문연구원(KASI) 음양력변환계산 표준 사례 및 한국표준시(KST) 합삭 천문 계산과 전수 대조 검증을 완료한 <strong>KASI 기반 한국 음력 데이터</strong>입니다(중국 <code>UTC+8</code> 등 타 지역 음력과 혼용하지 않음). KASI 역서 전체 범위(양력 1391년 2월 5일 ~ 2050년 12월 31일)와 구분하여, 본 사이트는 역사적 표준시 확정이 가능한 <strong>양력 1908년 4월 1일 ~ 2050년 12월 31일</strong>, <strong>음력 1908년 3월 1일(평달) ~ 2050년 11월 18일(평달)</strong> 입력만 지원합니다. 음력 입력 시 해당 연도의 윤달 존재 여부와 대소월(29일/30일), 변환된 양력 날짜의 지원 범위 포함 여부를 모두 검증하며 범위 밖 입력은 추정값으로 처리하지 않습니다.</li>
+            <li><strong>3. 절입 계산 (12절 미반올림 반개구간 판정 및 VSOP87D 명세):</strong>
+              출생 연주와 대상 날짜의 세운은 <strong>입춘(태양 황경 315°)</strong>, 월주와 월운은 월 경계인 <strong>12절(소한·입춘·경칩·청명·입하·망종·소서·입추·백로·한로·입동·대설)</strong>의 절입 순간에 전환합니다. 내부 판정은 반올림하지 않은 UTC 순간(밀리초 단위)을 사용하고 화면 표시만 분 단위(<code>분 단위 표시</code>)로 처리하며, <strong>반개구간 <code>[절입 순간, 다음 절입 순간)</code> 규칙</strong>을 적용해 절입과 정확히 같은 순간의 출생 및 조회도 새로운 연주·월주로 일관되게 처리합니다. 천문 계산은 Bretagnon &amp; Francou(1988) <strong>VSOP87D</strong> 지구 구면 좌표 급수 중 Jean Meeus(<em>Astronomical Algorithms</em> 2nd ed., Ch. 25) 축약 72개 주기항(<code>L0</code> 39항·<code>L1</code> 20항·<code>L2</code> 8항·<code>L3</code> 3항·<code>L4</code> 2항, <code>L5</code> 및 황위 <code>B</code> 생략)으로 지심 황경을 구한 뒤, FK5 좌표계 보정(<code>-0.09033"</code>)·IAU 1980 경도 장동(<code>Δψ</code>, 4개 주요항)·연주 광행차(<code>-20.4898"/R</code>)를 적용해 태양의 지심 겉보기 황경을 산출합니다. 시간척도는 <code>UTC → JDE(TT)</code> 변환 시 NASA Espenak &amp; Meeus(2006) 구간별 다항식 <code>ΔT</code>를 사용하며, 뉴턴-할선 수치 탐색 오차는 <code>10⁻¹¹도(1ms 미만)</code>이고 한국천문연구원(KASI) 역서와 대조한 절입 시각 편차는 최대 약 <code>±24초</code>(화면의 분 단위 표시 기준 최대 <code>±1분</code> 차이 가능)입니다.</li>
+            <li><strong>4. 경도 보정과 날짜 경계 (지방평균태양시 및 본 사이트 채택 자시 규칙):</strong>
+              출생 일주·시주는 출생 당시 법정 시각을 역사적 시간대에 따라 UTC 순간으로 변환한 뒤, 출생지 실제 경도(국토지리정보원·특별시/광역시/도청 소재지 WGS84 좌표)를 적용해 <strong>지방평균태양시(<code>LMST = UTC + 경도 × 4분</code>)</strong>를 산출합니다. 현대 한국(KST, 동경 135°) 출생의 경우 KST 대비 보정량은 <code>(출생지 경도 − 135°) × 4분</code>이며(내부 계산은 소수점 정밀 경도 사용, 화면 표시용 보정량만 정수 분으로 반올림), 균시차를 적용하지 않으므로 ‘진태양시’라는 명칭을 사용하지 않습니다. 기본 일주 날짜 경계는 <strong>지방평균태양시 보정 후 자정 <code>00:00</code></strong>(기준일: 양력 2000-01-01 = 무오일, 60갑자 인덱스 54, 음수 나머지 <code>((54 + diffDays) % 60 + 60) % 60</code> 처리)이며, 시지는 보정 후 시각에 따라 배정하고 자시(子時)를 다음처럼 정의합니다: <strong>① <code>23:00~00:00</code>은 해당 보정 날짜의 일간으로 시간 천간 산출, ② <code>00:00~01:00</code>은 자정 이후 새 날짜의 일간으로 시간 천간 산출</strong>. 위 규칙은 본 사이트가 채택한 야자시 처리 방식이며 학파 공통 규칙이 아니므로, <code>23:00</code>에 일주를 바꾸는 대안 기준이나 경도 보정 미적용 기준과 결과가 달라지는 경우 일주·시주를 모두 재계산해 비교 안내합니다.</li>
+            <li><strong>5. 대운 순역행과 시작 시점 (‘전통 단위 분해 후 달력 가산’ 고정):</strong>
+              절입 기준으로 계산한 출생 연주 천간의 음양에 따라 <strong>양년생 남성·음년생 여성은 순행, 음년생 남성·양년생 여성은 역행</strong>하며, 첫 대운은 월주에서 순행·역행으로 한 칸 이동한 간지입니다. 기산 간격은 순행 시 <code>출생 순간(UTC) → 다음 12절 절입 순간(UTC)</code>, 역행 시 <code>이전 12절 절입 순간(UTC) → 출생 순간(UTC)</code>의 차이로 계산하며(절입과 출생이 정확히 같으면 기산 간격 <code>0</code> 처리), 소수 연도에 365.2425일을 곱하는 방식과 섞지 않고 다음 <strong>‘전통 단위 분해 후 달력 가산’</strong> 방식으로만 산출합니다: ① 기산 간격을 <code>3일</code> 단위로 분해해 가산 연수 계산(<code>3일 → 1년</code>), ② 남은 간격을 <code>6시간</code> 단위로 분해해 가산 개월 수 계산(<code>1일 → 4개월</code>, <code>6시간 → 1개월</code>), ③ 남은 간격은 <code>출생 간격 1초 → 가산 기간 120초</code> 비율로 환산(<code>2시간 → 10일</code>), ④ 출생지 법정 시각 달력에 연·월을 함께 가산(월말 날짜가 없으면 해당 월 마지막 날로 제한, 서머타임 결손 시각은 IANA <code>later</code>·중복 시각은 <code>earlier</code> 규칙 적용)한 뒤 남은 기간을 경과시간으로 가산해 <strong>채택한 환산법에 따른 대운 시작 시점</strong>을 구합니다. 후속 대운(2~10대운)은 매 단계 누적 가산하지 않고 첫 시작 시점으로부터 달력 기준 10년씩 산출해 월말·윤년 오차 누적을 방지하며, 대운 구간은 반개구간 <code>[시작 시점, 다음 대운 시작 시점)</code>으로 판정하고 첫 대운 시작 전은 임의 대운 배정 없이 <strong>‘대운 시작 전’</strong>으로 표시합니다.</li>
+            <li><strong>6. 출생 시간 모름·성별 미입력 및 불확실성 결과 제한:</strong>
+              성별 미입력 시에는 대운을 제외하고 <strong>‘대운 미반영 간이 풀이’</strong>로 표시합니다. 출생 시간 모름 선택 시에는 시주와 구매 시간 후보를 제외하며, 정오(12:00)를 실제 출생 시각처럼 확정하지 않고 당일 법정 시각 전체 범위(<code>00:00:00 ~ 23:59:59</code>)를 검사합니다. 가능한 출생 시각에 따라 원국(절입일 당일 출생)이나 적용 대운(약 4개월 대운 전환 가능 구간)이 달라지면 불확실성을 표시하며, <strong>그 불확실성이 날짜 후보 선정 결과를 바꾸는 경우에는 단일 후보를 임의로 확정하지 않고 결과 제한 안내를 표시</strong>합니다.</li>
+            <li><strong>7. 대한민국 내 구매 기준(KST)과 시간 후보 전환 제외:</strong>
+              현재 버전은 <strong>대한민국 내 구매만 지원</strong>하며 한국표준시(<code>KST, UTC+9</code>)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음). 대상 날짜의 일진은 KST 자정(<code>00:00</code>)에 전환하고 시진은 KST 기준으로 배정하며, 이는 출생 원국의 지방평균태양시 적용과 구분되는 제품 기준입니다. <strong>12절 절입이나 대운 전환이 후보 시간대(2시간 시진) 내부에 걸리는 경우 2시간 전체에 하나의 운이 적용되는 것처럼 표시하지 않도록 해당 시간대를 후보에서 제외</strong>하고 안내하며, 이미 지난 시간과 동행복권 공식 판매 마감 시간(매일 24:00~06:00 미판매, 토요일 20:00 마감)은 제외합니다.</li>
+            <li><strong>8. 개인화 번호 생성 시드 구성(<code>LOTTO-NUM-GEN-v1.1</code>):</strong>
+              날짜 후보 선정(명리 해석)과 번호 5세트 생성(SHA-256 결정론적 피셔-예이츠 추출)은 분리되어 있으며, 정규화된 입력값(<code>양력 환산 생년월일</code>, <code>양/음력·윤달 구분</code>, <code>출생 시각 또는 UNKNOWN</code>, <code>출생 도시 코드</code>, <code>성별 M/F/NONE</code>, <code>선택 날짜</code>, <code>선택 시간대 코드</code>, <code>규칙 버전</code>)만 시드에 포함해 같은 입력이면 항상 동일한 5세트를 생성합니다.</li>
           </ul>
         </div>
       </details>
@@ -400,23 +411,58 @@ const BRANCHES = ['자(子)', '축(丑)', '인(寅)', '묘(卯)', '진(辰)', '�
 const BRANCH_MAIN_STEM = [9, 5, 0, 1, 4, 2, 3, 5, 6, 7, 4, 8];
 const WEEKDAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
+// 1. 역사적 시간대 및 서머타임 (IANA tzdb 2026e / ICU 78.3 Asia/Seoul 전환 테이블)
+// 대한제국 표준시 최초 시행(양력 1908-04-01, 음력 1908-03-01)부터 현대 KST까지 모든 법정 표준시·서머타임 이력 포함
+const ASIA_SEOUL_TRANSITIONS = [
+  { startUtcMs: -2208988800000, offsetMin: 30472 / 60, stdMin: 30472 / 60, isDST: false, label: '표준시 시행 전 서울 지방평균시 (LMT UTC+08:27:52)' },
+  { startUtcMs: -1948782472000, offsetMin: 510, stdMin: 510, isDST: false, label: '대한제국 표준시 (UTC+08:30, 동경 127.5°)' }, // 1908-03-31T15:32:08Z (1908-04-01 00:00 시행)
+  { startUtcMs: -1830414600000, offsetMin: 540, stdMin: 540, isDST: false, label: '표준시 (UTC+09:00, 동경 135°)' },            // 1911-12-31T15:30:00Z (1912-01-01 00:00 시행)
+  { startUtcMs: -681210000000,  offsetMin: 600, stdMin: 540, isDST: true,  label: '서머타임 KDT (UTC+10:00)' },                 // 1948-05-31T15:00:00Z
+  { startUtcMs: -672228000000,  offsetMin: 540, stdMin: 540, isDST: false, label: '한국표준시 KST (UTC+09:00)' },               // 1948-09-12T14:00:00Z
+  { startUtcMs: -654771600000,  offsetMin: 600, stdMin: 540, isDST: true,  label: '서머타임 KDT (UTC+10:00)' },                 // 1949-04-02T15:00:00Z
+  { startUtcMs: -640864800000,  offsetMin: 540, stdMin: 540, isDST: false, label: '한국표준시 KST (UTC+09:00)' },               // 1949-09-10T14:00:00Z
+  { startUtcMs: -623408400000,  offsetMin: 600, stdMin: 540, isDST: true,  label: '서머타임 KDT (UTC+10:00)' },                 // 1950-03-31T15:00:00Z
+  { startUtcMs: -609415200000,  offsetMin: 540, stdMin: 540, isDST: false, label: '한국표준시 KST (UTC+09:00)' },               // 1950-09-09T14:00:00Z
+  { startUtcMs: -588848400000,  offsetMin: 600, stdMin: 540, isDST: true,  label: '서머타임 KDT (UTC+10:00)' },                 // 1951-05-05T15:00:00Z
+  { startUtcMs: -577965600000,  offsetMin: 540, stdMin: 540, isDST: false, label: '한국표준시 KST (UTC+09:00)' },               // 1951-09-08T14:00:00Z
+  { startUtcMs: -498128400000,  offsetMin: 510, stdMin: 510, isDST: false, label: '구 한국표준시 (UTC+08:30, 동경 127.5°)' },    // 1954-03-20T15:00:00Z
+  { startUtcMs: -462702600000,  offsetMin: 570, stdMin: 510, isDST: true,  label: '서머타임 (UTC+09:30)' },                      // 1955-05-04T15:30:00Z
+  { startUtcMs: -451733400000,  offsetMin: 510, stdMin: 510, isDST: false, label: '구 한국표준시 (UTC+08:30, 동경 127.5°)' },    // 1955-09-08T14:30:00Z
+  { startUtcMs: -429784200000,  offsetMin: 570, stdMin: 510, isDST: true,  label: '서머타임 (UTC+09:30)' },                      // 1956-05-19T15:30:00Z
+  { startUtcMs: -418296600000,  offsetMin: 510, stdMin: 510, isDST: false, label: '구 한국표준시 (UTC+08:30, 동경 127.5°)' },    // 1956-09-29T14:30:00Z
+  { startUtcMs: -399544200000,  offsetMin: 570, stdMin: 510, isDST: true,  label: '서머타임 (UTC+09:30)' },                      // 1957-05-04T15:30:00Z
+  { startUtcMs: -387451800000,  offsetMin: 510, stdMin: 510, isDST: false, label: '구 한국표준시 (UTC+08:30, 동경 127.5°)' },    // 1957-09-21T14:30:00Z
+  { startUtcMs: -368094600000,  offsetMin: 570, stdMin: 510, isDST: true,  label: '서머타임 (UTC+09:30)' },                      // 1958-05-03T15:30:00Z
+  { startUtcMs: -356002200000,  offsetMin: 510, stdMin: 510, isDST: false, label: '구 한국표준시 (UTC+08:30, 동경 127.5°)' },    // 1958-09-20T14:30:00Z
+  { startUtcMs: -336645000000,  offsetMin: 570, stdMin: 510, isDST: true,  label: '서머타임 (UTC+09:30)' },                      // 1959-05-02T15:30:00Z
+  { startUtcMs: -324552600000,  offsetMin: 510, stdMin: 510, isDST: false, label: '구 한국표준시 (UTC+08:30, 동경 127.5°)' },    // 1959-09-19T14:30:00Z
+  { startUtcMs: -305195400000,  offsetMin: 570, stdMin: 510, isDST: true,  label: '서머타임 (UTC+09:30)' },                      // 1960-04-30T15:30:00Z
+  { startUtcMs: -293103000000,  offsetMin: 510, stdMin: 510, isDST: false, label: '구 한국표준시 (UTC+08:30, 동경 127.5°)' },    // 1960-09-17T14:30:00Z
+  { startUtcMs: -264933000000,  offsetMin: 540, stdMin: 540, isDST: false, label: '한국표준시 KST (UTC+09:00, 동경 135°)' },     // 1961-08-09T15:30:00Z
+  { startUtcMs: 547578000000,   offsetMin: 600, stdMin: 540, isDST: true,  label: '서머타임 KDT (UTC+10:00)' },                 // 1987-05-09T17:00:00Z
+  { startUtcMs: 560883600000,   offsetMin: 540, stdMin: 540, isDST: false, label: '한국표준시 KST (UTC+09:00, 동경 135°)' },     // 1987-10-10T17:00:00Z
+  { startUtcMs: 579027600000,   offsetMin: 600, stdMin: 540, isDST: true,  label: '서머타임 KDT (UTC+10:00)' },                 // 1988-05-07T17:00:00Z
+  { startUtcMs: 592333200000,   offsetMin: 540, stdMin: 540, isDST: false, label: '한국표준시 KST (UTC+09:00, 동경 135°)' }      // 1988-10-08T17:00:00Z
+];
+
+// 도시별 실제 경도 및 출처 (국토지리정보원 / 각 특별시·광역시·도청 소재지 WGS84 좌표)
+// 현대 한국 KST(동경 135°) 대비 정밀 보정량(분) = (lon - 135) * 4, 표시용 보정량(displayOffsetMin)만 정수로 반올림
 const CITIES = {
-  '':        { name: '미선택 (표준시 동경 135°)', lon: 135.0, offsetMin: 0 },
-  SEOUL:     { name: '서울', lon: 126.98, offsetMin: -32 },
-  INCHEON:   { name: '인천', lon: 126.71, offsetMin: -33 },
-  SUWON:     { name: '수원·경기', lon: 127.01, offsetMin: -32 },
-  CHUNCHEON: { name: '춘천·강원서부', lon: 127.73, offsetMin: -29 },
-  GANGNEUNG: { name: '강릉·강원동부', lon: 128.89, offsetMin: -24 },
-  DAEJEON:   { name: '대전·세종', lon: 127.38, offsetMin: -30 },
-  CHEONGJU:  { name: '청주·충북', lon: 127.49, offsetMin: -30 },
-  JEONJU:    { name: '전주·전북', lon: 127.15, offsetMin: -31 },
-  GWANGJU:   { name: '광주·전남', lon: 126.85, offsetMin: -33 },
-  DAEGU:     { name: '대구·경북', lon: 128.60, offsetMin: -26 },
-  POHANG:    { name: '포항', lon: 129.37, offsetMin: -23 },
-  BUSAN:     { name: '부산', lon: 129.08, offsetMin: -24 },
-  ULSAN:     { name: '울산', lon: 129.31, offsetMin: -23 },
-  CHANGWON:  { name: '창원·경남', lon: 128.68, offsetMin: -25 },
-  JEJU:      { name: '제주', lon: 126.53, offsetMin: -34 }
+  SEOUL:     { name: '서울특별시',     lon: 126.9780, source: '서울특별시청(중구 세종대로 110)',     exactKstOffsetMin: (126.9780 - 135) * 4, displayOffsetMin: Math.round((126.9780 - 135) * 4) },
+  INCHEON:   { name: '인천광역시',     lon: 126.7052, source: '인천광역시청(남동구 정각로 29)',       exactKstOffsetMin: (126.7052 - 135) * 4, displayOffsetMin: Math.round((126.7052 - 135) * 4) },
+  SUWON:     { name: '수원·경기',      lon: 127.0286, source: '수원시청·경기도청 권역(팔달구 효원로)', exactKstOffsetMin: (127.0286 - 135) * 4, displayOffsetMin: Math.round((127.0286 - 135) * 4) },
+  CHUNCHEON: { name: '춘천·강원서부',  lon: 127.7298, source: '춘천시청·강원도청(춘천시 중앙로)',     exactKstOffsetMin: (127.7298 - 135) * 4, displayOffsetMin: Math.round((127.7298 - 135) * 4) },
+  GANGNEUNG: { name: '강릉·강원동부',  lon: 128.8760, source: '강릉시청(강릉시 강릉대로 33)',         exactKstOffsetMin: (128.8760 - 135) * 4, displayOffsetMin: Math.round((128.8760 - 135) * 4) },
+  DAEJEON:   { name: '대전·세종',      lon: 127.3845, source: '대전광역시청(서구 둔산로 100)',        exactKstOffsetMin: (127.3845 - 135) * 4, displayOffsetMin: Math.round((127.3845 - 135) * 4) },
+  CHEONGJU:  { name: '청주·충북',      lon: 127.4914, source: '청주시청·충북도청(상당구 상당로)',     exactKstOffsetMin: (127.4914 - 135) * 4, displayOffsetMin: Math.round((127.4914 - 135) * 4) },
+  JEONJU:    { name: '전주·전북',      lon: 127.1480, source: '전주시청·전북도청(완산구 노송광장로)', exactKstOffsetMin: (127.1480 - 135) * 4, displayOffsetMin: Math.round((127.1480 - 135) * 4) },
+  GWANGJU:   { name: '광주·전남',      lon: 126.8526, source: '광주광역시청(서구 내방로 111)',        exactKstOffsetMin: (126.8526 - 135) * 4, displayOffsetMin: Math.round((126.8526 - 135) * 4) },
+  DAEGU:     { name: '대구·경북',      lon: 128.6014, source: '대구광역시청(중구 공평로 88)',         exactKstOffsetMin: (128.6014 - 135) * 4, displayOffsetMin: Math.round((128.6014 - 135) * 4) },
+  POHANG:    { name: '포항',           lon: 129.3435, source: '포항시청(남구 시청로 1)',              exactKstOffsetMin: (129.3435 - 135) * 4, displayOffsetMin: Math.round((129.3435 - 135) * 4) },
+  BUSAN:     { name: '부산광역시',     lon: 129.0756, source: '부산광역시청(연제구 중앙대로 1001)',   exactKstOffsetMin: (129.0756 - 135) * 4, displayOffsetMin: Math.round((129.0756 - 135) * 4) },
+  ULSAN:     { name: '울산광역시',     lon: 129.3114, source: '울산광역시청(남구 중앙로 201)',        exactKstOffsetMin: (129.3114 - 135) * 4, displayOffsetMin: Math.round((129.3114 - 135) * 4) },
+  CHANGWON:  { name: '창원·경남',      lon: 128.6811, source: '창원시청·경남도청(성산구 중앙대로)',   exactKstOffsetMin: (128.6811 - 135) * 4, displayOffsetMin: Math.round((128.6811 - 135) * 4) },
+  JEJU:      { name: '제주특별자치도', lon: 126.5312, source: '제주시청·제주도청(제주시 광양9길)',    exactKstOffsetMin: (126.5312 - 135) * 4, displayOffsetMin: Math.round((126.5312 - 135) * 4) }
 };
 
 const SOLAR_TERMS_12 = [
@@ -567,13 +613,129 @@ function updatePeriodHint() {
 }
 
 // ============================================================================
-// 음양력·윤달 변환 및 검증 (1900~2050)
+// 1. 역사적 시간대(Asia/Seoul) 변환 함수 (법정 시각 ↔ UTC 순간)
 // ============================================================================
+function getAsiaSeoulPeriodForUtc(utcMs) {
+  let chosen = ASIA_SEOUL_TRANSITIONS[0];
+  for (let i = 0; i < ASIA_SEOUL_TRANSITIONS.length; i++) {
+    if (utcMs >= ASIA_SEOUL_TRANSITIONS[i].startUtcMs) {
+      chosen = ASIA_SEOUL_TRANSITIONS[i];
+    } else {
+      break;
+    }
+  }
+  return chosen;
+}
+
+function utcToLocalAsiaSeoul(utcMs) {
+  const period = getAsiaSeoulPeriodForUtc(utcMs);
+  const localMs = Math.round(utcMs + period.offsetMin * 60000);
+  const d = new Date(localMs);
+  return {
+    year: d.getUTCFullYear(),
+    month: d.getUTCMonth() + 1,
+    day: d.getUTCDate(),
+    hour: d.getUTCHours(),
+    minute: d.getUTCMinutes(),
+    second: d.getUTCSeconds(),
+    ms: d.getUTCMilliseconds(),
+    offsetMin: period.offsetMin,
+    stdMin: period.stdMin,
+    isDST: period.isDST,
+    tzLabel: period.label
+  };
+}
+
+function localToUtcAsiaSeoul(year, month, day, hour = 0, minute = 0, second = 0, ms = 0) {
+  const naiveMs = Date.UTC(year, month - 1, day, hour, minute, second, ms);
+  const matches = [];
+  for (let i = 0; i < ASIA_SEOUL_TRANSITIONS.length; i++) {
+    const p = ASIA_SEOUL_TRANSITIONS[i];
+    const nextStart = (i + 1 < ASIA_SEOUL_TRANSITIONS.length) ? ASIA_SEOUL_TRANSITIONS[i + 1].startUtcMs : Infinity;
+    const candUtc = Math.round(naiveMs - p.offsetMin * 60000);
+    if (candUtc >= p.startUtcMs && candUtc < nextStart) {
+      matches.push({ utcMs: candUtc, period: p });
+    }
+  }
+  if (matches.length === 1) {
+    return {
+      utcMs: matches[0].utcMs,
+      period: matches[0].period,
+      disambiguation: 'normal',
+      alternateUtcMs: null,
+      note: null
+    };
+  }
+  if (matches.length >= 2) {
+    const first = matches[0];
+    const secondOcc = matches[1];
+    return {
+      utcMs: first.utcMs,
+      period: first.period,
+      disambiguation: 'fold',
+      alternateUtcMs: secondOcc.utcMs,
+      alternatePeriod: secondOcc.period,
+      note: `법정 시각(${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')} ${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')})은 서머타임 해제·표준시 환원으로 시계가 뒤로 돌아가며 두 번 반복된 중복 시각(Fold)입니다. IANA/Temporal 호환(earlier) 규칙에 따라 첫 번째 발생 시각(${first.period.label})을 기본 적용하고 두 번째 발생 시각(${secondOcc.period.label})과의 차이를 함께 검토했습니다.`
+    };
+  }
+  let prePeriod = ASIA_SEOUL_TRANSITIONS[0];
+  let postPeriod = ASIA_SEOUL_TRANSITIONS[1];
+  for (let i = 0; i < ASIA_SEOUL_TRANSITIONS.length - 1; i++) {
+    const p1 = ASIA_SEOUL_TRANSITIONS[i];
+    const p2 = ASIA_SEOUL_TRANSITIONS[i + 1];
+    const cand1 = Math.round(naiveMs - p1.offsetMin * 60000);
+    const cand2 = Math.round(naiveMs - p2.offsetMin * 60000);
+    if (cand1 >= p2.startUtcMs && cand2 < p2.startUtcMs) {
+      prePeriod = p1;
+      postPeriod = p2;
+      break;
+    }
+  }
+  const resolvedUtc = Math.round(naiveMs - prePeriod.offsetMin * 60000);
+  const earlierUtc = Math.round(naiveMs - postPeriod.offsetMin * 60000);
+  const resolvedLocal = utcToLocalAsiaSeoul(resolvedUtc);
+  return {
+    utcMs: resolvedUtc,
+    period: postPeriod,
+    disambiguation: 'gap',
+    alternateUtcMs: earlierUtc,
+    alternatePeriod: prePeriod,
+    note: `법정 시각(${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')} ${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')})은 서머타임 시작·표준시 변경으로 시계가 건너뛴 존재하지 않는 시각(Gap)입니다. IANA/Temporal 호환(later) 규칙에 따라 직전 오프셋 기준 경과 시각(${String(resolvedLocal.hour).padStart(2,'0')}:${String(resolvedLocal.minute).padStart(2,'0')} ${postPeriod.label})으로 변환했습니다.`
+  };
+}
+
+// ============================================================================
+// 2. 음양력·윤달 변환 및 지원 범위 검증
+// - KASI 전체 범위(양력 1391-02-05 ~ 2050-12-31)와 본 사이트 지원 범위 구분:
+//   * 본 사이트 양력 입력 지원 범위: 양력 1908년 4월 1일 ~ 2050년 12월 31일 (대한제국 근대 법정 표준시 시행일 이후)
+//   * 본 사이트 음력 입력 지원 범위: 음력 1908년 3월 1일(평달, 양력 1908-04-01) ~ 음력 2050년 11월 18일(평달, 양력 2050-12-31)
+// ============================================================================
+const MIN_SUPPORTED_SOLAR_UTC = Date.UTC(1908, 3, 1);  // 양력 1908-04-01 (대한제국 표준시 시행일)
+const MAX_SUPPORTED_SOLAR_UTC = Date.UTC(2050, 11, 31); // 양력 2050-12-31
+
 function isValidSolarYMD(year, month, day) {
   if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return false;
   if (year < 1900 || year > 2050 || month < 1 || month > 12 || day < 1 || day > 31) return false;
   const d = new Date(Date.UTC(year, month - 1, day));
   return d.getUTCFullYear() === year && (d.getUTCMonth() + 1) === month && d.getUTCDate() === day;
+}
+
+function isSupportedSolarYMD(year, month, day) {
+  if (!isValidSolarYMD(year, month, day)) return { ok: false, error: '존재하지 않는 양력 날짜입니다. (윤년 2월 29일 여부 및 월별 일수를 확인해 주세요)' };
+  const utc = Date.UTC(year, month - 1, day);
+  if (utc < MIN_SUPPORTED_SOLAR_UTC) {
+    return {
+      ok: false,
+      error: '양력 1908년 4월 1일(대한제국 근대 표준시 시행일) 이전 기간은 당시 역사적 법정 시각을 정확히 확정할 수 없어 본 사이트 지원 범위(양력 1908년 4월 1일 ~ 2050년 12월 31일)에서 제한됩니다.'
+    };
+  }
+  if (utc > MAX_SUPPORTED_SOLAR_UTC) {
+    return {
+      ok: false,
+      error: '본 사이트의 양력 입력 지원 범위는 양력 1908년 4월 1일 ~ 2050년 12월 31일입니다. 범위 밖의 입력은 추정값으로 처리하지 않습니다.'
+    };
+  }
+  return { ok: true };
 }
 
 function getLunarYearInfo(lunarYear) {
@@ -606,8 +768,11 @@ function lunarToSolar(lunarYear, lunarMonth, lunarDay, isLeapMonth) {
   if (!Number.isInteger(lunarYear) || !Number.isInteger(lunarMonth) || !Number.isInteger(lunarDay)) {
     return { ok: false, error: '생년월일(연·월·일)을 숫자로 정확히 입력해 주세요.' };
   }
-  if (lunarYear < 1900 || lunarYear > 2050) {
-    return { ok: false, error: '음력 변환 지원 범위는 1900년~2050년입니다.' };
+  if (lunarYear < 1908 || lunarYear > 2050) {
+    return {
+      ok: false,
+      error: '본 사이트의 음력 입력 지원 범위는 음력 1908년 3월 1일(양력 1908-04-01) ~ 음력 2050년 11월 18일(양력 2050-12-31)입니다. 범위 밖의 날짜는 추정값으로 처리하지 않습니다.'
+    };
   }
   if (lunarMonth < 1 || lunarMonth > 12 || lunarDay < 1 || lunarDay > 30) {
     return { ok: false, error: '음력 월(1~12월)과 일(1~30일) 범위를 확인해 주세요.' };
@@ -633,10 +798,19 @@ function lunarToSolar(lunarYear, lunarMonth, lunarDay, isLeapMonth) {
     return { ok: false, error: `음력 ${lunarYear}년 ${isLeapMonth ? '윤' : ''}${lunarMonth}월은 ${found.days}일(작은달)까지만 있습니다.` };
   }
   const solarUTC = info.jan1UTC + (dayOffset + lunarDay - 1) * 86400000;
-  const d = new Date(solarUTC);
-  if (d.getUTCFullYear() > 2050) {
-    return { ok: false, error: '변환된 양력 날짜가 지원 범위(2050년 12월 31일)를 벗어납니다.' };
+  if (solarUTC < MIN_SUPPORTED_SOLAR_UTC) {
+    return {
+      ok: false,
+      error: '변환된 양력 날짜가 대한제국 근대 법정 표준시 시행일(양력 1908년 4월 1일, 음력 1908년 3월 1일) 이전이므로 지원 범위에서 제한됩니다.'
+    };
   }
+  if (solarUTC > MAX_SUPPORTED_SOLAR_UTC) {
+    return {
+      ok: false,
+      error: '변환된 양력 날짜가 본 사이트 지원 범위(양력 2050년 12월 31일, 음력 2050년 11월 18일)를 벗어납니다. 범위 밖의 입력은 추정값으로 처리하지 않습니다.'
+    };
+  }
+  const d = new Date(solarUTC);
   return {
     ok: true,
     year: d.getUTCFullYear(),
@@ -646,9 +820,8 @@ function lunarToSolar(lunarYear, lunarMonth, lunarDay, isLeapMonth) {
 }
 
 function solarToLunar(solarYear, solarMonth, solarDay) {
-  if (!isValidSolarYMD(solarYear, solarMonth, solarDay)) {
-    return { ok: false, error: '존재하지 않는 양력 날짜입니다. (윤년 여부 및 월별 일수를 확인해 주세요)' };
-  }
+  const sup = isSupportedSolarYMD(solarYear, solarMonth, solarDay);
+  if (!sup.ok) return sup;
   const targetUTC = Date.UTC(solarYear, solarMonth - 1, solarDay);
   for (let y = solarYear; y >= solarYear - 1 && y >= 1900; y--) {
     const info = getLunarYearInfo(y);
@@ -667,11 +840,14 @@ function solarToLunar(solarYear, solarMonth, solarDay) {
       rem -= m.days;
     }
   }
-  return { ok: false, error: '지원 범위(양력 1900년 1월 31일 ~ 2050년 12월 31일) 밖의 날짜입니다.' };
+  return { ok: false, error: '본 사이트 지원 범위(양력 1908년 4월 1일 ~ 2050년 12월 31일) 밖의 날짜입니다.' };
 }
 
 // ============================================================================
-// 천문 절입 시각 및 사주팔자(연·월·일·시주) 계산
+// 3. VSOP87D + NASA Espenak & Meeus 구간별 Delta T 및 미반올림 12절 절입 순간 계산
+// - 내부 판정은 반올림하지 않은 UTC 순간(findSolarTermUtcMs) 사용
+// - 화면 표시만 분 단위(formatUtcToKstMinuteStr)로 처리
+// - 반개구간 [절입 순간, 다음 절입 순간) 규칙 적용
 // ============================================================================
 function sumSeries(terms, tau) {
   let s = 0;
@@ -679,13 +855,36 @@ function sumSeries(terms, tau) {
   return s;
 }
 
-function deltaTSeconds(year) {
+function deltaTSecondsPiecewise(year) {
+  if (year < 1920) {
+    const t = year - 1900;
+    return -2.79 + 1.494119 * t - 0.0598939 * t * t + 0.0061966 * Math.pow(t, 3) - 0.000197 * Math.pow(t, 4);
+  }
+  if (year < 1941) {
+    const t = year - 1920;
+    return 21.20 + 0.84493 * t - 0.076100 * t * t + 0.0020936 * Math.pow(t, 3);
+  }
+  if (year < 1961) {
+    const t = year - 1950;
+    return 29.07 + 0.407 * t - (t * t) / 233.0 + Math.pow(t, 3) / 2547.0;
+  }
+  if (year < 1986) {
+    const t = year - 1975;
+    return 45.45 + 1.067 * t - (t * t) / 260.0 - Math.pow(t, 3) / 718.0;
+  }
+  if (year < 2005) {
+    const t = year - 2000;
+    return 63.86 + 0.3345 * t - 0.060374 * t * t + 0.0017275 * Math.pow(t, 3) + 0.000651814 * Math.pow(t, 4) + 0.00002373599 * Math.pow(t, 5);
+  }
+  if (year <= 2026) {
+    return 64.69 + 0.225 * (year - 2005);
+  }
   const t = year - 2000;
   return 62.92 + 0.32217 * t + 0.005589 * t * t;
 }
 
 function solarApparentLongitude(jdUTC) {
-  const dt = deltaTSeconds(2000 + (jdUTC - 2451545.0) / 365.25) / 86400.0;
+  const dt = deltaTSecondsPiecewise(2000 + (jdUTC - 2451545.0) / 365.25) / 86400.0;
   const jde = jdUTC + dt;
   const tau = (jde - 2451545.0) / 365250.0;
   const T = tau * 10.0;
@@ -709,36 +908,107 @@ function solarApparentLongitude(jdUTC) {
   return ((sunLon + dPsi + aberration) % 360 + 360) % 360;
 }
 
-function findSolarTermJD(year, approxMonth, targetDeg) {
+const solarTermCache = {};
+function findSolarTermUtcMs(year, approxMonth, targetDeg) {
+  const key = `${year}-${approxMonth}-${targetDeg}`;
+  if (solarTermCache[key] !== undefined) return solarTermCache[key];
   let jd = Date.UTC(year, approxMonth - 1, 5, 0, 0, 0) / 86400000 + 2440587.5;
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 14; i++) {
     const lon = solarApparentLongitude(jd);
     let diff = targetDeg - lon;
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
     jd += diff / 0.98564736;
   }
-  return jd;
+  const utcMs = Math.round((jd - 2440587.5) * 86400000);
+  solarTermCache[key] = utcMs;
+  return utcMs;
 }
 
-function formatJDtoKSTString(jd) {
-  const ms = Math.floor(((jd - 2440587.5) * 86400000 + 9 * 3600000 + 30000) / 60000) * 60000;
-  const d = new Date(ms);
+function formatUtcToKstMinuteStr(utcMs) {
+  const roundedMs = Math.floor((utcMs + 9 * 3600000 + 30000) / 60000) * 60000;
+  const d = new Date(roundedMs);
   return d.toISOString().replace('T', ' ').slice(0, 16);
 }
 
+function getJieQiTableAroundYear(approxSolarYear) {
+  const terms = [];
+  for (let y = approxSolarYear - 1; y <= approxSolarYear + 1; y++) {
+    for (let idx = 0; idx < SOLAR_TERMS_12.length; idx++) {
+      const t = SOLAR_TERMS_12[idx];
+      const utcMs = findSolarTermUtcMs(y, t.month, t.deg);
+      const sajuYear = (t.month === 1) ? (y - 1) : y;
+      const monthTermIndex = (t.branch - 2 + 12) % 12;
+      terms.push({
+        solarYear: y,
+        month: t.month,
+        name: t.name,
+        deg: t.deg,
+        branch: t.branch,
+        sajuYear,
+        monthTermIndex,
+        utcMs,
+        kstDisplayStr: formatUtcToKstMinuteStr(utcMs)
+      });
+    }
+  }
+  terms.sort((a, b) => a.utcMs - b.utcMs);
+  return terms;
+}
+
+// 반개구간 [term_k.utcMs, term_{k+1}.utcMs) 규칙에 따른 연주·월주 및 직전/다음 절입 산출
+function evaluateSolarTermStateAtUtc(instantUtcMs, approxSolarYear) {
+  const terms = getJieQiTableAroundYear(approxSolarYear);
+  let activeIdx = 0;
+  for (let i = 0; i < terms.length - 1; i++) {
+    if (instantUtcMs >= terms[i].utcMs && instantUtcMs < terms[i + 1].utcMs) {
+      activeIdx = i;
+      break;
+    }
+  }
+  const activeTerm = terms[activeIdx];
+  const nextTerm = terms[activeIdx + 1];
+  const isExactTermBoundary = (instantUtcMs === activeTerm.utcMs);
+
+  const sajuYear = activeTerm.sajuYear;
+  const yearStem = ((sajuYear - 4) % 10 + 10) % 10;
+  const yearBranch = ((sajuYear - 4) % 12 + 12) % 12;
+
+  const monthBranch = activeTerm.branch;
+  const monthStartStem = (((yearStem % 5) * 2 + 2) % 10);
+  const monthStem = (monthStartStem + activeTerm.monthTermIndex) % 10;
+
+  const ipchunUtcMs = findSolarTermUtcMs(approxSolarYear, 2, 315);
+
+  return {
+    yearPillar: { stem: yearStem, branch: yearBranch, ganji: STEMS[yearStem] + BRANCHES[yearBranch] },
+    monthPillar: { stem: monthStem, branch: monthBranch, ganji: STEMS[monthStem] + BRANCHES[monthBranch] },
+    sajuYear,
+    activeTerm,
+    nextTerm,
+    isExactTermBoundary,
+    ipchunUtcMs,
+    ipchunKstDisplay: formatUtcToKstMinuteStr(ipchunUtcMs)
+  };
+}
+
+// ============================================================================
+// 4. 경도 보정(지방평균태양시)과 날짜 경계(보정 후 00:00 기본 vs 23:00 전환 대안 비교)
+// - 일주 기준일: 양력 2000-01-01 = 무오일(戊午日, 60갑자 0-based index 54)
+// - 음수 나머지 처리: ((54 + diffDays) % 60 + 60) % 60
+// ============================================================================
 function getDayGanjiFromSolarYMD(year, month, day) {
   const targetUTC = Date.UTC(year, month - 1, day);
   const baseUTC = Date.UTC(2000, 0, 1);
   const diffDays = Math.round((targetUTC - baseUTC) / 86400000);
   const idx60 = ((54 + diffDays) % 60 + 60) % 60;
-  return { stem: idx60 % 10, branch: idx60 % 12, idx60 };
+  return { stem: idx60 % 10, branch: idx60 % 12, idx60, ganji: STEMS[idx60 % 10] + BRANCHES[idx60 % 12] };
 }
 
 function getHourGanji(dayStemForHour, hourBranch) {
   const startStem = ((dayStemForHour % 5) * 2);
   const stem = (startStem + hourBranch) % 10;
-  return { stem, branch: hourBranch };
+  return { stem, branch: hourBranch, ganji: STEMS[stem] + BRANCHES[hourBranch] };
 }
 
 function formatPillar(p) {
@@ -746,78 +1016,143 @@ function formatPillar(p) {
   return STEMS[p.stem] + BRANCHES[p.branch];
 }
 
-function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour = 12, minute = 0, cityCode = '' }) {
-  const city = CITIES[cityCode] || CITIES[''];
-  const offsetMin = timeKnown ? city.offsetMin : 0;
+function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour = 0, minute = 0, cityCode = 'SEOUL' }) {
+  const city = CITIES[cityCode] || CITIES.SEOUL;
 
-  const kstMs = Date.UTC(solarYear, solarMonth - 1, solarDay, timeKnown ? hour : 12, timeKnown ? minute : 0, 0);
-  const utcMs = kstMs - 9 * 3600000;
-  const jdUTC = utcMs / 86400000 + 2440587.5;
+  if (!timeKnown) {
+    // 출생 시간 모름: 정오를 실제 출생 시각처럼 확정하지 않고 당일 법정 시각 [00:00:00, 23:59:59] 전체 범위를 검사
+    const startConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, 0, 0, 0);
+    const endConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, 23, 59, 59);
+    const stateStart = evaluateSolarTermStateAtUtc(startConv.utcMs, solarYear);
+    const stateEnd = evaluateSolarTermStateAtUtc(endConv.utcMs, solarYear);
+    const dayPillar = getDayGanjiFromSolarYMD(solarYear, solarMonth, solarDay);
+    const prevDate = new Date(Date.UTC(solarYear, solarMonth - 1, solarDay) - 86400000);
+    const nextDate = new Date(Date.UTC(solarYear, solarMonth - 1, solarDay) + 86400000);
+    const prevDayPillar = getDayGanjiFromSolarYMD(prevDate.getUTCFullYear(), prevDate.getUTCMonth() + 1, prevDate.getUTCDate());
+    const nextDayPillar = getDayGanjiFromSolarYMD(nextDate.getUTCFullYear(), nextDate.getUTCMonth() + 1, nextDate.getUTCDate());
 
-  const ipchunJD = findSolarTermJD(solarYear, 2, 315);
-  const sajuYear = (jdUTC < ipchunJD) ? (solarYear - 1) : solarYear;
-  const yearStem = ((sajuYear - 4) % 10 + 10) % 10;
-  const yearBranch = ((sajuYear - 4) % 12 + 12) % 12;
+    const termTransitionOnBirthDay = (stateStart.activeTerm.utcMs !== stateEnd.activeTerm.utcMs);
+    const transitionTerm = termTransitionOnBirthDay ? stateEnd.activeTerm : null;
+    const transitionTermLocal = transitionTerm ? utcToLocalAsiaSeoul(transitionTerm.utcMs) : null;
 
-  const lon = solarApparentLongitude(jdUTC);
-  const monthTermIndex = Math.floor(((lon + 45) % 360) / 30);
-  const monthBranch = (monthTermIndex + 2) % 12;
-  const monthStartStem = (((yearStem % 5) * 2 + 2) % 10);
-  const monthStem = (monthStartStem + monthTermIndex) % 10;
-
-  // 해당 양력 월의 절기 시각과 비교해 절입 경계 안내 생성
-  const monthTermDef = SOLAR_TERMS_12[solarMonth - 1];
-  const monthTermJD = findSolarTermJD(solarYear, monthTermDef.month, monthTermDef.deg);
-  const diffHoursToTerm = Math.abs(jdUTC - monthTermJD) * 24;
-  let termBoundaryNote = null;
-  const termKSTStr = formatJDtoKSTString(monthTermJD);
-  if (!timeKnown && termKSTStr.slice(0, 10) === toDateInputString(solarYear, solarMonth, solarDay)) {
-    termBoundaryNote = `출생일이 '${monthTermDef.name}' 절입일(${termKSTStr} KST) 당일입니다. '시간 모름' 선택으로 정오(12:00) 기준을 적용했으며, 실제 출생 시각이 절입 시각(${termKSTStr.slice(11)}) 이전이면 월주${monthTermDef.name === '입춘' ? '·연주' : ''}가 달라질 수 있습니다.`;
-  } else if (timeKnown && diffHoursToTerm <= 3) {
-    termBoundaryNote = `출생 시각이 '${monthTermDef.name}' 절입 시각(${termKSTStr} KST)과 약 ${Math.round(diffHoursToTerm * 60)}분 차이로 절입 경계에 인접해 있습니다.`;
-  }
-
-  let dayPillar = getDayGanjiFromSolarYMD(solarYear, solarMonth, solarDay);
-  let hourPillar = null;
-  let boundaryNote = null;
-  let correctedTimeStr = null;
-
-  if (timeKnown) {
-    const correctedKstMs = kstMs + offsetMin * 60000;
-    const cd = new Date(correctedKstMs);
-    const cYear = cd.getUTCFullYear();
-    const cMonth = cd.getUTCMonth() + 1;
-    const cDay = cd.getUTCDate();
-    const cHour = cd.getUTCHours();
-    const cMin = cd.getUTCMinutes();
-    correctedTimeStr = `${String(cHour).padStart(2, '0')}:${String(cMin).padStart(2, '0')}`;
-
-    dayPillar = getDayGanjiFromSolarYMD(cYear, cMonth, cDay);
-    const hourBranch = Math.floor(((cHour + 1) % 24) / 2);
-    const nextDayDate = new Date(Date.UTC(cYear, cMonth - 1, cDay) + 86400000);
-    const nextDayPillar = getDayGanjiFromSolarYMD(nextDayDate.getUTCFullYear(), nextDayDate.getUTCMonth() + 1, nextDayDate.getUTCDate());
-    const dayStemForHour = (cHour === 23) ? nextDayPillar.stem : dayPillar.stem;
-    hourPillar = getHourGanji(dayStemForHour, hourBranch);
-
-    const rawDayPillar = getDayGanjiFromSolarYMD(solarYear, solarMonth, solarDay);
-    if (cHour === 23 || hour === 23 || (cDay !== solarDay)) {
-      const altDayPillar = (cHour === 23) ? nextDayPillar : rawDayPillar;
-      const altHourPillar = getHourGanji(altDayPillar.stem, 0);
-      boundaryNote = `출생 시각(입력 ${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}${offsetMin !== 0 ? ', 경도 시차 보정 후 ' + correctedTimeStr : ''})이 밤 11시~자정 날짜 경계(자시)에 걸려 있습니다. 기본 기준(보정 후 자정 00:00 일주 전환)에서는 일주 '${formatPillar(dayPillar)}'·시주 '${formatPillar(hourPillar)}'이나, 밤 11시(23:00) 일주 전환(정자시) 또는 보정 미적용 기준에서는 일주 '${formatPillar(altDayPillar)}'·시주 '${formatPillar(altHourPillar)}'로 달라질 수 있습니다.`;
+    let termBoundaryNote = null;
+    if (termTransitionOnBirthDay) {
+      const localTermTimeStr = `${String(transitionTermLocal.hour).padStart(2,'0')}:${String(transitionTermLocal.minute).padStart(2,'0')}`;
+      termBoundaryNote = `출생일(${solarYear}-${String(solarMonth).padStart(2,'0')}-${String(solarDay).padStart(2,'0')}) 당일 법정 시각 약 ${localTermTimeStr}(KST 분 단위 표시 ${transitionTerm.kstDisplayStr})에 ‘${transitionTerm.name}’ 절입이 있어, 출생 시각이 절입 이전이면 연주 ${stateStart.yearPillar.ganji}·월주 ${stateStart.monthPillar.ganji}, 절입 순간 이후이면 연주 ${stateEnd.yearPillar.ganji}·월주 ${stateEnd.monthPillar.ganji}로 달라집니다.`;
     }
+
+    const boundaryNote = `‘시간 모름’ 선택으로 시주(時柱)를 제외하고 당일 달력 날짜 기준 일주(${formatPillar(dayPillar)})를 적용했습니다. 만약 실제 출생 시각이 자정 직후(지방평균태양시 보정 시 전날 23시대가 되는 구간)였다면 전날 일주(${formatPillar(prevDayPillar)})가, 밤 11시(23:00) 일주 전환 대안 기준의 23시 이후 출생이었다면 다음 날 일주(${formatPillar(nextDayPillar)})가 적용될 수 있습니다.`;
+
+    return {
+      timeKnown: false,
+      birthUtcMs: null,
+      dayRangeUtc: { startUtcMs: startConv.utcMs, endUtcMs: endConv.utcMs },
+      yearPillar: stateEnd.yearPillar,
+      monthPillar: stateEnd.monthPillar,
+      altBeforeTerm: termTransitionOnBirthDay ? { yearPillar: stateStart.yearPillar, monthPillar: stateStart.monthPillar, term: transitionTerm } : null,
+      dayPillar,
+      hourPillar: null,
+      dayMaster: dayPillar.stem,
+      city,
+      termTransitionOnBirthDay,
+      termBoundaryNote,
+      boundaryNote
+    };
   }
+
+  // 출생 시간 입력됨:
+  // 1) 출생지·출생 당시 법정 시각 -> 역사적 시간대·서머타임(Asia/Seoul) 반영 UTC 순간 변환
+  const tzConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, hour, minute, 0);
+  const birthUtcMs = tzConv.utcMs;
+
+  // 2) 연주·월주: 출생 순간(UTC)과 절입 순간(UTC)을 동일한 UTC 축에서 미반올림 비교
+  const termState = evaluateSolarTermStateAtUtc(birthUtcMs, solarYear);
+
+  const diffMinPrev = Math.abs(birthUtcMs - termState.activeTerm.utcMs) / 60000;
+  const diffMinNext = Math.abs(termState.nextTerm.utcMs - birthUtcMs) / 60000;
+  let termBoundaryNote = null;
+  if (termState.isExactTermBoundary) {
+    termBoundaryNote = `출생 순간이 ‘${termState.activeTerm.name}’ 절입 순간과 일치하여 반개구간([절입 순간, 다음 절입 순간)) 규칙에 따라 새로운 연주(${termState.yearPillar.ganji})·월주(${termState.monthPillar.ganji})를 적용했습니다.`;
+  } else if (diffMinPrev <= 120) {
+    termBoundaryNote = `출생 순간이 ‘${termState.activeTerm.name}’ 절입(KST 분 단위 표시 ${termState.activeTerm.kstDisplayStr}) 직후 약 ${Math.round(diffMinPrev)}분 시점입니다.`;
+  } else if (diffMinNext <= 120) {
+    termBoundaryNote = `출생 순간이 ‘${termState.nextTerm.name}’ 절입(KST 분 단위 표시 ${termState.nextTerm.kstDisplayStr}) 직전 약 ${Math.round(diffMinNext)}분 시점입니다.`;
+  }
+
+  // 3) 일주·시주: 출생 순간(UTC)에서 출생지 실제 경도(city.lon)로 지방평균태양시(LMST) 산출
+  const lmstMs = Math.round(birthUtcMs + city.lon * 240000);
+  const lmstDate = new Date(lmstMs);
+  const cYear = lmstDate.getUTCFullYear();
+  const cMonth = lmstDate.getUTCMonth() + 1;
+  const cDay = lmstDate.getUTCDate();
+  const cHour = lmstDate.getUTCHours();
+  const cMin = lmstDate.getUTCMinutes();
+  const cSec = lmstDate.getUTCSeconds();
+  const correctedTimeStr = `${String(cYear)}-${String(cMonth).padStart(2,'0')}-${String(cDay).padStart(2,'0')} ${String(cHour).padStart(2,'0')}:${String(cMin).padStart(2,'0')}:${String(cSec).padStart(2,'0')}`;
+  const correctedHM = `${String(cHour).padStart(2,'0')}:${String(cMin).padStart(2,'0')}`;
+
+  // 기본 기준: 지방평균태양시 보정 후 자정(00:00)에 일주 전환
+  // 자시 명시적 정의 (이 사이트가 채택한 야자시 처리 방식이며 학파 공통 규칙이 아님):
+  // - 23:00~00:00 (cHour === 23): 해당 보정 날짜(cYear-cMonth-cDay)의 일간으로 시간 천간 산출
+  // - 00:00~01:00 (cHour === 0): 자정 이후 새 보정 날짜(cYear-cMonth-cDay)의 일간으로 시간 천간 산출
+  const dayPillar = getDayGanjiFromSolarYMD(cYear, cMonth, cDay);
+  const hourBranch = Math.floor(((cHour + 1) % 24) / 2);
+  const hourPillar = getHourGanji(dayPillar.stem, hourBranch);
+
+  // 23:00에 일주를 바꾸는 대안 기준과 비교 (일주·시주 모두 재계산)
+  let alt23DayPillar = dayPillar;
+  let alt23HourPillar = hourPillar;
+  if (cHour === 23) {
+    const nextDt = new Date(Date.UTC(cYear, cMonth - 1, cDay) + 86400000);
+    alt23DayPillar = getDayGanjiFromSolarYMD(nextDt.getUTCFullYear(), nextDt.getUTCMonth() + 1, nextDt.getUTCDate());
+    alt23HourPillar = getHourGanji(alt23DayPillar.stem, 0);
+  }
+
+  // 경도 보정 미적용(법정 시각 그대로) 시의 일주·시주 비교
+  const rawDayPillar = getDayGanjiFromSolarYMD(solarYear, solarMonth, solarDay);
+  const rawHourBranch = Math.floor(((hour + 1) % 24) / 2);
+  const rawHourPillar = getHourGanji(rawDayPillar.stem, rawHourBranch);
+
+  const boundaryNotes = [];
+  if (alt23DayPillar.idx60 !== dayPillar.idx60 || alt23HourPillar.stem !== hourPillar.stem || alt23HourPillar.branch !== hourPillar.branch) {
+    boundaryNotes.push(`지방평균태양시 보정 후 시각(${correctedHM})이 23:00~00:00 구간에 해당합니다. 본 사이트가 채택한 야자시 처리 방식(보정 후 00:00 일주 전환 및 당일 보정 날짜 일간 기준 자시 천간 산출, 학파 공통 규칙 아님)에서는 일주 ‘${formatPillar(dayPillar)}’·시주 ‘${formatPillar(hourPillar)}’이나, 23:00에 일주를 다음 날로 바꾸는 대안 기준에서는 일주 ‘${formatPillar(alt23DayPillar)}’·시주 ‘${formatPillar(alt23HourPillar)}’로 달라집니다.`);
+  }
+  if (rawDayPillar.idx60 !== dayPillar.idx60 || rawHourPillar.stem !== hourPillar.stem || rawHourPillar.branch !== hourPillar.branch) {
+    boundaryNotes.push(`입력된 법정 시각(${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}, ${tzConv.period.label})과 출생지(${city.name}, 동경 ${city.lon}°) 지방평균태양시 보정 후 시각(${correctedHM}) 사이에 날짜 또는 시진 경계 차이가 있습니다. 경도 보정 미적용(법정 시계 기준) 시에는 일주 ‘${formatPillar(rawDayPillar)}’·시주 ‘${formatPillar(rawHourPillar)}’로 계산됩니다.`);
+  }
+  if (tzConv.alternateUtcMs !== null) {
+    const altTermState = evaluateSolarTermStateAtUtc(tzConv.alternateUtcMs, solarYear);
+    const altLmstMs = Math.round(tzConv.alternateUtcMs + city.lon * 240000);
+    const altLmstDate = new Date(altLmstMs);
+    const altDayPillar = getDayGanjiFromSolarYMD(altLmstDate.getUTCFullYear(), altLmstDate.getUTCMonth() + 1, altLmstDate.getUTCDate());
+    const altHourBranch = Math.floor(((altLmstDate.getUTCHours() + 1) % 24) / 2);
+    const altHourPillar = getHourGanji(altDayPillar.stem, altHourBranch);
+    boundaryNotes.push(`${tzConv.note} 대안 시각 적용 시 원국은 연주 ${altTermState.yearPillar.ganji}·월주 ${altTermState.monthPillar.ganji}·일주 ${formatPillar(altDayPillar)}·시주 ${formatPillar(altHourPillar)}입니다.`);
+  } else if (tzConv.note) {
+    boundaryNotes.push(tzConv.note);
+  }
+
+  const legalToLmstDiffMin = (lmstMs - Date.UTC(solarYear, solarMonth - 1, solarDay, hour, minute, 0)) / 60000;
 
   return {
-    yearPillar: { stem: yearStem, branch: yearBranch },
-    monthPillar: { stem: monthStem, branch: monthBranch },
+    timeKnown: true,
+    birthUtcMs,
+    tzPeriod: tzConv.period,
+    tzDisambiguation: tzConv.disambiguation,
+    yearPillar: termState.yearPillar,
+    monthPillar: termState.monthPillar,
     dayPillar,
     hourPillar,
+    alt23Pillars: (cHour === 23) ? { dayPillar: alt23DayPillar, hourPillar: alt23HourPillar } : null,
     dayMaster: dayPillar.stem,
     city,
-    offsetMin,
     correctedTimeStr,
+    correctedHM,
+    legalToLmstDiffMin: Number(legalToLmstDiffMin.toFixed(2)),
+    displayKstOffsetMin: city.displayOffsetMin,
+    exactKstOffsetMin: Number(city.exactKstOffsetMin.toFixed(2)),
     termBoundaryNote,
-    boundaryNote
+    boundaryNote: boundaryNotes.length > 0 ? boundaryNotes.join(' ') : null
   };
 }
 
@@ -841,42 +1176,20 @@ function isYukHap(b1, b2) {
 function isSamHap(b1, b2) { return b1 !== b2 && (b1 % 4 === b2 % 4); }
 function isCheonGanHap(s1, s2) { return Math.abs(s1 - s2) === 5; }
 
-// 12절기 목록을 시간순으로 생성하여 특정 JD 전후의 직전 절입(prev)과 다음 절입(next)을 반환
-function getSurroundingJieQi(jdUTC, approxSolarYear) {
-  const terms = [];
-  for (let y = approxSolarYear - 1; y <= approxSolarYear + 1; y++) {
-    for (const t of SOLAR_TERMS_12) {
-      const termJD = findSolarTermJD(y, t.month, t.deg);
-      terms.push({
-        year: y,
-        month: t.month,
-        name: t.name,
-        deg: t.deg,
-        branch: t.branch,
-        jd: termJD,
-        kstStr: formatJDtoKSTString(termJD)
-      });
-    }
-  }
-  terms.sort((a, b) => a.jd - b.jd);
-  let prev = null;
-  let next = null;
-  for (let i = 0; i < terms.length; i++) {
-    if (terms[i].jd <= jdUTC) {
-      prev = terms[i];
-    } else if (terms[i].jd > jdUTC) {
-      next = terms[i];
-      break;
-    }
-  }
-  return { prev, next };
+// ============================================================================
+// 5. 대운 순역행과 ‘전통 단위 분해 후 달력 가산’ 시작 시점 계산
+// - 3일 -> 1년, 6시간 -> 1개월(1일 -> 4개월), 1초 -> 120초(2시간 -> 10일)
+// - 출생지 법정 시각 달력에 연·월을 함께 가산 후 월말 클램핑, 남은 기간을 경과시간으로 가산
+// - 후속 대운은 첫 시작 시점으로부터 달력 기준 10년씩 산출 (매 단계 누적 가산 금지)
+// - 대운 구간은 반개구간 [시작 시점, 다음 대운 시작 시점)으로 판정
+// ============================================================================
+function daysInSolarMonth(year, month) {
+  return new Date(Date.UTC(year, month, 0)).getUTCDate();
 }
 
-// 대운(大運) 계산 (양남음녀 순행, 음남양녀 역행, 12절 기준 3일=1년 환산)
-function computeDaeunProfile({ solarYear, solarMonth, solarDay, timeKnown, hour = 12, minute = 0, gender = 'NONE', yearPillar, monthPillar }) {
-  if (gender !== 'M' && gender !== 'F') {
-    return { enabled: false, gender: 'NONE', reason: '성별 미입력 (대운 미반영 간이 풀이)' };
-  }
+function computeSingleDaeunScheduleFromInstant(birthUtcMs, birthLocal, gender) {
+  const termState = evaluateSolarTermStateAtUtc(birthUtcMs, birthLocal.year);
+  const { yearPillar, monthPillar, activeTerm, nextTerm, isExactTermBoundary } = termState;
 
   const isYangYear = (yearPillar.stem % 2 === 0);
   const isMale = (gender === 'M');
@@ -886,163 +1199,272 @@ function computeDaeunProfile({ solarYear, solarMonth, solarDay, timeKnown, hour 
     ? `순행 (${isYangYear ? '양년생' : '음년생'} ${isMale ? '남성' : '여성'})`
     : `역행 (${isYangYear ? '양년생' : '음년생'} ${isMale ? '남성' : '여성'})`;
 
-  const birthKstMs = Date.UTC(solarYear, solarMonth - 1, solarDay, timeKnown ? hour : 12, timeKnown ? minute : 0, 0);
-  const birthJdUTC = (birthKstMs - 9 * 3600000) / 86400000 + 2440587.5;
-  const { prev, next } = getSurroundingJieQi(birthJdUTC, solarYear);
+  let refTerm = isForward ? nextTerm : activeTerm;
+  let deltaMs = 0;
+  if (isExactTermBoundary) {
+    deltaMs = 0;
+    refTerm = activeTerm;
+  } else {
+    deltaMs = isForward ? (nextTerm.utcMs - birthUtcMs) : (birthUtcMs - activeTerm.utcMs);
+    if (deltaMs < 0) deltaMs = 0;
+  }
 
-  const refTerm = isForward ? next : prev;
-  const deltaDays = isForward ? (next.jd - birthJdUTC) : (birthJdUTC - prev.jd);
+  const THREE_DAYS_MS = 3 * 86400000;
+  const addYears = Math.floor(deltaMs / THREE_DAYS_MS);
+  const remAfterYearsMs = deltaMs - addYears * THREE_DAYS_MS;
 
-  // 3일 = 1년, 1일 = 4개월, 1시간 = 5일 (연속 환산 연수 = deltaDays / 3.0)
-  const exactStartYears = deltaDays / 3.0;
-  const startYearsInt = Math.floor(exactStartYears);
-  const startMonthsRem = Math.round((exactStartYears - startYearsInt) * 12);
-  const adjYears = startMonthsRem === 12 ? startYearsInt + 1 : startYearsInt;
-  const adjMonths = startMonthsRem === 12 ? 0 : startMonthsRem;
-  const displayDaeunNumber = Math.max(1, Math.round(exactStartYears));
+  const SIX_HOURS_MS = 6 * 3600000;
+  const addMonths = Math.floor(remAfterYearsMs / SIX_HOURS_MS);
+  const remAfterMonthsMs = remAfterYearsMs - addMonths * SIX_HOURS_MS;
 
-  // 출생 시간 모름일 때의 시작 시점 불확실성 (당일 00:00~23:59 KST = ±0.5일 = ±2개월)
-  const startUncertaintyDays = timeKnown ? 0 : Math.round((0.5 / 3.0) * 365.2425);
-  const birthDateStr = toDateInputString(solarYear, solarMonth, solarDay);
-  const sameDayAsJieQi = !timeKnown && (prev.kstStr.slice(0, 10) === birthDateStr || next.kstStr.slice(0, 10) === birthDateStr);
+  const addedElapsedMs = Math.round(remAfterMonthsMs * 120);
+  const addedDaysFloat = addedElapsedMs / 86400000;
 
-  const birthSolarUTC = Date.UTC(solarYear, solarMonth - 1, solarDay);
-  const TROPICAL_YEAR_DAYS = 365.2425;
+  const totalMonths = (birthLocal.year + addYears) * 12 + (birthLocal.month - 1) + addMonths;
+  const calY = Math.floor(totalMonths / 12);
+  const calM = (totalMonths % 12) + 1;
+  const calD = Math.min(birthLocal.day, daysInSolarMonth(calY, calM));
+
+  const baseCalConv = localToUtcAsiaSeoul(calY, calM, calD, birthLocal.hour, birthLocal.minute, birthLocal.second || 0, birthLocal.ms || 0);
+  const firstStartUtcMs = baseCalConv.utcMs + addedElapsedMs;
+  const firstStartLocal = utcToLocalAsiaSeoul(firstStartUtcMs);
+
+  const boundaryUtcList = [firstStartUtcMs];
+  const boundaryLocalList = [firstStartLocal];
+  const dstNotes = [];
+  if (baseCalConv.note) dstNotes.push(baseCalConv.note);
+
+  for (let i = 2; i <= 11; i++) {
+    const targetY = firstStartLocal.year + (i - 1) * 10;
+    const targetM = firstStartLocal.month;
+    const targetD = Math.min(firstStartLocal.day, daysInSolarMonth(targetY, targetM));
+    const conv = localToUtcAsiaSeoul(targetY, targetM, targetD, firstStartLocal.hour, firstStartLocal.minute, firstStartLocal.second, firstStartLocal.ms);
+    if (conv.note && i <= 10) dstNotes.push(`${i}대운 시작 시점 변환 안내: ${conv.note}`);
+    boundaryUtcList.push(conv.utcMs);
+    boundaryLocalList.push(utcToLocalAsiaSeoul(conv.utcMs));
+  }
+
+  const displayDaeunNumber = Math.max(1, Math.round(addYears + addMonths / 12 + addedDaysFloat / 365));
+
   const pillars = [];
   for (let i = 1; i <= 10; i++) {
     const stem = ((monthPillar.stem + direction * i) % 10 + 10) % 10;
     const branch = ((monthPillar.branch + direction * i) % 12 + 12) % 12;
-    const startOffsetDays = Math.round((exactStartYears + (i - 1) * 10) * TROPICAL_YEAR_DAYS);
-    const endOffsetDays = Math.round((exactStartYears + i * 10) * TROPICAL_YEAR_DAYS) - 1;
-    const startUTC = birthSolarUTC + startOffsetDays * 86400000;
-    const endUTC = birthSolarUTC + endOffsetDays * 86400000;
-    const sDt = new Date(startUTC);
-    const eDt = new Date(endUTC);
+    const sUtc = boundaryUtcList[i - 1];
+    const eUtc = boundaryUtcList[i];
+    const sLoc = boundaryLocalList[i - 1];
+    const eLoc = boundaryLocalList[i];
+    const startDateStr = `${sLoc.year}-${String(sLoc.month).padStart(2,'0')}-${String(sLoc.day).padStart(2,'0')}`;
+    const nextStartDateStr = `${eLoc.year}-${String(eLoc.month).padStart(2,'0')}-${String(eLoc.day).padStart(2,'0')}`;
+    const startDateTimeStr = `${startDateStr} ${String(sLoc.hour).padStart(2,'0')}:${String(sLoc.minute).padStart(2,'0')}`;
+    const nextStartDateTimeStr = `${nextStartDateStr} ${String(eLoc.hour).padStart(2,'0')}:${String(eLoc.minute).padStart(2,'0')}`;
     const roundedStartAge = displayDaeunNumber + (i - 1) * 10;
-    const roundedEndAge = roundedStartAge + 9;
-    const roundedStartUTC = birthSolarUTC + Math.round(roundedStartAge * TROPICAL_YEAR_DAYS) * 86400000;
+
     pillars.push({
       order: i,
       stem,
       branch,
       ganji: STEMS[stem] + BRANCHES[branch],
-      displayAgeRange: `대운수 ${roundedStartAge} (${roundedStartAge}~${roundedEndAge}세 구간)`,
-      exactAgeStartLabel: `만 ${adjYears + (i - 1) * 10}년 ${adjMonths}개월`,
-      startUTC,
-      endUTC,
-      startDateStr: sDt.toISOString().slice(0, 10),
-      endDateStr: eDt.toISOString().slice(0, 10),
-      roundedStartUTC
+      startUtcMs: sUtc,
+      nextStartUtcMs: eUtc,
+      startDateStr,
+      nextStartDateStr,
+      startDateTimeStr,
+      nextStartDateTimeStr,
+      displayAgeRange: `표시 대운수 ${roundedStartAge}`,
+      decompAgeLabel: `${addYears + (i - 1) * 10}년 ${addMonths}개월 ${Math.floor(addedDaysFloat)}일`
     });
   }
 
   return {
-    enabled: true,
-    gender,
     isYangYear,
     isForward,
     direction,
     directionLabel,
+    yearPillar,
+    monthPillar,
     refTerm,
-    prevTerm: prev,
-    nextTerm: next,
-    deltaDays: Number(deltaDays.toFixed(3)),
-    exactStartYears: Number(exactStartYears.toFixed(2)),
-    exactStartLabel: timeKnown
-      ? `출생 후 만 ${adjYears}년 ${adjMonths}개월 (절입 간격 ${deltaDays.toFixed(2)}일 ÷ 3)`
-      : `출생 후 약 만 ${adjYears}년 ${adjMonths}개월 ± 2개월 (정오 기준 절입 간격 ${deltaDays.toFixed(1)}일 ÷ 3, 시간 미상으로 ±2개월 범위 존재)`,
+    isExactTermBoundary,
+    deltaMs,
+    deltaDays: Number((deltaMs / 86400000).toFixed(4)),
+    decomposition: {
+      addYears,
+      addMonths,
+      addedDays: Math.floor(addedDaysFloat),
+      addedHours: Math.floor((addedDaysFloat - Math.floor(addedDaysFloat)) * 24),
+      addedElapsedMs
+    },
+    decompSummaryLabel: `UTC 기산 간격 ${(deltaMs / 86400000).toFixed(2)}일 → 전통 단위 분해(${addYears}년 ${addMonths}개월 ${Math.floor(addedDaysFloat)}일) 달력 가산`,
     displayDaeunNumber,
-    startUncertaintyDays,
-    sameDayAsJieQi,
+    firstStartUtcMs,
+    firstStartLocal,
+    dstNotes,
     pillars
   };
 }
 
-// 대상 날짜에 적용되는 대운 조회 및 대운 경계(교운기·반올림 오차·시간 미상 불확실성) 판정
-function getActiveDaeunForDate(daeunProfile, targetY, targetM, targetD) {
-  if (!daeunProfile || !daeunProfile.enabled) {
-    return { active: null, isPreDaeun: false, boundaryNotes: [] };
-  }
-  const targetUTC = Date.UTC(targetY, targetM - 1, targetD);
-  const boundaryNotes = [];
-
-  if (daeunProfile.sameDayAsJieQi) {
-    boundaryNotes.push(`출생일이 절입일 당일이고 ‘시간 모름’ 상태여서, 실제 출생 시각이 절입 시각 전후인지에 따라 월주 및 대운 간지·방향이 달라질 수 있습니다.`);
+function computeDaeunProfile({ solarYear, solarMonth, solarDay, timeKnown, hour = 0, minute = 0, gender = 'NONE' }) {
+  if (gender !== 'M' && gender !== 'F') {
+    return { enabled: false, gender: 'NONE', reason: '성별 미입력 (대운 미반영 간이 풀이)' };
   }
 
-  let active = null;
-  let isPreDaeun = false;
-  if (targetUTC < daeunProfile.pillars[0].startUTC) {
-    isPreDaeun = true;
-  } else {
-    for (const p of daeunProfile.pillars) {
-      if (targetUTC >= p.startUTC && targetUTC <= p.endUTC) {
-        active = p;
-        break;
-      }
-    }
-    if (!active) active = daeunProfile.pillars[daeunProfile.pillars.length - 1];
+  if (timeKnown) {
+    const tzConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, hour, minute, 0);
+    const birthLocal = { year: solarYear, month: solarMonth, day: solarDay, hour, minute, second: 0, ms: 0 };
+    const sched = computeSingleDaeunScheduleFromInstant(tzConv.utcMs, birthLocal, gender);
+    return {
+      enabled: true,
+      timeKnown: true,
+      gender,
+      ...sched,
+      startLabel: `채택한 환산법에 따른 첫 대운 시작 시점: ${sched.pillars[0].startDateTimeStr} (${sched.decompSummaryLabel})`
+    };
   }
 
-  for (let i = 0; i < daeunProfile.pillars.length; i++) {
-    const p = daeunProfile.pillars[i];
-    const diffDaysFromStart = Math.round((targetUTC - p.startUTC) / 86400000);
-    if (Math.abs(diffDaysFromStart) <= Math.max(45, daeunProfile.startUncertaintyDays)) {
-      const prevDesc = i === 0 ? '대운 시작 전(초년 월주 기운)' : `${i}대운(${daeunProfile.pillars[i - 1].ganji})`;
-      if (daeunProfile.startUncertaintyDays > 0) {
-        boundaryNotes.push(`대상 날짜(${toDateInputString(targetY, targetM, targetD)})가 ${prevDesc}에서 ${p.order}대운(${p.ganji}, 정오 기준 전환일 약 ${p.startDateStr})으로 넘어가는 경계에 걸려 있어, 출생 시간 미입력에 따른 시작 시점 차이(약 ±2개월)로 적용 대운이 달라질 수 있습니다.`);
-      } else {
-        boundaryNotes.push(`대상 날짜가 ${prevDesc}에서 ${p.order}대운(${p.ganji}, 전환일 ${p.startDateStr})으로 바뀌는 교운기(전환 시점 전후 약 ${Math.abs(diffDaysFromStart)}일)에 해당합니다.`);
-      }
-    }
-  }
+  const startConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, 0, 0, 0);
+  const endConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, 23, 59, 59);
+  const schedEarlyBirth = computeSingleDaeunScheduleFromInstant(startConv.utcMs, { year: solarYear, month: solarMonth, day: solarDay, hour: 0, minute: 0, second: 0, ms: 0 }, gender);
+  const schedLateBirth = computeSingleDaeunScheduleFromInstant(endConv.utcMs, { year: solarYear, month: solarMonth, day: solarDay, hour: 23, minute: 59, second: 59, ms: 0 }, gender);
 
-  if (active) {
-    let roundedActive = null;
-    for (const p of daeunProfile.pillars) {
-      const nextRoundedUTC = p.order < 10 ? daeunProfile.pillars[p.order].roundedStartUTC : Infinity;
-      if (targetUTC >= p.roundedStartUTC && targetUTC < nextRoundedUTC) {
-        roundedActive = p;
-        break;
-      }
-    }
-    if (roundedActive && roundedActive.order !== active.order) {
-      boundaryNotes.push(`반올림된 대운수(${daeunProfile.displayDaeunNumber})만 단순 적용하면 ${roundedActive.order}대운(${roundedActive.ganji})으로 잘못 분류될 수 있으나, 실제 절입 간격 환산(3일=1년) 기준으로는 ${active.order}대운(${active.ganji}, ${active.startDateStr} ~ ${active.endDateStr})이 적용됩니다.`);
-    }
-  }
+  const sameTermOnDay = (schedEarlyBirth.monthPillar.ganji === schedLateBirth.monthPillar.ganji && schedEarlyBirth.yearPillar.ganji === schedLateBirth.yearPillar.ganji);
 
-  return { active, isPreDaeun, boundaryNotes };
-}
-
-// 대상 날짜의 세운(입춘 기준)·월운(12절기 기준)·일진(자정 기준) 산출
-function computeTargetDatePillars(targetY, targetM, targetD) {
-  const noonKstMs = Date.UTC(targetY, targetM - 1, targetD, 12, 0, 0);
-  const jdUTC = (noonKstMs - 9 * 3600000) / 86400000 + 2440587.5;
-  const ipchunJD = findSolarTermJD(targetY, 2, 315);
-  const ipchunKST = formatJDtoKSTString(ipchunJD);
-  const dateStr = toDateInputString(targetY, targetM, targetD);
-
-  const sajuYear = (jdUTC < ipchunJD) ? (targetY - 1) : targetY;
-  const seunStem = ((sajuYear - 4) % 10 + 10) % 10;
-  const seunBranch = ((sajuYear - 4) % 12 + 12) % 12;
-
-  const lon = solarApparentLongitude(jdUTC);
-  const monthTermIndex = Math.floor(((lon + 45) % 360) / 30);
-  const wolunBranch = (monthTermIndex + 2) % 12;
-  const monthStartStem = (((seunStem % 5) * 2 + 2) % 10);
-  const wolunStem = (monthStartStem + monthTermIndex) % 10;
-
-  const monthTermDef = SOLAR_TERMS_12[targetM - 1];
-  const monthTermJD = findSolarTermJD(targetY, monthTermDef.month, monthTermDef.deg);
-  const monthTermKST = formatJDtoKSTString(monthTermJD);
-  const isTermTransitionDay = (monthTermKST.slice(0, 10) === dateStr);
-
-  const iljin = getDayGanjiFromSolarYMD(targetY, targetM, targetD);
+  const rangePillars = schedLateBirth.pillars.map((pLate, idx) => {
+    const pEarly = schedEarlyBirth.pillars[idx];
+    const minStartUtcMs = Math.min(pEarly.startUtcMs, pLate.startUtcMs);
+    const maxStartUtcMs = Math.max(pEarly.startUtcMs, pLate.startUtcMs);
+    const minNextUtcMs = Math.min(pEarly.nextStartUtcMs, pLate.nextStartUtcMs);
+    const maxNextUtcMs = Math.max(pEarly.nextStartUtcMs, pLate.nextStartUtcMs);
+    const minLoc = utcToLocalAsiaSeoul(minStartUtcMs);
+    const maxLoc = utcToLocalAsiaSeoul(maxStartUtcMs);
+    const minDateStr = `${minLoc.year}-${String(minLoc.month).padStart(2,'0')}-${String(minLoc.day).padStart(2,'0')}`;
+    const maxDateStr = `${maxLoc.year}-${String(maxLoc.month).padStart(2,'0')}-${String(maxLoc.day).padStart(2,'0')}`;
+    return {
+      ...pLate,
+      minStartUtcMs,
+      maxStartUtcMs,
+      minNextUtcMs,
+      maxNextUtcMs,
+      startRangeStr: `${minDateStr} ~ ${maxDateStr}`,
+      earlyGanji: pEarly.ganji,
+      lateGanji: pLate.ganji
+    };
+  });
 
   return {
-    seun: { stem: seunStem, branch: seunBranch, ganji: STEMS[seunStem] + BRANCHES[seunBranch], sajuYear, ipchunKST, isIpchunDay: (ipchunKST.slice(0, 10) === dateStr) },
-    wolun: { stem: wolunStem, branch: wolunBranch, ganji: STEMS[wolunStem] + BRANCHES[wolunBranch], termName: monthTermDef.name, termKST: monthTermKST, isTermTransitionDay },
-    iljin: { stem: iljin.stem, branch: iljin.branch, ganji: STEMS[iljin.stem] + BRANCHES[iljin.branch] }
+    enabled: true,
+    timeKnown: false,
+    gender,
+    sameTermOnDay,
+    schedEarlyBirth,
+    schedLateBirth,
+    isYangYear: schedLateBirth.isYangYear,
+    isForward: schedLateBirth.isForward,
+    direction: schedLateBirth.direction,
+    directionLabel: sameTermOnDay
+      ? schedLateBirth.directionLabel
+      : `절입 전 ${schedEarlyBirth.directionLabel} / 절입 후 ${schedLateBirth.directionLabel}`,
+    refTerm: schedLateBirth.refTerm,
+    displayDaeunNumber: schedLateBirth.displayDaeunNumber,
+    pillars: rangePillars,
+    startLabel: sameTermOnDay
+      ? `출생 시간 미상으로 채택한 환산법에 따른 첫 대운 시작 가능 구간: ${rangePillars[0].startRangeStr} (당일 00:00~23:59 출생 범위에 따라 최대 약 4개월 폭 존재)`
+      : `출생일 당일 절입으로 인해 출생 시각(절입 전·후)에 따라 대운 방향·간지 및 채택한 환산법에 따른 대운 시작 시점이 달라집니다.`
+  };
+}
+
+function getActiveDaeunAtUtc(daeunProfile, targetStartUtcMs, targetEndUtcMs = targetStartUtcMs) {
+  if (!daeunProfile || !daeunProfile.enabled) {
+    return { active: null, isPreDaeun: false, isAmbiguous: false, boundaryNotes: [] };
+  }
+
+  if (daeunProfile.timeKnown) {
+    const boundaryNotes = [...(daeunProfile.dstNotes || [])];
+    const firstStart = daeunProfile.pillars[0].startUtcMs;
+    const endInstant = (targetEndUtcMs > targetStartUtcMs) ? (targetEndUtcMs - 1) : targetStartUtcMs;
+    if (endInstant < firstStart) {
+      return {
+        active: null,
+        activeAtStart: null,
+        activeAtEnd: null,
+        hasTransitionInside: false,
+        isPreDaeun: true,
+        isAmbiguous: false,
+        boundaryNotes
+      };
+    }
+    let activeAtStart = null;
+    let activeAtEnd = null;
+    for (const p of daeunProfile.pillars) {
+      if (targetStartUtcMs >= p.startUtcMs && targetStartUtcMs < p.nextStartUtcMs) activeAtStart = p;
+      if (endInstant >= p.startUtcMs && endInstant < p.nextStartUtcMs) activeAtEnd = p;
+    }
+    if (!activeAtStart && targetStartUtcMs >= daeunProfile.pillars[9].nextStartUtcMs) activeAtStart = daeunProfile.pillars[9];
+    if (!activeAtEnd && endInstant >= daeunProfile.pillars[9].nextStartUtcMs) activeAtEnd = daeunProfile.pillars[9];
+
+    const hasTransitionInside = (activeAtStart !== activeAtEnd);
+    const active = activeAtEnd || activeAtStart;
+
+    for (let i = 0; i < daeunProfile.pillars.length; i++) {
+      const p = daeunProfile.pillars[i];
+      const diffDays = Math.abs(targetStartUtcMs - p.startUtcMs) / 86400000;
+      if (diffDays <= 30) {
+        const prevDesc = i === 0 ? '대운 시작 전' : `${i}대운(${daeunProfile.pillars[i - 1].ganji})`;
+        boundaryNotes.push(`대상 시점이 ${prevDesc}에서 ${p.order}대운(${p.ganji}, 채택한 환산법에 따른 대운 시작 시점 ${p.startDateTimeStr})으로 바뀌는 전환기(약 ${Math.round(diffDays)}일 차이)에 인접해 있습니다.`);
+      }
+    }
+
+    return {
+      active,
+      activeAtStart,
+      activeAtEnd,
+      hasTransitionInside,
+      isPreDaeun: !active,
+      isAmbiguous: false,
+      boundaryNotes
+    };
+  }
+
+  const earlyState = getActiveDaeunAtUtc({ enabled: true, timeKnown: true, pillars: daeunProfile.schedEarlyBirth.pillars }, targetStartUtcMs, targetEndUtcMs);
+  const lateState = getActiveDaeunAtUtc({ enabled: true, timeKnown: true, pillars: daeunProfile.schedLateBirth.pillars }, targetStartUtcMs, targetEndUtcMs);
+  const boundaryNotes = [];
+
+  if (!daeunProfile.sameTermOnDay) {
+    boundaryNotes.push(`출생일 당일 절입이 있고 출생 시간을 몰라, 절입 전 출생 시(${earlyState.active ? `${earlyState.active.order}대운 ${earlyState.active.ganji}` : '대운 시작 전'})와 절입 후 출생 시(${lateState.active ? `${lateState.active.order}대운 ${lateState.active.ganji}` : '대운 시작 전'})의 적용 대운이 달라집니다.`);
+    return {
+      active: lateState.active,
+      isPreDaeun: earlyState.isPreDaeun && lateState.isPreDaeun,
+      isAmbiguous: true,
+      earlyActive: earlyState.active,
+      lateActive: lateState.active,
+      boundaryNotes
+    };
+  }
+
+  const earlyOrder = earlyState.active ? earlyState.active.order : 0;
+  const lateOrder = lateState.active ? lateState.active.order : 0;
+  if (earlyOrder !== lateOrder) {
+    const descE = earlyState.active ? `${earlyState.active.order}대운(${earlyState.active.ganji})` : '대운 시작 전';
+    const descL = lateState.active ? `${lateState.active.order}대운(${lateState.active.ganji})` : '대운 시작 전';
+    const rangeP = daeunProfile.pillars[Math.max(earlyOrder, lateOrder) - 1];
+    boundaryNotes.push(`대상 날짜가 출생 시간 미상에 따른 대운 전환 가능 구간(${rangeP ? rangeP.startRangeStr : ''}) 안에 놓여 있어, 실제 출생 시각에 따라 적용 대운이 ‘${descE}’ 또는 ‘${descL}’으로 달라집니다.`);
+    return {
+      active: lateState.active,
+      isPreDaeun: false,
+      isAmbiguous: true,
+      earlyActive: earlyState.active,
+      lateActive: lateState.active,
+      boundaryNotes
+    };
+  }
+
+  const matchedRangePillar = earlyOrder > 0 ? daeunProfile.pillars[earlyOrder - 1] : null;
+  return {
+    active: matchedRangePillar,
+    isPreDaeun: earlyOrder === 0,
+    isAmbiguous: false,
+    earlyActive: matchedRangePillar,
+    lateActive: matchedRangePillar,
+    boundaryNotes
   };
 }
 
@@ -1070,10 +1492,52 @@ function analyzeNatalChart(saju, timeKnown) {
   };
 }
 
-function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, nowKST) {
-  const targetPillars = computeTargetDatePillars(y, m, d);
-  const { seun, wolun, iljin } = targetPillars;
-  const daeunState = getActiveDaeunForDate(daeunProfile, y, m, d);
+function birthParamsTimeLabel(saju, timeKnown) {
+  return timeKnown && saju.hourPillar ? formatPillar(saju.hourPillar) : '시간 모름(제외)';
+}
+
+// ============================================================================
+// 6 & 7. 대상 날짜·시간 후보 평가 (대한민국 KST 기준, 시간대 내부 절입·대운 전환 제외, 시간 미상 불확실성 결과 제한)
+// ============================================================================
+function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched, y, m, d, timeKnown, nowUtcMs) {
+  const dateObj = new Date(Date.UTC(y, m - 1, d));
+  const dow = dateObj.getUTCDay();
+  const dateStr = toDateInputString(y, m, d);
+
+  // 대한민국 내 동행복권 공식 판매 시간: 매일 06:00~24:00 KST, 토요일은 06:00~20:00 KST 마감
+  const salesOpenUtcMs  = Date.UTC(y, m - 1, d, 6, 0, 0) - 9 * 3600000;
+  const salesCloseUtcMs = Date.UTC(y, m - 1, d, dow === 6 ? 20 : 24, 0, 0) - 9 * 3600000;
+  const effectiveStartUtcMs = Math.max(salesOpenUtcMs, nowUtcMs);
+  if (effectiveStartUtcMs >= salesCloseUtcMs) return null;
+
+  // 대상 날짜의 일진은 KST(UTC+9) 자정(00:00) 기준 전환
+  const iljin = getDayGanjiFromSolarYMD(y, m, d);
+
+  // 원국 일지 또는 월지와 정면 육충이면 제외
+  if (isYukChung(iljin.branch, saju.dayPillar.branch)) return null;
+  if (isYukChung(iljin.branch, saju.monthPillar.branch)) return null;
+
+  // 구매 가능 구간 [effectiveStartUtcMs, salesCloseUtcMs) 동안 12절 절입 전환 여부 확인
+  const termStart = evaluateSolarTermStateAtUtc(effectiveStartUtcMs, y);
+  const termEnd   = evaluateSolarTermStateAtUtc(salesCloseUtcMs - 1, y);
+  const hasTermTransitionInSalesWindow = (termStart.activeTerm.utcMs !== termEnd.activeTerm.utcMs);
+  let evalInstantUtcMs = effectiveStartUtcMs;
+  let dayTermTransitionNote = null;
+  if (hasTermTransitionInSalesWindow) {
+    const transUtc = termEnd.activeTerm.utcMs;
+    const beforeDur = transUtc - effectiveStartUtcMs;
+    const afterDur  = salesCloseUtcMs - transUtc;
+    evalInstantUtcMs = (beforeDur >= afterDur) ? effectiveStartUtcMs : transUtc;
+    const usedBefore = (evalInstantUtcMs < transUtc);
+    dayTermTransitionNote = `대상 날짜(${dateStr})의 구매 가능 시간 중 ${termEnd.activeTerm.kstDisplayStr} KST(분 단위 표시)에 ‘${termEnd.activeTerm.name}’ 절입 전환(${termStart.monthPillar.ganji}월 → ${termEnd.monthPillar.ganji}월)이 있어, 날짜 대표 평가는 구매 가능 시간의 주된 구간인 절입 ${usedBefore ? '이전(' + termStart.monthPillar.ganji + '월)' : '이후(' + termEnd.monthPillar.ganji + '월)'} 기준으로 산출하고 절입이 걸친 시간대는 후보에서 제외했습니다.`;
+  }
+
+  const evalTermState = evaluateSolarTermStateAtUtc(evalInstantUtcMs, y);
+  const seun = evalTermState.yearPillar;
+  const wolun = evalTermState.monthPillar;
+
+  const daeunLookupTarget = singleDaeunSched ? { enabled: true, timeKnown: true, pillars: singleDaeunSched.pillars, dstNotes: singleDaeunSched.dstNotes } : daeunProfile;
+  const daeunState = getActiveDaeunAtUtc(daeunLookupTarget, evalInstantUtcMs, salesCloseUtcMs);
   const activeDaeun = daeunState.active;
 
   const dm = saju.dayMaster;
@@ -1087,10 +1551,6 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
   const seunBranchGod = getTenGod(dm, BRANCH_MAIN_STEM[seun.branch]);
   const daeunStemGod = activeDaeun ? getTenGod(dm, activeDaeun.stem) : null;
   const daeunBranchGod = activeDaeun ? getTenGod(dm, BRANCH_MAIN_STEM[activeDaeun.branch]) : null;
-
-  // 원국 일지 또는 월지와 정면 육충이면 제외
-  if (isYukChung(iljin.branch, saju.dayPillar.branch)) return null;
-  if (isYukChung(iljin.branch, saju.monthPillar.branch)) return null;
 
   const hasIljinPyeonJae = (iljinStemGod.code === '편재' || iljinBranchGod.code === '편재');
   const hasIljinJeongJae = (iljinStemGod.code === '정재' || iljinBranchGod.code === '정재');
@@ -1131,7 +1591,6 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
   if (fBalance) factors.push('balance');
   if (fHarmony) factors.push('harmony');
 
-  // 단일 요소 하나만으로 길일 확정 금지: 최소 2개 이상 조건 충족 필수
   if (!fWealth && !fSikSangSaengJae) return null;
   if (factors.length < 2) return null;
 
@@ -1154,18 +1613,32 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
   if (hasSeunWolunWealth && hasIljinSikSang) score += 6;
   if (hasSeunWolunSikSang && hasIljinWealth) score += 6;
 
-  const dateObj = new Date(Date.UTC(y, m - 1, d));
-  const dow = dateObj.getUTCDay();
-  const dateStr = toDateInputString(y, m, d);
-  const todayStr = toDateInputString(nowKST.year, nowKST.month, nowKST.day);
-
-  if (dateStr === todayStr && dow === 6 && nowKST.hour >= 20) return null;
-
+  // 구매 시간 후보 평가 (Section 7):
+  // - 대한민국 내 구매(KST, UTC+9) 기준 시진 배정
+  // - 지난 시간 및 토요일 20:00 이후 제외
+  // - 시간대 내부에 12절 절입이나 대운 전환이 있으면 2시간 전체에 하나의 운이 적용되는 것처럼 표시하지 않도록 해당 시간대를 제외
   let validSlots = [];
+  const excludedSlotNotes = [];
   if (timeKnown && saju.hourPillar) {
     for (const slot of PURCHASE_SLOTS) {
       if (dow === 6 && !slot.allowSat) continue;
-      if (dateStr === todayStr && nowKST.hour >= slot.endHour) continue;
+      const slotStartUtcMs = Date.UTC(y, m - 1, d, slot.startHour, 0, 0) - 9 * 3600000;
+      const slotEndUtcMs   = Date.UTC(y, m - 1, d, slot.endHour, 0, 0) - 9 * 3600000;
+      if (nowUtcMs >= slotEndUtcMs) continue;
+
+      const sTerm = evaluateSolarTermStateAtUtc(slotStartUtcMs, y);
+      const eTerm = evaluateSolarTermStateAtUtc(slotEndUtcMs - 1, y);
+      if (sTerm.activeTerm.utcMs !== eTerm.activeTerm.utcMs) {
+        excludedSlotNotes.push(`${slot.label} 시간대 내부(${eTerm.activeTerm.kstDisplayStr} KST)에 ‘${eTerm.activeTerm.name}’ 절입 전환(${sTerm.monthPillar.ganji}월 → ${eTerm.monthPillar.ganji}월)이 포함되어 있어, 2시간 전체에 하나의 운이 적용되는 것처럼 표시하지 않도록 해당 시간대를 후보에서 제외했습니다.`);
+        continue;
+      }
+
+      const sDaeun = getActiveDaeunAtUtc(daeunLookupTarget, slotStartUtcMs, slotEndUtcMs);
+      if (sDaeun.hasTransitionInside) {
+        excludedSlotNotes.push(`${slot.label} 시간대 내부에 대운 전환 시점이 포함되어 있어, 2시간 전체에 하나의 대운이 적용되는 것처럼 표시하지 않도록 해당 시간대를 후보에서 제외했습니다.`);
+        continue;
+      }
+
       const hGanji = getHourGanji(iljin.stem, slot.branch);
       if (isYukChung(hGanji.branch, saju.dayPillar.branch) || isYukChung(hGanji.branch, saju.hourPillar.branch) || isYukChung(hGanji.branch, iljin.branch)) {
         continue;
@@ -1183,8 +1656,15 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
       if (hStemGod.code === '편재' || hBranchGod.code === '편재') slotScore += 12;
 
       if (slotScore >= 28) {
+        let displayLabel = slot.label;
+        if (nowUtcMs > slotStartUtcMs && nowUtcMs < slotEndUtcMs) {
+          const curKst = new Date(nowUtcMs + 9 * 3600000);
+          const hm = `${String(curKst.getUTCHours()).padStart(2,'0')}:${String(curKst.getUTCMinutes()).padStart(2,'0')}`;
+          displayLabel = `${hm}(현재) ~ ${String(slot.endHour).padStart(2,'0')}:00 (${BRANCHES[slot.branch]}시 잔여 구매 가능 구간)`;
+        }
         validSlots.push({
           ...slot,
+          label: displayLabel,
           ganji: formatPillar(hGanji),
           stemGod: hStemGod.code,
           branchGod: hBranchGod.code,
@@ -1196,7 +1676,6 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
     validSlots = validSlots.slice(0, 2);
   }
 
-  // 상세 풀이: 유리하게 해석한 요소 & 상충하거나 주의해서 해석할 요소
   const pros = [];
   const cautions = [];
 
@@ -1218,7 +1697,7 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
     pros.push(`적용 대운(${activeDaeun.ganji})의 지지와 일진 지지가 합(조화)을 이루어 대운의 흐름과 당일 일진이 부드럽게 맞물립니다.`);
   }
   if (validSlots.length > 0) {
-    pros.push(`구매 시간 후보 시진(${validSlots.map(s => `${s.label} ${s.ganji}`).join(', ')})이 원국·일진과 충(沖)하지 않고 조화·보완 기운을 더합니다.`);
+    pros.push(`대한민국 내 구매 시간 후보 시진(${validSlots.map(s => `${s.label} ${s.ganji}`).join(', ')})이 원국·일진과 충(沖)하지 않고 조화·보완 기운을 더합니다.`);
   }
 
   if (hasDayYukHap || hasDaySamHap || hasDaeunHap || hasStemHapWithDM) {
@@ -1241,7 +1720,7 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
   if (activeDaeun) {
     summaryParts.push(`${activeDaeun.order}대운(${activeDaeun.ganji})과 ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
   } else if (daeunProfile.enabled && daeunState.isPreDaeun) {
-    summaryParts.push(`초년 대운 시작 전(월주 기운 참조) ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
+    summaryParts.push(`대운 시작 전(첫 대운 시작 이전 구간) ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
   } else {
     summaryParts.push(`${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서(대운 미반영 간이 풀이),`);
   }
@@ -1267,19 +1746,30 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
   if (saju.boundaryNote) uncertainties.push(saju.boundaryNote);
   if (saju.termBoundaryNote) uncertainties.push(saju.termBoundaryNote);
   for (const bn of daeunState.boundaryNotes) uncertainties.push(bn);
+  if (dayTermTransitionNote) uncertainties.push(dayTermTransitionNote);
+  for (const exNote of excludedSlotNotes) uncertainties.push(exNote);
   if (!timeKnown) {
-    uncertainties.push(`‘출생 시간 모름’ 선택으로 시주(時柱)를 제외한 삼주(연·월·일주) 기준 풀이이며, 대운 시작 시점에 약 ±2개월의 불확실성이 존재하고 구매 시간대 추천은 제공하지 않습니다.`);
+    uncertainties.push(`‘출생 시간 모름’ 선택으로 정오를 실제 출생 시각으로 확정하지 않고 당일(00:00~23:59) 범위를 검토했으며, 시주(時柱)와 구매 시간 후보를 제외했습니다.`);
   }
   if (!daeunProfile.enabled) {
     uncertainties.push(`성별 미입력으로 대운(10년 주기 운)을 제외한 ‘대운 미반영 간이 풀이’가 적용되었습니다. 성별을 선택하면 대운을 반영한 5단계 풀이로 확인할 수 있습니다.`);
   }
-  if (seun.isIpchunDay) {
-    uncertainties.push(`대상 날짜는 입춘 절입일(${seun.ipchunKST} KST) 당일이므로, 절입 시각 전후로 세운과 월운이 전환됩니다.`);
-  } else if (wolun.isTermTransitionDay) {
-    uncertainties.push(`대상 날짜는 ‘${wolun.termName}’ 절입일(${wolun.termKST} KST) 당일이므로, 절입 시각 전후로 월운이 전환됩니다.`);
-  }
   if (uncertainties.length === 0) {
-    uncertainties.push(`입력된 출생 시각과 대상 날짜가 자시(23:00~00:00) 경계나 절입 시각, 대운 전환 경계에 걸리지 않아 기준 차이에 따른 간지 변동이 없습니다.`);
+    uncertainties.push(`입력된 출생 시각과 대상 날짜가 자시(23:00~00:00) 경계나 절입 순간, 대운 전환 경계에 걸리지 않아 기준 차이에 따른 간지 변동이 없습니다.`);
+  }
+
+  let daeunSummaryText = '';
+  if (!daeunProfile.enabled) {
+    daeunSummaryText = `성별 미입력 — 대운 미반영 간이 풀이 (대운을 제외하고 세운·월운·일진과 원국을 비교)`;
+  } else if (daeunState.isPreDaeun) {
+    const p1 = daeunProfile.pillars[0];
+    const startDesc = daeunProfile.timeKnown ? p1.startDateTimeStr : p1.startRangeStr;
+    daeunSummaryText = `대운 시작 전 (임의 대운 배정 없음 · 1대운 ${p1.ganji} 채택한 환산법에 따른 대운 시작 시점: ${startDesc}, ${daeunProfile.directionLabel})`;
+  } else if (daeunProfile.timeKnown) {
+    daeunSummaryText = `${activeDaeun.order}대운 ${activeDaeun.ganji} [일간 대비 천간 ${daeunStemGod.code} · 지지 ${daeunBranchGod.code}] / 반개구간 [시작 시점, 다음 대운 시작 시점): ${activeDaeun.startDateTimeStr} ~ ${activeDaeun.nextStartDateTimeStr} (${activeDaeun.displayAgeRange}, ${daeunProfile.directionLabel}, ${daeunProfile.decompSummaryLabel})`;
+  } else {
+    const rangeP = daeunProfile.pillars[activeDaeun.order - 1];
+    daeunSummaryText = `${activeDaeun.order}대운 ${activeDaeun.ganji} [일간 대비 천간 ${daeunStemGod.code} · 지지 ${daeunBranchGod.code}] / 채택한 환산법에 따른 대운 시작 가능 구간: ${rangeP ? rangeP.startRangeStr : activeDaeun.startDateStr} (${activeDaeun.displayAgeRange}, ${daeunProfile.directionLabel})`;
   }
 
   const tier = (factors.length >= 3 && score >= 68) ? '날짜 후보' : '보조 후보';
@@ -1294,47 +1784,97 @@ function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, no
     score,
     daeunModeLabel: daeunProfile.enabled ? '대운 반영 풀이' : '대운 미반영 간이 풀이',
     activeDaeunOrder: activeDaeun ? activeDaeun.order : null,
+    activeDaeunGanji: activeDaeun ? activeDaeun.ganji : (daeunState.isPreDaeun ? '대운 시작 전' : null),
     reason: summaryParts.join(' '),
     slots: validSlots,
+    excludedSlotNotes,
     detail: {
       natalSummary: `연주 ${formatPillar(saju.yearPillar)} · 월주 ${formatPillar(saju.monthPillar)} · 일주 ${formatPillar(saju.dayPillar)} · 시주 ${birthParamsTimeLabel(saju, timeKnown)} (일간: ${dmKo})`,
       natalStrengthNote: `간이 억부 분포(생조[인성·비겁] ${natal.supportCount} : 설기·소모[식상·재성·관성] ${natal.drainCount} → ${natal.isSupportStrong ? '생조 우세/신강 경향' : '소모 우세/신약 경향'}) — ※ 신강·신약과 용신은 억부·조후·격국 등 학파마다 판정 기준이 다르므로, 본 사이트는 원국 오행·십성 비중을 단순 비교한 억부 참고 지표만 보조적으로 활용하며 절대적 판정이 아닙니다.`,
-      daeunSummary: daeunProfile.enabled
-        ? (daeunState.isPreDaeun
-            ? `대운 시작 전 초년 구간 (1대운 ${daeunProfile.pillars[0].ganji} 시작일: ${daeunProfile.pillars[0].startDateStr}, ${daeunProfile.directionLabel}, ${daeunProfile.exactStartLabel})`
-            : `${activeDaeun.order}대운 ${activeDaeun.ganji} [일간 대비 천간 ${daeunStemGod.code} · 지지 ${daeunBranchGod.code}] / 적용 기간: ${activeDaeun.startDateStr} ~ ${activeDaeun.endDateStr} (${activeDaeun.displayAgeRange}, ${daeunProfile.directionLabel})`)
-        : `성별 미입력 — 대운 미반영 간이 풀이 (대운을 제외하고 세운·월운·일진과 원국을 비교)`,
-      seunWolunIljinSummary: `세운 ${seun.ganji}[${seunStemGod.code}·${seunBranchGod.code}, 입춘 ${seun.ipchunKST} KST 기준] · 월운 ${wolun.ganji}[${wolunStemGod.code}·${wolunBranchGod.code}, 12절기 기준] · 일진 ${iljin.ganji}[${iljinStemGod.code}·${iljinBranchGod.code}, 자정 기준]`,
+      daeunSummary: daeunSummaryText,
+      seunWolunIljinSummary: `세운 ${seun.ganji}[${seunStemGod.code}·${seunBranchGod.code}, 입춘 ${evalTermState.ipchunKstDisplay} KST 분 단위 표시 기준] · 월운 ${wolun.ganji}[${wolunStemGod.code}·${wolunBranchGod.code}, 12절 ‘${evalTermState.activeTerm.name}’ ${evalTermState.activeTerm.kstDisplayStr} KST 분 단위 표시 기준] · 일진 ${iljin.ganji}[${iljinStemGod.code}·${iljinBranchGod.code}, 대한민국 KST 00:00 자정 기준]`,
       pros,
       cautions,
-      ruleVersionText: `해석 규칙 ${SAJU_RULE_VERSION} · 번호 생성 규칙 ${NUM_GEN_VERSION} (만세력: KASI 1900~2050 음양력·VSOP87 12절기 절입 시각·대운 3일=1년 비례 환산·자정 일진 전환·구매 시간 한국표준시 KST 기준)`,
+      ruleVersionText: `해석 규칙 ${SAJU_RULE_VERSION} · 번호 생성 규칙 ${NUM_GEN_VERSION} (Asia/Seoul IANA tzdb 2026e 역사적 시간대 UTC 변환 · .NET KoreanLunisolarCalendar KASI 대조 검증 음양력 · VSOP87D 12절 미반올림 반개구간 판정 및 분 단위 표시 · 출생 원국 지방평균태양시 및 본 사이트 채택 자시 규칙 · 전통 단위 분해 후 달력 가산 대운 · 대한민국 내 구매 KST 기준)`,
       uncertainties
     }
   };
 }
 
-function birthParamsTimeLabel(saju, timeKnown) {
-  return timeKnown && saju.hourPillar ? formatPillar(saju.hourPillar) : '시간 모름(제외)';
-}
-
 function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) {
+  const nowUtcMs = Date.now();
   const nowKST = getCurrentKST();
-  const natal = analyzeNatalChart(saju, timeKnown);
+  const todayUTC = Date.UTC(nowKST.year, nowKST.month - 1, nowKST.day);
   const [sy, sm, sd] = startStr.split('-').map(Number);
   const [ey, em, ed] = endStr.split('-').map(Number);
   const startUTC = Date.UTC(sy, sm - 1, sd);
   const endUTC = Date.UTC(ey, em - 1, ed);
-  const todayUTC = Date.UTC(nowKST.year, nowKST.month - 1, nowKST.day);
 
-  const list = [];
-  for (let t = startUTC; t <= endUTC; t += 86400000) {
-    if (t < todayUTC) continue;
-    const dt = new Date(t);
-    const cand = evaluateCandidateDate(saju, natal, daeunProfile, dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate(), timeKnown, nowKST);
-    if (cand) list.push(cand);
+  function runScenario(sajuScenario, singleDaeunSched) {
+    const natal = analyzeNatalChart(sajuScenario, timeKnown);
+    const list = [];
+    for (let t = startUTC; t <= endUTC; t += 86400000) {
+      if (t < todayUTC) continue;
+      const dt = new Date(t);
+      const cand = evaluateSingleScenarioDate(
+        sajuScenario,
+        natal,
+        daeunProfile,
+        singleDaeunSched,
+        dt.getUTCFullYear(),
+        dt.getUTCMonth() + 1,
+        dt.getUTCDate(),
+        timeKnown,
+        nowUtcMs
+      );
+      if (cand) list.push(cand);
+    }
+    list.sort((a, b) => b.score - a.score || a.dateStr.localeCompare(b.dateStr));
+    return list.slice(0, 2);
   }
-  list.sort((a, b) => b.score - a.score || a.dateStr.localeCompare(b.dateStr));
-  return list.slice(0, 2);
+
+  if (timeKnown) {
+    return {
+      restrictedByUncertainty: false,
+      restrictionReason: null,
+      candidates: runScenario(saju, daeunProfile.enabled ? daeunProfile : null)
+    };
+  }
+
+  // 출생 시간 모름(Section 6): 당일 00:00:00 출생 가정(Early)과 23:59:59 출생 가정(Late)을 모두 실행해 후보 선정 결과가 달라지는지 검증
+  const sajuEarly = saju.altBeforeTerm
+    ? { ...saju, yearPillar: saju.altBeforeTerm.yearPillar, monthPillar: saju.altBeforeTerm.monthPillar }
+    : saju;
+  const sajuLate = saju;
+  const schedEarly = daeunProfile.enabled ? daeunProfile.schedEarlyBirth : null;
+  const schedLate  = daeunProfile.enabled ? daeunProfile.schedLateBirth : null;
+
+  const candsEarly = runScenario(sajuEarly, schedEarly);
+  const candsLate  = runScenario(sajuLate, schedLate);
+
+  const sigEarly = candsEarly.map(c => `${c.dateStr}:${c.tier}`).join('|');
+  const sigLate  = candsLate.map(c => `${c.dateStr}:${c.tier}`).join('|');
+
+  if (sigEarly !== sigLate) {
+    const earlyDesc = candsEarly.length > 0 ? candsEarly.map(c => `${c.dateStr}(일진 ${c.dayPillarStr}, ${c.tier})`).join(', ') : '조건 충족 후보 없음';
+    const lateDesc  = candsLate.length > 0 ? candsLate.map(c => `${c.dateStr}(일진 ${c.dayPillarStr}, ${c.tier})`).join(', ') : '조건 충족 후보 없음';
+    const causeDesc = saju.termTransitionOnBirthDay
+      ? `출생일 당일 ‘${saju.altBeforeTerm.term.name}’ 절입(${saju.altBeforeTerm.term.kstDisplayStr} KST 분 단위 표시) 전후에 따라 원국(연주·월주)${daeunProfile.enabled ? ' 및 적용 대운' : ''}이 달라져`
+      : `출생 시간 미상에 따른 채택 환산법 대운 시작 가능 구간(약 4개월 폭) 내부에 조회 기간이 걸려 실제 출생 시각에 따라 적용 대운이 달라져`;
+    return {
+      restrictedByUncertainty: true,
+      restrictionReason: `‘출생 시간 모름’ 상태에서 ${causeDesc}, 당일 이른 시각(00:00경) 출생 기준 후보[${earlyDesc}]와 늦은 시각(23:59경) 출생 기준 후보[${lateDesc}]의 선정 결과가 서로 달라집니다. 본 사이트 규칙(불확실성이 후보 선정 결과를 바꾸면 단일 후보를 확정하지 않음)에 따라 임의로 단일 후보를 확정하지 않고 결과를 제한합니다. 정확한 출생 시간을 입력하시거나 대운 전환 구간 이후의 기간을 조회해 주세요.`,
+      candsEarly,
+      candsLate,
+      candidates: []
+    };
+  }
+
+  return {
+    restrictedByUncertainty: false,
+    restrictionReason: null,
+    candidates: candsLate
+  };
 }
 
 // ============================================================================
@@ -1795,6 +2335,11 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
     return;
   }
 
+  if (cityCode === 'OVERSEAS_UNSUPPORTED') {
+    showSajuError('해외 또는 기타 미지원 지역은 출생 당시 역사적 법정 시간대·서머타임 이력이 대한민국(Asia/Seoul)과 달라 현재 버전에서 지원 범위를 제한하고 있습니다.');
+    return;
+  }
+
   let solarYear = rawYear;
   let solarMonth = rawMonth;
   let solarDay = rawDay;
@@ -1811,8 +2356,9 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
     solarDay = conv.day;
     convertedDesc = `음력 ${rawYear}년 ${isLeapMonth ? '윤' : ''}${rawMonth}월 ${rawDay}일 → 양력 ${solarYear}년 ${solarMonth}월 ${solarDay}일`;
   } else {
-    if (!isValidSolarYMD(solarYear, solarMonth, solarDay)) {
-      showSajuError('유효하지 않은 양력 날짜입니다. 연도(1900~2050)와 월·일(윤년 2월 29일 등)을 확인해 주세요.');
+    const sup = isSupportedSolarYMD(solarYear, solarMonth, solarDay);
+    if (!sup.ok) {
+      showSajuError(sup.error);
       return;
     }
     const lunarConv = solarToLunar(solarYear, solarMonth, solarDay);
@@ -1832,11 +2378,15 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
     return;
   }
 
-  let hour = 12;
+  let hour = 0;
   let minute = 0;
   if (timeKnown) {
     if (!timeVal || !/^\d{2}:\d{2}$/.test(timeVal)) {
       showSajuError('출생 시간을 입력하거나, 시간을 모르면 ‘시간 모름’을 선택해 주세요.');
+      return;
+    }
+    if (!cityCode || !CITIES[cityCode]) {
+      showSajuError('출생 시간을 입력한 경우, 출생 당시 법정 시각 변환과 지방평균태양시 경도 보정을 위해 출생 도시(대한민국 내 지원 지역)를 선택해 주세요.');
       return;
     }
     [hour, minute] = timeVal.split(':').map(Number);
@@ -1892,26 +2442,24 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
     timeKnown,
     hour,
     minute,
-    gender,
-    yearPillar: saju.yearPillar,
-    monthPillar: saju.monthPillar
+    gender
   });
-  const candidates = findCandidatesInRange(saju, daeunProfile, timeKnown, rangeStart, rangeEnd);
+  const candidateResult = findCandidatesInRange(saju, daeunProfile, timeKnown, rangeStart, rangeEnd);
 
-  renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeStart, candidates);
+  renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeStart, candidateResult);
 });
 
-function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeStart, candidates) {
+function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeStart, candidateResult) {
   sajuResultEl.style.display = 'block';
 
   // 원국 요약 렌더링
   pillarsSummaryEl.replaceChildren();
   const topLine = document.createElement('div');
-  const cityInfo = saju.offsetMin !== 0
-    ? `${saju.city.name} 경도 시차 ${saju.offsetMin}분 보정 적용 (원국 보정 시각 ${saju.correctedTimeStr})`
-    : '동경 135° 표준시 기준 (경도 시차 보정 미적용)';
+  const cityInfo = birthParams.timeKnown
+    ? `출생 당시 법정 시각(${saju.tzPeriod.label}) → UTC 변환 후 ${saju.city.name}(동경 ${saju.city.lon}°, 현대 KST 대비 표시 ${saju.displayKstOffsetMin}분) 지방평균태양시 ${saju.correctedHM} 적용`
+    : '출생 시간 모름 선택 (정오 미확정 · 당일 00:00~23:59 전체 범위 검토 · 시주 및 구매 시간 후보 제외)';
   const genderInfo = birthParams.gender === 'M' ? '남성 (대운 반영)' : (birthParams.gender === 'F' ? '여성 (대운 반영)' : '성별 미입력 (대운 미반영 간이 풀이)');
-  topLine.innerHTML = `<strong>만세력 원국 및 대운 요약</strong> · <span>${convertedDesc}</span> · <span>${genderInfo}</span><br><span style="font-size:12px;color:#717b91">${birthParams.timeKnown ? cityInfo : '출생 시간 모름 선택 (시주 및 구매 시간대 후보 제외)'}</span>`;
+  topLine.innerHTML = `<strong>만세력 원국 및 대운 요약</strong> · <span>${convertedDesc}</span> · <span>${genderInfo}</span><br><span style="font-size:12px;color:#717b91">${cityInfo}</span>`;
   pillarsSummaryEl.appendChild(topLine);
 
   const grid = document.createElement('div');
@@ -1919,8 +2467,8 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
   const items = [
     { title: '시주(時柱)', val: birthParams.timeKnown ? formatPillar(saju.hourPillar) : '시간 모름(제외)' },
     { title: '일주(日柱 · 본원)', val: formatPillar(saju.dayPillar) },
-    { title: '월주(月柱 · 절기)', val: formatPillar(saju.monthPillar) },
-    { title: '연주(年柱 · 입춘)', val: formatPillar(saju.yearPillar) }
+    { title: '월주(月柱 · 12절)', val: saju.altBeforeTerm ? `${saju.altBeforeTerm.monthPillar.ganji} / ${formatPillar(saju.monthPillar)}` : formatPillar(saju.monthPillar) },
+    { title: '연주(年柱 · 입춘)', val: (saju.altBeforeTerm && saju.altBeforeTerm.yearPillar.ganji !== formatPillar(saju.yearPillar)) ? `${saju.altBeforeTerm.yearPillar.ganji} / ${formatPillar(saju.yearPillar)}` : formatPillar(saju.yearPillar) }
   ];
   for (const it of items) {
     const box = document.createElement('div');
@@ -1943,19 +2491,23 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
     daeunBox.innerHTML = `<strong>대운(大運) 안내:</strong> 성별 미입력으로 <strong>‘대운 미반영 간이 풀이’</strong>가 적용되었습니다. (세운·월운·일진 비교는 정상 제공되며, 성별을 선택하면 10년 주기 대운까지 함께 반영합니다)`;
   } else {
     const [rsY, rsM, rsD] = rangeStart.split('-').map(Number);
-    const refDaeunState = getActiveDaeunForDate(daeunProfile, rsY, rsM, rsD);
+    const refStartUtcMs = Date.UTC(rsY, rsM - 1, rsD, 12, 0, 0) - 9 * 3600000;
+    const refDaeunState = getActiveDaeunAtUtc(daeunProfile, refStartUtcMs, refStartUtcMs);
     const activeOrder = refDaeunState.active ? refDaeunState.active.order : null;
-    const refTermText = `${daeunProfile.refTerm.name}(${daeunProfile.refTerm.kstStr} KST)`;
+    const refTermText = `${daeunProfile.refTerm.name}(KST 분 단위 표시 ${daeunProfile.refTerm.kstDisplayStr})`;
+    const statusText = refDaeunState.isPreDaeun ? ' · <strong>현재 조회 시점: 대운 시작 전</strong>' : '';
     const headerDiv = document.createElement('div');
-    headerDiv.innerHTML = `<strong>대운(大運) 진행:</strong> ${daeunProfile.directionLabel} · 기준 절입(${refTermText})까지 ${daeunProfile.exactStartLabel} · <strong>표시 대운수 ${daeunProfile.displayDaeunNumber}</strong>`;
+    headerDiv.innerHTML = `<strong>대운(大運) 진행:</strong> ${daeunProfile.directionLabel} · 기준 12절(${refTermText}) · ${daeunProfile.startLabel}${statusText}`;
     daeunBox.appendChild(headerDiv);
 
     const strip = document.createElement('div');
     strip.className = 'daeun-strip';
     for (const p of daeunProfile.pillars) {
       const chip = document.createElement('div');
-      chip.className = 'daeun-chip' + (p.order === activeOrder ? ' active' : '');
-      chip.innerHTML = `<div>${p.order}대운(대운수 ${daeunProfile.displayDaeunNumber + (p.order - 1) * 10})</div><div><strong>${p.ganji}</strong></div><div style="font-size:10px;opacity:.85">${p.startDateStr.slice(0, 7)}~</div>`;
+      chip.className = 'daeun-chip' + (!refDaeunState.isPreDaeun && p.order === activeOrder ? ' active' : '');
+      const ganjiLabel = (!daeunProfile.timeKnown && p.earlyGanji && p.earlyGanji !== p.lateGanji) ? `${p.earlyGanji}/${p.lateGanji}` : p.ganji;
+      const dateLabel = daeunProfile.timeKnown ? `${p.startDateStr.slice(0, 7)}~` : `${p.startRangeStr.slice(0, 7)}~`;
+      chip.innerHTML = `<div>${p.order}대운(대운수 ${daeunProfile.displayDaeunNumber + (p.order - 1) * 10})</div><div><strong>${ganjiLabel}</strong></div><div style="font-size:10px;opacity:.85">${dateLabel}</div>`;
       strip.appendChild(chip);
     }
     daeunBox.appendChild(strip);
@@ -1982,8 +2534,18 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
     pillarsSummaryEl.appendChild(termBox);
   }
 
-  // 날짜 후보 카드 렌더링
+  // 날짜 후보 카드 렌더링 (Section 6: 불확실성이 후보 선정 결과를 바꾸면 단일 후보 미확정 및 결과 제한 안내)
   candidatesContainerEl.replaceChildren();
+  if (candidateResult.restrictedByUncertainty) {
+    const restrictBox = document.createElement('div');
+    restrictBox.className = 'boundary-alert';
+    restrictBox.style.padding = '16px';
+    restrictBox.innerHTML = `<strong>⚠️ 출생 시간 불확실성에 따른 결과 제한 안내 (단일 후보 미확정)</strong><br><div style="margin-top:6px">${candidateResult.restrictionReason}</div>`;
+    candidatesContainerEl.appendChild(restrictBox);
+    return;
+  }
+
+  const candidates = candidateResult.candidates || [];
   if (candidates.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty-candidates';
@@ -2021,13 +2583,17 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
     slotBox.className = 'slot-box';
     const radioName = `slot-choice-${idx}`;
 
+    const excludedNoteHtml = (cand.excludedSlotNotes && cand.excludedSlotNotes.length > 0)
+      ? `<div class="slot-meta" style="color:#7a4f08;margin-top:6px">※ 전환 시간대 제외 안내: ${cand.excludedSlotNotes.join(' ')}</div>`
+      : '';
+
     if (!birthParams.timeKnown) {
-      slotBox.textContent = '구매 시간대 후보: ‘시간 모름’ 선택으로 시간대 후보를 제공하지 않습니다.';
+      slotBox.textContent = '구매 시간대 후보: ‘출생 시간 모름’ 선택으로 시주와 구매 시간 후보를 제공하지 않습니다.';
     } else if (cand.slots.length === 0) {
-      slotBox.innerHTML = `<strong>구매 시간대 후보:</strong> 이 날짜에는 두드러진 특정 시간대 후보가 없습니다. 판매 가능 시간 내 편한 시간대에 이용해 보세요.<div class="slot-meta">시간대 기준: 실제 구매 지역 한국표준시(KST, 동경 135°) 2시간 시진 · 출생지를 구매 지역으로 자동 간주하지 않음 · 동행복권 판매 시간 반영</div>`;
+      slotBox.innerHTML = `<strong>구매 시간대 후보 (대한민국 내 구매 · KST 기준):</strong> 이 날짜에는 두드러진 특정 시간대 후보가 없습니다. 동행복권 판매 가능 시간 내 편한 시간대에 이용해 보세요.${excludedNoteHtml}<div class="slot-meta">구매 지역 및 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 대상 일진 KST 자정 전환 및 시진 KST 배정 · 동행복권 공식 판매 시간 반영).</div>`;
     } else {
       const slotTitle = document.createElement('div');
-      slotTitle.innerHTML = '<strong>구매 시간대 후보 (2시간 단위):</strong>';
+      slotTitle.innerHTML = '<strong>구매 시간대 후보 (대한민국 내 구매 · KST 2시간 시진 기준):</strong>';
       const slotList = document.createElement('div');
       slotList.className = 'slot-list';
 
@@ -2045,7 +2611,7 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
 
       const meta = document.createElement('div');
       meta.className = 'slot-meta';
-      meta.textContent = '시간대 기준: 실제 구매 지역 한국표준시(KST, 동경 135° 시계 시각) 2시간 시진 기준 · 출생지를 구매 지역으로 자동 간주하지 않음 · 마감 시간 제외';
+      meta.innerHTML = `${excludedNoteHtml ? excludedNoteHtml + '<br>' : ''}구매 지역 및 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 대상 일진 KST 자정 전환 및 시진 KST 배정 · 시간대 내부 절입/대운 전환 구간 및 지난 시간·판매 마감 제외).`;
       slotBox.append(slotTitle, slotList, meta);
     }
 
