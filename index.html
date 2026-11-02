@@ -5,28 +5,177 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>행운의 로또 번호 추천</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f0f3fa;font-family:Arial,'Malgun Gothic',sans-serif;color:#202942;padding:24px}.card{width:100%;max-width:620px;background:white;border-radius:28px;padding:48px 28px;text-align:center;box-shadow:0 20px 70px #26355a12}.label{font-size:12px;letter-spacing:3px;color:#6755db;font-weight:bold}h1{font-size:30px;letter-spacing:-1px;margin:18px 0 12px}.description{font-size:15px;color:#717b91;line-height:1.7}.sets{display:grid;gap:14px;margin:30px 0}.set{display:flex;align-items:center;gap:12px}.set-label{font-size:13px;font-weight:bold;color:#717b91;min-width:20px}.set .balls{margin:0;flex:1;flex-wrap:nowrap}.balls{display:flex;justify-content:center;gap:12px;margin:36px 0;flex-wrap:wrap}.ball{width:60px;height:60px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;color:white;font-size:24px;font-weight:bold;box-shadow:inset 0 -5px 0 #00000012}.empty{background:#e9edf5;color:#8c96ac}.yellow{background:#e5aa16}.blue{background:#448bd4}.red{background:#dc6470}.gray{background:#7a8495}.green{background:#52a773}button{font:inherit;border:0;border-radius:12px;cursor:pointer;padding:16px 24px;font-weight:bold}button:focus-visible{outline:3px solid #b3a8ff;outline-offset:4px}#generate{background:#6755db;color:white;width:100%;max-width:350px}#generate:hover{background:#5443c4}#copy{display:block;margin:14px auto 0;background:transparent;color:#6755db;padding:10px}#copy:disabled{color:#a1a8b7;cursor:default}.note{font-size:12px;color:#8790a1;margin:25px 0 0;line-height:1.8}#status{min-height:20px;color:#6755db;font-size:13px;margin:12px 0 0}@media(max-width:480px){.card{padding:36px 18px}h1{font-size:26px}.balls{gap:7px}.set{gap:5px}.set-label{min-width:14px}.balls{gap:5px}.ball{width:clamp(27px,8.2vw,42px);height:clamp(27px,8.2vw,42px);font-size:16px}}
-#bonus{display:block;margin:14px auto 0;background:#eeeafa;color:#6755db}#bonus[aria-pressed="true"]{background:#6755db;color:white}.with-bonus .ball{width:48px;height:48px;font-size:21px}.with-bonus .balls{gap:8px}.bonus-group{display:flex;flex-direction:column;align-items:center;gap:4px;border-left:1px solid #e4e7ef;padding-left:12px}.bonus-caption{font-size:10px;color:#717b91;white-space:nowrap}@media(max-width:480px){body{padding:12px}.card{padding-left:12px;padding-right:12px}.with-bonus .ball{width:clamp(23px,7vw,34px);height:clamp(23px,7vw,34px);font-size:14px}.with-bonus .balls{gap:4px}.bonus-group{padding-left:6px}.bonus-caption{font-size:9px}}
-body,.card,#bonus,#theme-toggle,.info-panel,.today-badge{transition:background-color .25s ease,color .25s ease,box-shadow .25s ease,border-color .25s ease}.card{position:relative}#theme-toggle{position:absolute;top:20px;right:20px;padding:8px 14px;font-size:13px;border-radius:999px;background:#f0f3fa;color:#202942;border:1px solid #e4e7ef}#theme-toggle:hover{background:#e4e9f5}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f0f3fa;font-family:Arial,'Malgun Gothic',sans-serif;color:#202942;padding:24px}
+.card{width:100%;max-width:660px;background:white;border-radius:28px;padding:48px 28px;text-align:center;box-shadow:0 20px 70px #26355a12;position:relative}
+.label{font-size:12px;letter-spacing:3px;color:#6755db;font-weight:bold}
+h1{font-size:30px;letter-spacing:-1px;margin:18px 0 12px}
+h2{font-size:18px;margin:0 0 8px}
+h3{font-size:15px;margin:0 0 6px}
+.description{font-size:15px;color:#717b91;line-height:1.7;margin:0 0 12px}
+.sets{display:grid;gap:14px;margin:24px 0}
+.set{display:flex;align-items:center;gap:12px}
+.set-label{font-size:13px;font-weight:bold;color:#717b91;min-width:20px}
+.set .balls{margin:0;flex:1;flex-wrap:nowrap}
+.balls{display:flex;justify-content:center;gap:12px;margin:36px 0;flex-wrap:wrap}
+.ball{width:60px;height:60px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;color:white;font-size:24px;font-weight:bold;box-shadow:inset 0 -5px 0 #00000012}
+.empty{background:#e9edf5;color:#8c96ac}
+.yellow{background:#e5aa16}
+.blue{background:#448bd4}
+.red{background:#dc6470}
+.gray{background:#7a8495}
+.green{background:#52a773}
+button{font:inherit;border:0;border-radius:12px;cursor:pointer;padding:14px 20px;font-weight:bold}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b3a8ff;outline-offset:3px}
+#generate{background:#6755db;color:white;width:100%;max-width:350px;padding:16px 24px}
+#generate:hover{background:#5443c4}
+.secondary-btn{background:#eeeafa;color:#5443c4;padding:12px 18px;font-size:14px}
+.secondary-btn:hover{background:#e2dbf7}
+.secondary-btn:disabled{opacity:.55;cursor:default}
+#copy{display:inline-block;margin:10px 6px 0;background:transparent;color:#6755db;padding:10px 14px}
+#copy:disabled,#save-record:disabled{color:#a1a8b7;cursor:default;background:transparent}
+#save-record{display:inline-block;margin:10px 6px 0;background:#eeeafa;color:#5443c4;padding:10px 16px;font-size:14px}
+.note{font-size:12px;color:#8790a1;margin:22px 0 0;line-height:1.8}
+#status{min-height:20px;color:#6755db;font-size:13px;margin:12px 0 0}
+#bonus{display:block;margin:12px auto 0;background:#eeeafa;color:#6755db;padding:12px 20px}
+#bonus[aria-pressed="true"]{background:#6755db;color:white}
+.with-bonus .ball{width:48px;height:48px;font-size:21px}
+.with-bonus .balls{gap:8px}
+.bonus-group{display:flex;flex-direction:column;align-items:center;gap:4px;border-left:1px solid #e4e7ef;padding-left:12px}
+.bonus-caption{font-size:10px;color:#717b91;white-space:nowrap}
+body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-card,.record-card{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+#theme-toggle{position:absolute;top:20px;right:20px;padding:8px 14px;font-size:13px;border-radius:999px;background:#f0f3fa;color:#202942;border:1px solid #e4e7ef}
+#theme-toggle:hover{background:#e4e9f5}
 .today-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:999px;background:#f4f2ff;color:#5443c4;font-size:13px;font-weight:bold}
-.info-panel{margin:22px 0 8px;padding:18px 16px;border-radius:18px;background:#f7f9fd;border:1px solid #e6ebf5;text-align:center}
-.info-header{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;color:#525d75;margin-bottom:12px}
+.info-panel{margin:18px 0;padding:16px;border-radius:18px;background:#f7f9fd;border:1px solid #e6ebf5;text-align:center}
+.info-header{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;color:#525d75;margin-bottom:10px}
 .info-round{font-weight:bold;color:#6755db;background:#eeeafa;padding:3px 10px;border-radius:999px}
 .info-date{font-weight:bold;color:#202942}
-.mini-balls{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
-.mini-ball{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:white;font-size:14px;font-weight:bold;box-shadow:inset 0 -3px 0 #00000015}
+.mini-balls{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0}
+.mini-ball{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:white;font-size:13px;font-weight:bold;box-shadow:inset 0 -3px 0 #00000015}
 .mini-plus{font-size:14px;font-weight:bold;color:#717b91;margin:0 2px}
-.info-prize{font-size:14px;color:#202942;padding-top:10px;border-top:1px dashed #dde3f0}
-.info-prize strong{color:#6755db;font-size:16px}
-[data-theme="dark"] body{background:#0f1420;color:#eef2ff}[data-theme="dark"] .card{background:#1a2234;box-shadow:0 20px 70px #00000066}[data-theme="dark"] .label,[data-theme="dark"] #copy,[data-theme="dark"] #status{color:#9d8df7}[data-theme="dark"] .description,[data-theme="dark"] .set-label,[data-theme="dark"] .bonus-caption{color:#9aa5bc}[data-theme="dark"] .bonus-group{border-left-color:#2d3852}[data-theme="dark"] #bonus{background:#282446;color:#b6a9ff}[data-theme="dark"] #bonus[aria-pressed="true"]{background:#6755db;color:white}[data-theme="dark"] #copy:disabled{color:#535d73}[data-theme="dark"] .note{color:#6b768e}[data-theme="dark"] #theme-toggle{background:#263047;color:#eef2ff;border-color:#364362}[data-theme="dark"] #theme-toggle:hover{background:#313e5b}
-[data-theme="dark"] .today-badge{background:#282446;color:#c4baff}
-[data-theme="dark"] .info-panel{background:#131929;border-color:#2a3550}
-[data-theme="dark"] .info-header{color:#9aa5bc}
-[data-theme="dark"] .info-round{background:#282446;color:#b6a9ff}
-[data-theme="dark"] .info-date,[data-theme="dark"] .info-prize{color:#eef2ff}
+.info-prize{font-size:13px;color:#202942;padding-top:8px;border-top:1px dashed #dde3f0}
+.info-prize strong{color:#6755db;font-size:15px}
+
+/* 사주로 나의 행운 날짜 보기 패널 */
+.saju-panel{margin:18px 0 22px;border-radius:20px;background:#f7f8fc;border:1px solid #e2e7f4;text-align:left;overflow:hidden}
+.saju-summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:16px;color:#202942;background:#f1f4fb}
+.saju-summary::-webkit-details-marker{display:none}
+.saju-summary-badge{font-size:12px;font-weight:bold;color:#6755db;background:#e8e3ff;padding:4px 10px;border-radius:999px}
+.saju-body{padding:20px}
+.saju-intro{font-size:13px;color:#5d677e;line-height:1.6;margin:0 0 16px}
+.form-grid{display:grid;gap:14px}
+.form-row{display:grid;gap:6px}
+.form-label{font-size:13px;font-weight:bold;color:#2c3652}
+.date-inputs{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+.input-field,select.input-field{width:100%;padding:10px 12px;border:1px solid #cfd7e8;border-radius:10px;font:inherit;font-size:14px;background:white;color:#202942}
+.inline-options{display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:14px}
+.inline-options label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.field-hint{font-size:12px;color:#6c768d;line-height:1.5;margin:2px 0 0}
+.error-msg{font-size:13px;color:#c93b4b;background:#fff0f2;border:1px solid #f7c6cc;padding:10px 12px;border-radius:10px;margin:12px 0 0;display:none}
+.saju-actions{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.saju-submit{background:#6755db;color:white;padding:12px 20px;font-size:14px;width:100%}
+.saju-submit:hover{background:#5443c4}
+
+/* 사주 분석 및 후보 결과 카드 */
+.saju-result{margin-top:18px;border-top:1px solid #e2e7f4;padding-top:16px;display:none}
+.pillars-box{background:white;border:1px solid #e2e7f4;border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;line-height:1.6}
+.pillars-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin:8px 0}
+.pillar-item{background:#f7f8fc;border-radius:10px;padding:8px 4px}
+.pillar-title{font-size:11px;color:#717b91;display:block}
+.pillar-val{font-size:14px;font-weight:bold;color:#202942}
+.daeun-summary-box{margin-top:10px;padding-top:10px;border-top:1px dashed #dde3f0;font-size:12px}
+.daeun-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px;text-align:center}
+.daeun-chip{background:#f7f8fc;border:1px solid #e2e7f4;border-radius:8px;padding:5px 4px;font-size:11px;line-height:1.35}
+.daeun-chip.active{background:#eeeafa;border-color:#6755db;color:#5443c4;font-weight:bold}
+.boundary-alert{font-size:12px;color:#7a4f08;background:#fff8eb;border:1px solid #f5deb3;border-radius:10px;padding:9px 12px;margin-top:8px;line-height:1.5}
+.candidates-wrap{display:grid;gap:12px;margin:14px 0}
+.candidate-card{background:white;border:1px solid #d8dff0;border-radius:16px;padding:16px}
+.candidate-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.candidate-date{font-size:16px;font-weight:bold;color:#202942}
+.badge-group{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tier-badge{font-size:12px;font-weight:bold;padding:4px 10px;border-radius:999px}
+.tier-primary{background:#eeeafa;color:#5443c4}
+.tier-secondary{background:#e9f5ee;color:#2e7d52}
+.mode-tag{font-size:11px;font-weight:bold;padding:4px 9px;border-radius:999px;background:#eef2fb;color:#43506c}
+.candidate-reason{font-size:13px;color:#434e68;line-height:1.6;margin:8px 0}
+.slot-box{background:#f7f9fd;border-radius:10px;padding:10px 12px;margin:10px 0;font-size:13px}
+.slot-list{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0}
+.slot-list label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:13px}
+.slot-meta{font-size:11px;color:#717b91;margin-top:4px}
+.candidate-detail{margin:10px 0;background:#f9fafd;border:1px solid #e2e7f4;border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.6}
+.candidate-detail summary{cursor:pointer;font-weight:bold;color:#5443c4;font-size:13px}
+.detail-grid{display:grid;gap:8px;margin-top:10px}
+.detail-row{padding-bottom:6px;border-bottom:1px dashed #e5eaf5}
+.detail-row:last-child{border-bottom:0;padding-bottom:0}
+.detail-label{font-weight:bold;color:#2c3652;display:block;margin-bottom:2px}
+.detail-list{margin:3px 0 0;padding-left:18px}
+.candidate-btn{width:100%;background:#6755db;color:white;padding:11px 16px;font-size:14px;margin-top:8px}
+.candidate-btn:hover{background:#5443c4}
+.empty-candidates{background:white;border:1px dashed #cbd3e6;border-radius:14px;padding:18px;text-align:center;font-size:14px;color:#525d75}
+.saju-disclaimer{font-size:12px;color:#6c768d;background:#eef1f8;padding:10px 12px;border-radius:10px;margin:12px 0;text-align:center;line-height:1.5}
+.criteria-box{margin-top:10px;font-size:12px;color:#525d75;background:white;border:1px solid #e2e7f4;border-radius:12px;padding:10px 14px}
+.criteria-box summary{cursor:pointer;font-weight:bold;color:#5443c4}
+.criteria-content{margin-top:10px;line-height:1.65}
+.criteria-content ul{margin:6px 0;padding-left:18px}
+
+/* 번호 생성 모드 표시 배너 */
+.mode-bar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
+.mode-pill{font-size:12px;font-weight:bold;padding:5px 12px;border-radius:999px;background:#eeeafa;color:#5443c4}
+.mode-desc{font-size:13px;color:#525d75;background:#f7f9fd;border:1px solid #e6ebf5;border-radius:12px;padding:10px 14px;margin:10px 0;line-height:1.5;display:none}
+
+/* 저장된 기록 영역 */
+.records-panel{margin-top:26px;padding-top:20px;border-top:1px solid #e4e7ef;text-align:left}
+.records-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.records-list{display:grid;gap:12px}
+.record-card{background:#f7f9fd;border:1px solid #e2e7f4;border-radius:14px;padding:14px;font-size:13px}
+.record-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.record-meta{color:#525d75;line-height:1.5}
+.record-sets{font-family:monospace;font-size:13px;background:white;border:1px solid #e6ebf5;border-radius:10px;padding:8px 10px;margin:8px 0;line-height:1.6;white-space:pre-wrap}
+.record-check{font-size:12px;padding:6px 10px;border-radius:8px;background:#eef1f8;color:#434e68;margin-top:6px}
+.delete-btn{background:transparent;color:#c93b4b;padding:4px 8px;font-size:12px}
+
+/* 다크모드 */
+[data-theme="dark"] body{background:#0f1420;color:#eef2ff}
+[data-theme="dark"] .card{background:#1a2234;box-shadow:0 20px 70px #00000066}
+[data-theme="dark"] .label,[data-theme="dark"] #copy,[data-theme="dark"] #status{color:#9d8df7}
+[data-theme="dark"] .description,[data-theme="dark"] .set-label,[data-theme="dark"] .bonus-caption,[data-theme="dark"] .saju-intro,[data-theme="dark"] .field-hint,[data-theme="dark"] .slot-meta{color:#9aa5bc}
+[data-theme="dark"] .bonus-group,[data-theme="dark"] .records-panel,[data-theme="dark"] .saju-result,[data-theme="dark"] .daeun-summary-box,[data-theme="dark"] .detail-row{border-color:#2d3852}
+[data-theme="dark"] #bonus,[data-theme="dark"] .secondary-btn,[data-theme="dark"] #save-record,[data-theme="dark"] .mode-pill,[data-theme="dark"] .tier-primary,[data-theme="dark"] .daeun-chip.active{background:#282446;color:#c4baff;border-color:#6755db}
+[data-theme="dark"] #bonus[aria-pressed="true"]{background:#6755db;color:white}
+[data-theme="dark"] #copy:disabled,[data-theme="dark"] #save-record:disabled{color:#535d73;background:transparent}
+[data-theme="dark"] .note{color:#6b768e}
+[data-theme="dark"] #theme-toggle{background:#263047;color:#eef2ff;border-color:#364362}
+[data-theme="dark"] #theme-toggle:hover{background:#313e5b}
+[data-theme="dark"] .today-badge,[data-theme="dark"] .info-round,[data-theme="dark"] .saju-summary-badge{background:#282446;color:#c4baff}
+[data-theme="dark"] .info-panel,[data-theme="dark"] .saju-panel,[data-theme="dark"] .record-card,[data-theme="dark"] .mode-desc,[data-theme="dark"] .slot-box,[data-theme="dark"] .candidate-detail,[data-theme="dark"] .daeun-chip{background:#131929;border-color:#2a3550;color:#d6def0}
+[data-theme="dark"] .saju-summary{background:#161f33;color:#eef2ff}
+[data-theme="dark"] .info-header,[data-theme="dark"] .record-meta{color:#9aa5bc}
+[data-theme="dark"] .info-date,[data-theme="dark"] .info-prize,[data-theme="dark"] .form-label,[data-theme="dark"] .candidate-date,[data-theme="dark"] .pillar-val,[data-theme="dark"] .detail-label{color:#eef2ff}
 [data-theme="dark"] .info-prize{border-top-color:#2a3550}
-[data-theme="dark"] .info-prize strong{color:#b6a9ff}
-@media(max-width:480px){#theme-toggle{position:static;margin:0 auto 14px;display:inline-flex;align-items:center;gap:6px}.mini-ball{width:30px;height:30px;font-size:13px}}
+[data-theme="dark"] .info-prize strong,[data-theme="dark"] .criteria-box summary,[data-theme="dark"] .candidate-detail summary{color:#b6a9ff}
+[data-theme="dark"] .input-field,[data-theme="dark"] select.input-field,[data-theme="dark"] .pillars-box,[data-theme="dark"] .candidate-card,[data-theme="dark"] .criteria-box,[data-theme="dark"] .record-sets,[data-theme="dark"] .empty-candidates{background:#1d273b;border-color:#32405f;color:#eef2ff}
+[data-theme="dark"] .pillar-item,[data-theme="dark"] .saju-disclaimer,[data-theme="dark"] .record-check,[data-theme="dark"] .mode-tag{background:#131929;color:#b8c3da}
+[data-theme="dark"] .candidate-reason,[data-theme="dark"] .criteria-content{color:#cbd5ea}
+[data-theme="dark"] .boundary-alert{background:#2c2210;border-color:#664d1a;color:#f5d58c}
+[data-theme="dark"] .error-msg{background:#35161c;border-color:#782834;color:#ff9da8}
+
+@media(max-width:480px){
+  body{padding:12px}
+  .card{padding:32px 14px}
+  h1{font-size:25px}
+  #theme-toggle{position:static;margin:0 auto 12px;display:inline-flex;align-items:center;gap:6px}
+  .set{gap:5px}
+  .set-label{min-width:14px}
+  .balls{gap:5px}
+  .ball{width:clamp(27px,8.2vw,42px);height:clamp(27px,8.2vw,42px);font-size:16px}
+  .with-bonus .ball{width:clamp(23px,7vw,34px);height:clamp(23px,7vw,34px);font-size:14px}
+  .with-bonus .balls{gap:4px}
+  .bonus-group{padding-left:6px}
+  .bonus-caption{font-size:9px}
+  .mini-ball{width:28px;height:28px;font-size:12px}
+  .pillars-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
@@ -36,31 +185,290 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge{transition:background-c
 <div id="today-date" class="today-badge" aria-label="오늘 날짜"></div>
 <h1>이번주의 행운을 뽑아보세요 🍀</h1>
 <p class="description">버튼 한 번으로 만나는 나만의 로또 번호.<br>1부터 45까지, 중복 없는 번호 6개를 5세트 추천합니다.</p>
+
 <section id="last-draw" class="info-panel" aria-label="지난회차 당첨 정보">
   <div class="info-header">
-    <span id="last-draw-round" class="info-round">지난회차 불러오는 중...</span>
-    <span>당첨 일자: <strong id="last-draw-date" class="info-date">-</strong></span>
+    <span id="last-draw-round" class="info-round">공식 데이터 확인 중...</span>
+    <span>당첨 일자: <strong id="last-draw-date" class="info-date">확인 대기</strong></span>
   </div>
   <div id="last-draw-balls" class="mini-balls" aria-label="지난회차 당첨번호"></div>
-  <div class="info-prize">지난회차 1등 당첨금: <strong id="last-draw-prize">-</strong></div>
+  <div class="info-prize">지난회차 1등 당첨금: <strong id="last-draw-prize">확인 대기</strong></div>
 </section>
+
+<!-- 접고 펼칠 수 있는 '사주로 나의 행운 날짜 보기' 영역 (기본 접힘) -->
+<details id="saju-details" class="saju-panel">
+  <summary class="saju-summary">
+    <span>🧭 사주로 나의 행운 날짜 보기</span>
+    <span class="saju-summary-badge">오락용 개인화 풀이</span>
+  </summary>
+  <div class="saju-body">
+    <p class="saju-intro">
+      생년월일시와 성별(선택)을 입력하면 전통 명리학의 만세력(절입 시각·음양력)과 대운·세운·월운·일진·시진의 오행(재성·식상생재·합충) 상징 기준에 따라 살펴볼 기간 안의 날짜·시간 후보를 찾아드립니다.
+    </p>
+    <form id="saju-form" class="form-grid" novalidate>
+      <div class="form-row">
+        <span class="form-label" id="birth-date-label">생년월일 (1900~2050년)</span>
+        <div class="date-inputs" role="group" aria-labelledby="birth-date-label">
+          <input id="birth-year" class="input-field" type="number" min="1900" max="2050" placeholder="연도 (예: 1990)" aria-label="출생 연도" required>
+          <input id="birth-month" class="input-field" type="number" min="1" max="12" placeholder="월 (1~12)" aria-label="출생 월" required>
+          <input id="birth-day" class="input-field" type="number" min="1" max="31" placeholder="일 (1~31)" aria-label="출생 일" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <span class="form-label">양력 / 음력 선택</span>
+        <div class="inline-options">
+          <label><input type="radio" name="calendar-type" id="cal-solar" value="solar" checked> 양력</label>
+          <label><input type="radio" name="calendar-type" id="cal-lunar" value="lunar"> 음력</label>
+          <label id="leap-month-wrap" style="display:none"><input type="checkbox" id="is-leap-month"> 윤달(閏月)</label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <span class="form-label">성별 (대운 계산용)</span>
+        <div class="inline-options" role="radiogroup" aria-label="전통 명리 계산에 사용할 성별">
+          <label><input type="radio" name="birth-gender" id="gender-none" value="NONE" checked> 미입력</label>
+          <label><input type="radio" name="birth-gender" id="gender-male" value="M"> 남성</label>
+          <label><input type="radio" name="birth-gender" id="gender-female" value="F"> 여성</label>
+        </div>
+        <p class="field-hint">전통적인 대운 진행 방향을 계산하는 데 사용합니다. (성별 미입력 시 대운을 제외하고 ‘대운 미반영 간이 풀이’로 세운·월운·일진 비교를 제공합니다)</p>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label" for="birth-time">출생 시간</label>
+        <div class="inline-options">
+          <input id="birth-time" class="input-field" type="time" style="max-width:180px" aria-describedby="birth-time-hint">
+          <label><input type="checkbox" id="time-unknown"> 시간 모름</label>
+        </div>
+        <p id="birth-time-hint" class="field-hint">💡 밤 11시 전후에는 계산 기준에 따라 풀이가 달라질 수 있어요. ‘시간 모름’을 선택하면 시주와 구매 시간대 후보를 제외하며, 대운 시작 시점의 불확실성 범위(±2개월)를 함께 안내합니다.</p>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label" for="birth-city">출생 도시 (원국 경도 시차 보정)</label>
+        <select id="birth-city" class="input-field">
+          <option value="">출생 도시 선택 (선택 안 함: 동경 135° 표준시 그대로 사용)</option>
+          <option value="SEOUL">서울 (동경 126.98° · -32분 경도 보정)</option>
+          <option value="INCHEON">인천 (동경 126.71° · -33분 경도 보정)</option>
+          <option value="SUWON">수원·경기 (동경 127.01° · -32분 경도 보정)</option>
+          <option value="CHUNCHEON">춘천·강원서부 (동경 127.73° · -29분 경도 보정)</option>
+          <option value="GANGNEUNG">강릉·강원동부 (동경 128.89° · -24분 경도 보정)</option>
+          <option value="DAEJEON">대전·세종 (동경 127.38° · -30분 경도 보정)</option>
+          <option value="CHEONGJU">청주·충북 (동경 127.49° · -30분 경도 보정)</option>
+          <option value="JEONJU">전주·전북 (동경 127.15° · -31분 경도 보정)</option>
+          <option value="GWANGJU">광주·전남 (동경 126.85° · -33분 경도 보정)</option>
+          <option value="DAEGU">대구·경북 (동경 128.60° · -26분 경도 보정)</option>
+          <option value="POHANG">포항 (동경 129.37° · -23분 경도 보정)</option>
+          <option value="BUSAN">부산 (동경 129.08° · -24분 경도 보정)</option>
+          <option value="ULSAN">울산 (동경 129.31° · -23분 경도 보정)</option>
+          <option value="CHANGWON">창원·경남 (동경 128.68° · -25분 경도 보정)</option>
+          <option value="JEJU">제주 (동경 126.53° · -34분 경도 보정)</option>
+        </select>
+        <p class="field-hint">출생지 경도 보정은 출생 원국(시주·일주) 산출에만 사용하며, 구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 실제 구매 지역 기준 한국표준시(KST)로 표시합니다.</p>
+      </div>
+
+      <div class="form-row">
+        <span class="form-label">살펴볼 기간 (기본값: 이번 회차 남은 구매 가능 기간)</span>
+        <div class="inline-options">
+          <label>시작일 <input id="range-start" class="input-field" type="date" style="width:auto"></label>
+          <label>종료일 <input id="range-end" class="input-field" type="date" style="width:auto"></label>
+        </div>
+        <p id="range-period-hint" class="field-hint"></p>
+      </div>
+
+      <div class="form-row">
+        <div class="inline-options" style="justify-content:space-between">
+          <label style="font-size:13px;display:inline-flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="remember-birth"> 이 기기에 출생 정보(성별 포함) 기억하기 (선택 시에만 브라우저에 저장)
+          </label>
+          <button id="clear-saved-birth" type="button" class="delete-btn" style="display:none">저장된 출생 정보 삭제</button>
+        </div>
+      </div>
+
+      <div id="saju-error" class="error-msg" role="alert"></div>
+
+      <div class="saju-actions">
+        <button id="analyze-saju" type="submit" class="saju-submit">나의 행운 날짜 후보 확인하기</button>
+      </div>
+    </form>
+
+    <div id="saju-result" class="saju-result" aria-live="polite">
+      <div id="pillars-summary" class="pillars-box"></div>
+      <div id="candidates-container" class="candidates-wrap"></div>
+      <p class="saju-disclaimer">전통 명리학을 활용한 오락용 풀이입니다. 대운·세운을 포함한 결과도 실제 횡재나 로또 당첨 확률을 예측하지 않습니다.</p>
+
+      <details class="criteria-box">
+        <summary>계산 기준 보기 (만세력·대운·세운 명리 해석 기준 및 지원 범위)</summary>
+        <div class="criteria-content">
+          <p><strong>적용 규칙 버전:</strong> 명리 날짜 해석 <code>LOTTO-SAJU-RULE-v2.0</code> · 개인화 번호 생성 <code>LOTTO-NUM-GEN-v1.1</code></p>
+          <ul>
+            <li><strong>양력·음력·윤달 변환:</strong> 한국천문연구원(KASI) 한국표준시(UTC+9) 기준 음양력 데이터(지원 범위: 1900년 1월 31일 ~ 2050년 12월 31일)를 사용하여 윤달 여부와 큰달(30일)·작은달(29일)을 검증합니다.</li>
+            <li><strong>연주·월주·세운·월운 절입 기준:</strong> 양력 1월 1일이나 음력 설날이 아닌, VSOP87 태양 황경 천문 계산으로 산출한 <strong>12절기(입춘·경칩·청명·입하·망종·소서·입추·백로·한로·입동·대설·소한)의 분 단위 절입 시각(KST)</strong>을 기준으로 출생 연주·월주와 대상 날짜의 세운(입춘 기준)·월운(12절 기준)을 전환합니다.</li>
+            <li><strong>대운(大運) 계산 기준:</strong> 출생 연주 천간의 음양(갑·병·무·경·임=양년, 을·정·기·신·계=음년)과 성별을 조합해 <strong>양년생 남성·음년생 여성은 순행, 음년생 남성·양년생 여성은 역행</strong>으로 월주에서 대운 간지 배열을 산출합니다. 24절기 중 월 경계가 되는 12절만을 사용해 순행은 <code>출생 시각 → 다음 절입 시각</code>, 역행은 <code>이전 절입 시각 → 출생 시각</code> 간격을 구하고, <strong>3일 = 1년(1일 = 4개월, 1시간 = 5일)</strong> 연속 비례 환산(<code>절입 간격 일수 ÷ 3</code>)으로 대운별 정밀 시작·종료일을 산출합니다. 대운 경계 부근에서 반올림된 정수 대운수 때문에 적용 대운이 잘못 바뀌지 않도록 정밀 전환일 기준으로 판정하며, 성별 미입력 시에는 대운을 제외하고 <strong>‘대운 미반영 간이 풀이’</strong>로 세운·월운·일진을 비교합니다.</li>
+            <li><strong>일주·시주·일진 및 날짜 경계(밤 11시·자정):</strong> 기본 기준은 <strong>자정(00:00, 출생 정보는 경도 보정 후 시각, 대상 일진은 KST 자정)에 날짜(일주·일진)가 바뀌는 방식(야자시 구분)</strong>을 사용합니다. 출생 시각이 밤 11시(23:00)~자정 경계에 걸려 정자시(23:00 일주 전환) 기준이나 보정 전 기준에서 일주·시주가 달라질 수 있는 경우 두 기준을 함께 안내합니다.</li>
+            <li><strong>출생지 경도 보정과 구매 시간대 기준 구분:</strong> 출생 도시에 따른 시간 보정은 대한민국 표준시 자오선(동경 135.0°)과의 차이에 따른 <strong>경도 시차 보정</strong>(예: 서울 -32분, 부산 -24분)만 출생 원국 산출에 적용하며, 균시차 기반 진태양시 보정은 적용하지 않습니다. 반면 <strong>구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 실제 구매 지역 기준인 한국표준시(KST, 동경 135° 시계 시각) 2시간 시진 단위</strong>로 표시합니다.</li>
+            <li><strong>5단계 통합 해석 규칙 및 학파별 한계 명시:</strong> ① 원국(일간·재성 구조), ② 해당 날짜의 대운, ③ 세운, ④ 월운·일진, ⑤ 구매 시진을 함께 비교합니다. 편재나 재성이 강하다는 이유만으로 길일을 확정하지 않으며, 일간 생조·설기 균형, 식상생재, 합·충을 함께 검토합니다. 특히 천간합·지지합이 있다고 해서 곧바로 다른 오행으로 완전히 변하는 ‘합화(合化) 성립’으로 단정하지 않고 조화(완충)와 묶임(합거) 가능성을 함께 안내합니다. 신강·신약 및 용신 판단은 억부·조후·격국 등 학파마다 기준이 다르므로, 원국 오행·십성 비중을 단순 비교한 억부 참고 지표만 보조적으로 사용하며 절대적 판정이 아님을 밝힙니다.</li>
+            <li><strong>개인화 번호 생성 시드 구성(<code>LOTTO-NUM-GEN-v1.1</code>):</strong> 날짜 후보 선정(명리 해석)과 번호 5세트 생성(SHA-256 결정론적 피셔-예이츠 추출)은 분리되어 있습니다. 번호 생성 시드에는 정규화된 입력값(<code>양력 환산 생년월일</code>, <code>양/음력·윤달 구분</code>, <code>출생 시각 또는 UNKNOWN</code>, <code>출생 도시 코드</code>, <code>성별 M/F/NONE</code>, <code>선택 날짜</code>, <code>선택 시간대 코드</code>, <code>규칙 버전</code>)만 포함하고 파생값(대운·세운 간지 등)은 중복 삽입하지 않아 같은 입력과 규칙 버전이면 언제나 동일한 5세트를 반환합니다.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</details>
+
+<!-- 번호 생성 모드 표시 -->
+<div class="mode-bar">
+  <span id="current-mode-pill" class="mode-pill">현재 모드: 무작위 추천</span>
+  <button id="switch-random-mode" type="button" class="secondary-btn" style="display:none;padding:6px 12px;font-size:12px">기본 무작위 추천으로 전환</button>
+</div>
+<div id="personal-mode-desc" class="mode-desc">
+  생년월일과 선택 날짜로 만든 개인화 번호입니다. 모든 유효한 번호 조합의 당첨 확률은 같습니다.
+</div>
+
 <div id="balls" class="sets" role="status" aria-live="polite" aria-label="아직 추천된 번호가 없습니다"><p class="description">버튼을 눌러 추천 번호 5세트를 확인하세요.</p></div>
 <button id="generate" type="button">로또 번호 5세트 추천받기 ↻</button>
 <button id="bonus" type="button" aria-pressed="false">보너스번호 포함</button>
-<button id="copy" type="button" disabled>5세트 모두 복사하기</button>
+<div>
+  <button id="copy" type="button" disabled>5세트 모두 복사하기</button>
+  <button id="save-record" type="button" disabled>이 5세트 기록 저장하기</button>
+</div>
 <p id="status" role="status" aria-live="polite"></p>
 <p class="note">무작위 번호 생성기이며 당첨을 예측하지 않습니다.<br>모든 번호 조합의 당첨 확률은 동일합니다.</p>
+
+<!-- 기기 저장 기록 영역 -->
+<section id="records-section" class="records-panel" aria-label="저장된 번호 기록">
+  <div class="records-header">
+    <h2>🗂️ 저장된 번호 기록</h2>
+    <button id="clear-records" type="button" class="delete-btn" style="display:none">전체 기록 삭제</button>
+  </div>
+  <div id="records-list" class="records-list">
+    <p class="description" style="font-size:13px;margin:0">아직 저장된 기록이 없습니다. 번호를 생성한 뒤 ‘이 5세트 기록 저장하기’를 눌러 보관할 수 있습니다.</p>
+  </div>
+</section>
 </main>
+
 <script>
 'use strict';
+
+// ============================================================================
+// 상수 및 버전 정의
+// ============================================================================
+const SAJU_RULE_VERSION = 'LOTTO-SAJU-RULE-v2.0';
+const NUM_GEN_VERSION = 'LOTTO-NUM-GEN-v1.1';
+const RANDOM_GEN_VERSION = 'RANDOM-v1.0';
+const STORAGE_RECORDS_KEY = 'lotto-saved-records-v1';
+const STORAGE_BIRTH_KEY = 'lotto-saved-birth-v1';
+
+// 1900~2050 한국천문연구원(KASI) / 한국표준시(UTC+9) 기준 음양력 비트 패킹 테이블
+const KR_LUNAR_1900_2050 = [4003538,6424402,4984485,3716682,6030923,4459163,3183958,5637482,4197209,2774866,5244754,3857189,6294309,4721227,3322523,5769901,4457834,2902889,5376937,4127570,6557074,4984101,3586637,6031702,4588213,3052973,5637844,4197801,2907538,5246610,3853606,6161703,4721239,3322550,5769946,4458196,3042985,5375817,3995283,6425235,4982059,3459675,5900653,4590442,3316564,5639076,4197193,2775699,5245589,3732779,6161709,4721325,3454314,5770674,4459940,3046729,5508426,4004501,6425238,4982102,3590837,5901013,4589266,3182245,5639845,4197962,2780310,5114523,3863894,6161770,4721497,3454802,5900114,4327205,2922059,5376587,4002475,6292141,4851051,3591017,6032809,4590994,3185445,5639461,4282957,6556246,5112502,3724717,6293204,4722089,3456402,5901970,4459814,2910806,5245527,4002486,6425434,4982484,3583689,6031177,4589203,3052839,5506347,4065883,2774362,5112682,3734357,6294436,4852553,3324563,5769877,4326701,2910813,5245613,4011434,6424018,4984229,3587402,6032714,4590229,3183917,5506390,4065973,2774442,5244626,3722917,6164133,4853322,3452054,5639323,4326746,2910933,5376873,4028242,6424402,4983589,3593803,5900875,4457643,3056987,5506413,4066153,2775890,5246354,3865893,6163749,4721229,3323053,5767862,4195765,2911657];
+
+// VSOP87D 태양 황경 급수 계수
+const L0_TERMS = [
+  [175347046, 0, 0], [3341656, 4.6692568, 6283.0758500], [34894, 4.62610, 12566.15170],
+  [3497, 2.7441, 5753.3849], [3418, 2.8289, 3.5231], [3136, 3.6277, 77713.7715],
+  [2676, 4.4181, 7860.4194], [2343, 6.1352, 3930.2097], [1324, 0.7425, 11506.7698],
+  [1273, 2.0371, 529.6910], [1199, 1.1096, 1577.3435], [990, 5.233, 5884.927],
+  [902, 2.045, 26.298], [857, 3.508, 398.149], [780, 1.179, 5223.694],
+  [753, 2.533, 5507.553], [505, 4.583, 18849.228], [492, 4.205, 775.523],
+  [357, 2.92, 0.067], [317, 5.849, 11790.629], [284, 1.899, 796.298],
+  [271, 0.315, 10977.079], [243, 0.345, 5486.778], [206, 4.806, 2544.314],
+  [205, 1.869, 5573.143], [202, 2.458, 6069.777], [156, 0.833, 213.299],
+  [132, 3.411, 2942.463], [126, 1.083, 20.775], [115, 0.645, 0.980],
+  [103, 0.636, 4694.003], [102, 0.976, 15720.839], [102, 4.267, 7.114],
+  [99, 6.21, 2146.17], [98, 0.68, 155.42], [86, 5.98, 161000.69],
+  [85, 1.30, 6275.96], [85, 3.67, 71430.70], [80, 1.81, 17260.15]
+];
+const L1_TERMS = [
+  [628331966747, 0, 0], [206059, 2.678235, 6283.075850], [4303, 2.6351, 12566.1517],
+  [425, 1.590, 3.523], [119, 5.796, 26.298], [109, 2.966, 1577.344],
+  [93, 2.59, 18849.23], [72, 1.14, 529.69], [68, 1.87, 398.15],
+  [67, 4.41, 5507.55], [59, 2.89, 5223.69], [56, 2.17, 155.42],
+  [45, 0.40, 796.30], [36, 0.47, 775.52], [29, 2.65, 7.11],
+  [21, 5.34, 0.98], [19, 1.85, 5486.78], [19, 4.97, 213.30],
+  [17, 2.99, 6275.96], [16, 0.03, 2544.31]
+];
+const L2_TERMS = [
+  [52919, 0, 0], [8720, 1.0721, 6283.0758], [309, 0.867, 12566.152],
+  [27, 0.05, 3.52], [16, 5.19, 26.30], [16, 3.68, 155.42],
+  [10, 0.76, 18849.23], [9, 2.06, 77713.77]
+];
+const L3_TERMS = [[289, 5.844, 6283.076], [35, 0, 0], [17, 5.49, 12566.15]];
+const L4_TERMS = [[114, 3.142, 0], [8, 4.13, 6283.08]];
+
+const STEMS = ['갑(甲)', '을(乙)', '병(丙)', '정(丁)', '무(戊)', '기(己)', '경(庚)', '신(辛)', '임(壬)', '계(癸)'];
+const STEMS_KO = ['갑목(甲木)', '을목(乙木)', '병화(丙火)', '정화(丁火)', '무토(戊土)', '기토(己土)', '경금(庚金)', '신금(辛金)', '임수(壬水)', '계수(癸水)'];
+const BRANCHES = ['자(子)', '축(丑)', '인(寅)', '묘(卯)', '진(辰)', '사(巳)', '오(午)', '미(未)', '신(申)', '유(酉)', '술(戌)', '해(亥)'];
+const BRANCH_MAIN_STEM = [9, 5, 0, 1, 4, 2, 3, 5, 6, 7, 4, 8];
+const WEEKDAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
+
+const CITIES = {
+  '':        { name: '미선택 (표준시 동경 135°)', lon: 135.0, offsetMin: 0 },
+  SEOUL:     { name: '서울', lon: 126.98, offsetMin: -32 },
+  INCHEON:   { name: '인천', lon: 126.71, offsetMin: -33 },
+  SUWON:     { name: '수원·경기', lon: 127.01, offsetMin: -32 },
+  CHUNCHEON: { name: '춘천·강원서부', lon: 127.73, offsetMin: -29 },
+  GANGNEUNG: { name: '강릉·강원동부', lon: 128.89, offsetMin: -24 },
+  DAEJEON:   { name: '대전·세종', lon: 127.38, offsetMin: -30 },
+  CHEONGJU:  { name: '청주·충북', lon: 127.49, offsetMin: -30 },
+  JEONJU:    { name: '전주·전북', lon: 127.15, offsetMin: -31 },
+  GWANGJU:   { name: '광주·전남', lon: 126.85, offsetMin: -33 },
+  DAEGU:     { name: '대구·경북', lon: 128.60, offsetMin: -26 },
+  POHANG:    { name: '포항', lon: 129.37, offsetMin: -23 },
+  BUSAN:     { name: '부산', lon: 129.08, offsetMin: -24 },
+  ULSAN:     { name: '울산', lon: 129.31, offsetMin: -23 },
+  CHANGWON:  { name: '창원·경남', lon: 128.68, offsetMin: -25 },
+  JEJU:      { name: '제주', lon: 126.53, offsetMin: -34 }
+};
+
+const SOLAR_TERMS_12 = [
+  { month: 1,  deg: 285, name: '소한', branch: 1 },
+  { month: 2,  deg: 315, name: '입춘', branch: 2 },
+  { month: 3,  deg: 345, name: '경칩', branch: 3 },
+  { month: 4,  deg: 15,  name: '청명', branch: 4 },
+  { month: 5,  deg: 45,  name: '입하', branch: 5 },
+  { month: 6,  deg: 75,  name: '망종', branch: 6 },
+  { month: 7,  deg: 105, name: '소서', branch: 7 },
+  { month: 8,  deg: 135, name: '입추', branch: 8 },
+  { month: 9,  deg: 165, name: '백로', branch: 9 },
+  { month: 10, deg: 195, name: '한로', branch: 10 },
+  { month: 11, deg: 225, name: '입동', branch: 11 },
+  { month: 12, deg: 255, name: '대설', branch: 0 }
+];
+
+const PURCHASE_SLOTS = [
+  { code: 'JIN',  label: '07:00 ~ 09:00 (진시)', branch: 4, startHour: 7,  endHour: 9,  allowSat: true },
+  { code: 'SA',   label: '09:00 ~ 11:00 (사시)', branch: 5, startHour: 9,  endHour: 11, allowSat: true },
+  { code: 'O',    label: '11:00 ~ 13:00 (오시)', branch: 6, startHour: 11, endHour: 13, allowSat: true },
+  { code: 'MI',   label: '13:00 ~ 15:00 (미시)', branch: 7, startHour: 13, endHour: 15, allowSat: true },
+  { code: 'SHIN', label: '15:00 ~ 17:00 (신시)', branch: 8, startHour: 15, endHour: 17, allowSat: true },
+  { code: 'YU',   label: '17:00 ~ 19:00 (유시)', branch: 9, startHour: 17, endHour: 19, allowSat: true },
+  { code: 'SUL',  label: '19:00 ~ 21:00 (술시)', branch: 10, startHour: 19, endHour: 21, allowSat: false },
+  { code: 'HAE',  label: '21:00 ~ 23:00 (해시)', branch: 11, startHour: 21, endHour: 23, allowSat: false }
+];
+
+// ============================================================================
+// 상태 변수
+// ============================================================================
 let currentNumbers = [];
 let bonusNumbers = [];
 let includeBonus = false;
+let currentMode = 'random'; // 'random' | 'personal'
+let currentPersonalMeta = null; // { selectedDate, selectedSlotLabel, ruleVersion }
+let verifiedLatestDraw = null; // 공식 확인된 최신 회차 데이터 (미확인 시 null)
+let drawResultCache = {}; // round -> draw data
+
 const balls = document.getElementById('balls');
 const copyButton = document.getElementById('copy');
+const saveRecordButton = document.getElementById('save-record');
 const status = document.getElementById('status');
 const bonusButton = document.getElementById('bonus');
 const themeToggle = document.getElementById('theme-toggle');
+const modePill = document.getElementById('current-mode-pill');
+const personalModeDesc = document.getElementById('personal-mode-desc');
+const switchRandomBtn = document.getElementById('switch-random-mode');
+
+// ============================================================================
+// 다크모드 / 화이트모드
+// ============================================================================
 function applyTheme(theme) {
   const isDark = theme === 'dark';
   document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -79,6 +487,859 @@ themeToggle.addEventListener('click', () => {
   applyTheme(nextTheme);
   try { localStorage.setItem('lotto-theme', nextTheme); } catch {}
 });
+
+// ============================================================================
+// 한국표준시(KST) 현재 시각 및 이번 회차 남은 구매 가능 기간 계산
+// ============================================================================
+function getCurrentKST() {
+  const now = new Date();
+  const kstMs = now.getTime() + 9 * 3600000;
+  const kstDate = new Date(kstMs);
+  return {
+    year: kstDate.getUTCFullYear(),
+    month: kstDate.getUTCMonth() + 1,
+    day: kstDate.getUTCDate(),
+    hour: kstDate.getUTCHours(),
+    minute: kstDate.getUTCMinutes(),
+    dow: kstDate.getUTCDay()
+  };
+}
+
+function toDateInputString(y, m, d) {
+  return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+
+function getDefaultSalesPeriod() {
+  const kst = getCurrentKST();
+  let startUTC = Date.UTC(kst.year, kst.month - 1, kst.day);
+  // 토요일 20:00 이후면 금주 판매 마감 -> 일요일(다음 날)부터 다음 주 토요일까지
+  if (kst.dow === 6 && kst.hour >= 20) {
+    startUTC += 86400000;
+  }
+  const startDt = new Date(startUTC);
+  const startDow = startDt.getUTCDay();
+  const daysUntilSat = (6 - startDow + 7) % 7;
+  const endUTC = startUTC + daysUntilSat * 86400000;
+  const endDt = new Date(endUTC);
+
+  const startStr = toDateInputString(startDt.getUTCFullYear(), startDt.getUTCMonth() + 1, startDt.getUTCDate());
+  const endStr = toDateInputString(endDt.getUTCFullYear(), endDt.getUTCMonth() + 1, endDt.getUTCDate());
+  return { startStr, endStr, saturdayStr: endStr };
+}
+
+function initPeriodInputs() {
+  const period = getDefaultSalesPeriod();
+  const startEl = document.getElementById('range-start');
+  const endEl = document.getElementById('range-end');
+  startEl.value = period.startStr;
+  endEl.value = period.endStr;
+  startEl.min = period.startStr;
+  updatePeriodHint();
+}
+
+function getConfirmedTargetDrawForDate(dateStr) {
+  // 공식 확인된 지난 회차 데이터가 있고, 그 추첨일로부터 정확히 7일 뒤가 이번 주 토요일일 때만 회차를 확정 표기
+  if (!verifiedLatestDraw || !verifiedLatestDraw.date || !verifiedLatestDraw.round) return null;
+  const lastDt = new Date(verifiedLatestDraw.date);
+  if (isNaN(lastDt.getTime())) return null;
+  const lastUTC = Date.UTC(lastDt.getUTCFullYear(), lastDt.getUTCMonth(), lastDt.getUTCDate());
+  const nextDrawUTC = lastUTC + 7 * 86400000;
+  const nextDt = new Date(nextDrawUTC);
+  const nextDrawStr = toDateInputString(nextDt.getUTCFullYear(), nextDt.getUTCMonth() + 1, nextDt.getUTCDate());
+  if (dateStr <= nextDrawStr && dateStr > toDateInputString(lastDt.getUTCFullYear(), lastDt.getUTCMonth() + 1, lastDt.getUTCDate())) {
+    return {
+      round: verifiedLatestDraw.round + 1,
+      drawDate: nextDrawStr
+    };
+  }
+  return null;
+}
+
+function updatePeriodHint() {
+  const period = getDefaultSalesPeriod();
+  const confirmed = getConfirmedTargetDrawForDate(period.saturdayStr);
+  const hintEl = document.getElementById('range-period-hint');
+  if (confirmed) {
+    hintEl.textContent = `동행복권 공식 판매 시간(매일 06:00~24:00, 토요일 20:00 마감) 기준 제${confirmed.round}회(추첨일 ${confirmed.drawDate}) 남은 구매 가능 기간입니다.`;
+  } else {
+    hintEl.textContent = `동행복권 공식 판매 시간(매일 06:00~24:00, 토요일 20:00 마감) 기준 이번 주 남은 구매 가능 기간(${period.startStr} ~ ${period.endStr})입니다.`;
+  }
+}
+
+// ============================================================================
+// 음양력·윤달 변환 및 검증 (1900~2050)
+// ============================================================================
+function isValidSolarYMD(year, month, day) {
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return false;
+  if (year < 1900 || year > 2050 || month < 1 || month > 12 || day < 1 || day > 31) return false;
+  const d = new Date(Date.UTC(year, month - 1, day));
+  return d.getUTCFullYear() === year && (d.getUTCMonth() + 1) === month && d.getUTCDate() === day;
+}
+
+function getLunarYearInfo(lunarYear) {
+  if (lunarYear < 1900 || lunarYear > 2050) return null;
+  const packed = KR_LUNAR_1900_2050[lunarYear - 1900];
+  const mask = packed & 0x1FFF;
+  const leapMonth = (packed >> 13) & 0x0F;
+  const offset = (packed >> 17) & 0x3F;
+  const totalMonths = leapMonth > 0 ? 13 : 12;
+  const months = [];
+  for (let i = 0; i < totalMonths; i++) {
+    const days = ((mask >> i) & 1) ? 30 : 29;
+    let mNum = i + 1;
+    let isLeap = false;
+    if (leapMonth > 0) {
+      if (i === leapMonth) {
+        mNum = leapMonth;
+        isLeap = true;
+      } else if (i > leapMonth) {
+        mNum = i;
+      }
+    }
+    months.push({ month: mNum, isLeap, days });
+  }
+  const jan1UTC = Date.UTC(lunarYear, 0, 1 + offset);
+  return { lunarYear, leapMonth, jan1UTC, months };
+}
+
+function lunarToSolar(lunarYear, lunarMonth, lunarDay, isLeapMonth) {
+  if (!Number.isInteger(lunarYear) || !Number.isInteger(lunarMonth) || !Number.isInteger(lunarDay)) {
+    return { ok: false, error: '생년월일(연·월·일)을 숫자로 정확히 입력해 주세요.' };
+  }
+  if (lunarYear < 1900 || lunarYear > 2050) {
+    return { ok: false, error: '음력 변환 지원 범위는 1900년~2050년입니다.' };
+  }
+  if (lunarMonth < 1 || lunarMonth > 12 || lunarDay < 1 || lunarDay > 30) {
+    return { ok: false, error: '음력 월(1~12월)과 일(1~30일) 범위를 확인해 주세요.' };
+  }
+  const info = getLunarYearInfo(lunarYear);
+  let dayOffset = 0;
+  let found = null;
+  for (const m of info.months) {
+    if (m.month === lunarMonth && m.isLeap === Boolean(isLeapMonth)) {
+      found = m;
+      break;
+    }
+    dayOffset += m.days;
+  }
+  if (!found) {
+    if (isLeapMonth) {
+      const leapDesc = info.leapMonth > 0 ? `윤${info.leapMonth}월` : '윤달 없음';
+      return { ok: false, error: `음력 ${lunarYear}년에는 윤${lunarMonth}월이 존재하지 않습니다. (${lunarYear}년 윤달: ${leapDesc})` };
+    }
+    return { ok: false, error: '존재하지 않는 음력 월입니다.' };
+  }
+  if (lunarDay > found.days) {
+    return { ok: false, error: `음력 ${lunarYear}년 ${isLeapMonth ? '윤' : ''}${lunarMonth}월은 ${found.days}일(작은달)까지만 있습니다.` };
+  }
+  const solarUTC = info.jan1UTC + (dayOffset + lunarDay - 1) * 86400000;
+  const d = new Date(solarUTC);
+  if (d.getUTCFullYear() > 2050) {
+    return { ok: false, error: '변환된 양력 날짜가 지원 범위(2050년 12월 31일)를 벗어납니다.' };
+  }
+  return {
+    ok: true,
+    year: d.getUTCFullYear(),
+    month: d.getUTCMonth() + 1,
+    day: d.getUTCDate()
+  };
+}
+
+function solarToLunar(solarYear, solarMonth, solarDay) {
+  if (!isValidSolarYMD(solarYear, solarMonth, solarDay)) {
+    return { ok: false, error: '존재하지 않는 양력 날짜입니다. (윤년 여부 및 월별 일수를 확인해 주세요)' };
+  }
+  const targetUTC = Date.UTC(solarYear, solarMonth - 1, solarDay);
+  for (let y = solarYear; y >= solarYear - 1 && y >= 1900; y--) {
+    const info = getLunarYearInfo(y);
+    if (!info || targetUTC < info.jan1UTC) continue;
+    let rem = Math.round((targetUTC - info.jan1UTC) / 86400000);
+    for (const m of info.months) {
+      if (rem < m.days) {
+        return {
+          ok: true,
+          year: y,
+          month: m.month,
+          day: rem + 1,
+          isLeapMonth: m.isLeap
+        };
+      }
+      rem -= m.days;
+    }
+  }
+  return { ok: false, error: '지원 범위(양력 1900년 1월 31일 ~ 2050년 12월 31일) 밖의 날짜입니다.' };
+}
+
+// ============================================================================
+// 천문 절입 시각 및 사주팔자(연·월·일·시주) 계산
+// ============================================================================
+function sumSeries(terms, tau) {
+  let s = 0;
+  for (const [A, B, C] of terms) s += A * Math.cos(B + C * tau);
+  return s;
+}
+
+function deltaTSeconds(year) {
+  const t = year - 2000;
+  return 62.92 + 0.32217 * t + 0.005589 * t * t;
+}
+
+function solarApparentLongitude(jdUTC) {
+  const dt = deltaTSeconds(2000 + (jdUTC - 2451545.0) / 365.25) / 86400.0;
+  const jde = jdUTC + dt;
+  const tau = (jde - 2451545.0) / 365250.0;
+  const T = tau * 10.0;
+  const L0 = sumSeries(L0_TERMS, tau);
+  const L1 = sumSeries(L1_TERMS, tau);
+  const L2 = sumSeries(L2_TERMS, tau);
+  const L3 = sumSeries(L3_TERMS, tau);
+  const L4 = sumSeries(L4_TERMS, tau);
+  const Lrad = (L0 + L1 * tau + L2 * tau * tau + L3 * tau * tau * tau + L4 * Math.pow(tau, 4)) / 1e8;
+  let sunLon = (Lrad * 180 / Math.PI + 180) % 360;
+  if (sunLon < 0) sunLon += 360;
+  const rad = Math.PI / 180;
+  sunLon -= 0.09033 / 3600;
+  const omega = (125.04452 - 1934.136261 * T) * rad;
+  const Lsun = (280.4665 + 36000.7698 * T) * rad;
+  const Lmoon = (218.3165 + 481267.8813 * T) * rad;
+  const dPsi = (-17.20 * Math.sin(omega) - 1.32 * Math.sin(2 * Lsun) - 0.23 * Math.sin(2 * Lmoon) + 0.21 * Math.sin(2 * omega)) / 3600;
+  const M = (357.52911 + 35999.05029 * T) * rad;
+  const R = 1.00014 - 0.01671 * Math.cos(M) - 0.00014 * Math.cos(2 * M);
+  const aberration = -20.4898 / (3600 * R);
+  return ((sunLon + dPsi + aberration) % 360 + 360) % 360;
+}
+
+function findSolarTermJD(year, approxMonth, targetDeg) {
+  let jd = Date.UTC(year, approxMonth - 1, 5, 0, 0, 0) / 86400000 + 2440587.5;
+  for (let i = 0; i < 12; i++) {
+    const lon = solarApparentLongitude(jd);
+    let diff = targetDeg - lon;
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+    jd += diff / 0.98564736;
+  }
+  return jd;
+}
+
+function formatJDtoKSTString(jd) {
+  const ms = Math.floor(((jd - 2440587.5) * 86400000 + 9 * 3600000 + 30000) / 60000) * 60000;
+  const d = new Date(ms);
+  return d.toISOString().replace('T', ' ').slice(0, 16);
+}
+
+function getDayGanjiFromSolarYMD(year, month, day) {
+  const targetUTC = Date.UTC(year, month - 1, day);
+  const baseUTC = Date.UTC(2000, 0, 1);
+  const diffDays = Math.round((targetUTC - baseUTC) / 86400000);
+  const idx60 = ((54 + diffDays) % 60 + 60) % 60;
+  return { stem: idx60 % 10, branch: idx60 % 12, idx60 };
+}
+
+function getHourGanji(dayStemForHour, hourBranch) {
+  const startStem = ((dayStemForHour % 5) * 2);
+  const stem = (startStem + hourBranch) % 10;
+  return { stem, branch: hourBranch };
+}
+
+function formatPillar(p) {
+  if (!p) return '시간 모름(제외)';
+  return STEMS[p.stem] + BRANCHES[p.branch];
+}
+
+function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour = 12, minute = 0, cityCode = '' }) {
+  const city = CITIES[cityCode] || CITIES[''];
+  const offsetMin = timeKnown ? city.offsetMin : 0;
+
+  const kstMs = Date.UTC(solarYear, solarMonth - 1, solarDay, timeKnown ? hour : 12, timeKnown ? minute : 0, 0);
+  const utcMs = kstMs - 9 * 3600000;
+  const jdUTC = utcMs / 86400000 + 2440587.5;
+
+  const ipchunJD = findSolarTermJD(solarYear, 2, 315);
+  const sajuYear = (jdUTC < ipchunJD) ? (solarYear - 1) : solarYear;
+  const yearStem = ((sajuYear - 4) % 10 + 10) % 10;
+  const yearBranch = ((sajuYear - 4) % 12 + 12) % 12;
+
+  const lon = solarApparentLongitude(jdUTC);
+  const monthTermIndex = Math.floor(((lon + 45) % 360) / 30);
+  const monthBranch = (monthTermIndex + 2) % 12;
+  const monthStartStem = (((yearStem % 5) * 2 + 2) % 10);
+  const monthStem = (monthStartStem + monthTermIndex) % 10;
+
+  // 해당 양력 월의 절기 시각과 비교해 절입 경계 안내 생성
+  const monthTermDef = SOLAR_TERMS_12[solarMonth - 1];
+  const monthTermJD = findSolarTermJD(solarYear, monthTermDef.month, monthTermDef.deg);
+  const diffHoursToTerm = Math.abs(jdUTC - monthTermJD) * 24;
+  let termBoundaryNote = null;
+  const termKSTStr = formatJDtoKSTString(monthTermJD);
+  if (!timeKnown && termKSTStr.slice(0, 10) === toDateInputString(solarYear, solarMonth, solarDay)) {
+    termBoundaryNote = `출생일이 '${monthTermDef.name}' 절입일(${termKSTStr} KST) 당일입니다. '시간 모름' 선택으로 정오(12:00) 기준을 적용했으며, 실제 출생 시각이 절입 시각(${termKSTStr.slice(11)}) 이전이면 월주${monthTermDef.name === '입춘' ? '·연주' : ''}가 달라질 수 있습니다.`;
+  } else if (timeKnown && diffHoursToTerm <= 3) {
+    termBoundaryNote = `출생 시각이 '${monthTermDef.name}' 절입 시각(${termKSTStr} KST)과 약 ${Math.round(diffHoursToTerm * 60)}분 차이로 절입 경계에 인접해 있습니다.`;
+  }
+
+  let dayPillar = getDayGanjiFromSolarYMD(solarYear, solarMonth, solarDay);
+  let hourPillar = null;
+  let boundaryNote = null;
+  let correctedTimeStr = null;
+
+  if (timeKnown) {
+    const correctedKstMs = kstMs + offsetMin * 60000;
+    const cd = new Date(correctedKstMs);
+    const cYear = cd.getUTCFullYear();
+    const cMonth = cd.getUTCMonth() + 1;
+    const cDay = cd.getUTCDate();
+    const cHour = cd.getUTCHours();
+    const cMin = cd.getUTCMinutes();
+    correctedTimeStr = `${String(cHour).padStart(2, '0')}:${String(cMin).padStart(2, '0')}`;
+
+    dayPillar = getDayGanjiFromSolarYMD(cYear, cMonth, cDay);
+    const hourBranch = Math.floor(((cHour + 1) % 24) / 2);
+    const nextDayDate = new Date(Date.UTC(cYear, cMonth - 1, cDay) + 86400000);
+    const nextDayPillar = getDayGanjiFromSolarYMD(nextDayDate.getUTCFullYear(), nextDayDate.getUTCMonth() + 1, nextDayDate.getUTCDate());
+    const dayStemForHour = (cHour === 23) ? nextDayPillar.stem : dayPillar.stem;
+    hourPillar = getHourGanji(dayStemForHour, hourBranch);
+
+    const rawDayPillar = getDayGanjiFromSolarYMD(solarYear, solarMonth, solarDay);
+    if (cHour === 23 || hour === 23 || (cDay !== solarDay)) {
+      const altDayPillar = (cHour === 23) ? nextDayPillar : rawDayPillar;
+      const altHourPillar = getHourGanji(altDayPillar.stem, 0);
+      boundaryNote = `출생 시각(입력 ${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}${offsetMin !== 0 ? ', 경도 시차 보정 후 ' + correctedTimeStr : ''})이 밤 11시~자정 날짜 경계(자시)에 걸려 있습니다. 기본 기준(보정 후 자정 00:00 일주 전환)에서는 일주 '${formatPillar(dayPillar)}'·시주 '${formatPillar(hourPillar)}'이나, 밤 11시(23:00) 일주 전환(정자시) 또는 보정 미적용 기준에서는 일주 '${formatPillar(altDayPillar)}'·시주 '${formatPillar(altHourPillar)}'로 달라질 수 있습니다.`;
+    }
+  }
+
+  return {
+    yearPillar: { stem: yearStem, branch: yearBranch },
+    monthPillar: { stem: monthStem, branch: monthBranch },
+    dayPillar,
+    hourPillar,
+    dayMaster: dayPillar.stem,
+    city,
+    offsetMin,
+    correctedTimeStr,
+    termBoundaryNote,
+    boundaryNote
+  };
+}
+
+function getTenGod(dayMaster, targetStem) {
+  const dmElem = Math.floor(dayMaster / 2);
+  const tgElem = Math.floor(targetStem / 2);
+  const samePol = (dayMaster % 2) === (targetStem % 2);
+  const diff = (tgElem - dmElem + 5) % 5;
+  if (diff === 0) return { code: samePol ? '비견' : '겁재', group: '비겁' };
+  if (diff === 1) return { code: samePol ? '식신' : '상관', group: '식상' };
+  if (diff === 2) return { code: samePol ? '편재' : '정재', group: '재성' };
+  if (diff === 3) return { code: samePol ? '편관' : '정관', group: '관성' };
+  return { code: samePol ? '편인' : '정인', group: '인성' };
+}
+
+function isYukChung(b1, b2) { return Math.abs(b1 - b2) === 6; }
+function isYukHap(b1, b2) {
+  const pairs = [[0,1],[2,11],[3,10],[4,9],[5,8],[6,7]];
+  return pairs.some(([a, b]) => (b1 === a && b2 === b) || (b1 === b && b2 === a));
+}
+function isSamHap(b1, b2) { return b1 !== b2 && (b1 % 4 === b2 % 4); }
+function isCheonGanHap(s1, s2) { return Math.abs(s1 - s2) === 5; }
+
+// 12절기 목록을 시간순으로 생성하여 특정 JD 전후의 직전 절입(prev)과 다음 절입(next)을 반환
+function getSurroundingJieQi(jdUTC, approxSolarYear) {
+  const terms = [];
+  for (let y = approxSolarYear - 1; y <= approxSolarYear + 1; y++) {
+    for (const t of SOLAR_TERMS_12) {
+      const termJD = findSolarTermJD(y, t.month, t.deg);
+      terms.push({
+        year: y,
+        month: t.month,
+        name: t.name,
+        deg: t.deg,
+        branch: t.branch,
+        jd: termJD,
+        kstStr: formatJDtoKSTString(termJD)
+      });
+    }
+  }
+  terms.sort((a, b) => a.jd - b.jd);
+  let prev = null;
+  let next = null;
+  for (let i = 0; i < terms.length; i++) {
+    if (terms[i].jd <= jdUTC) {
+      prev = terms[i];
+    } else if (terms[i].jd > jdUTC) {
+      next = terms[i];
+      break;
+    }
+  }
+  return { prev, next };
+}
+
+// 대운(大運) 계산 (양남음녀 순행, 음남양녀 역행, 12절 기준 3일=1년 환산)
+function computeDaeunProfile({ solarYear, solarMonth, solarDay, timeKnown, hour = 12, minute = 0, gender = 'NONE', yearPillar, monthPillar }) {
+  if (gender !== 'M' && gender !== 'F') {
+    return { enabled: false, gender: 'NONE', reason: '성별 미입력 (대운 미반영 간이 풀이)' };
+  }
+
+  const isYangYear = (yearPillar.stem % 2 === 0);
+  const isMale = (gender === 'M');
+  const isForward = (isYangYear && isMale) || (!isYangYear && !isMale);
+  const direction = isForward ? 1 : -1;
+  const directionLabel = isForward
+    ? `순행 (${isYangYear ? '양년생' : '음년생'} ${isMale ? '남성' : '여성'})`
+    : `역행 (${isYangYear ? '양년생' : '음년생'} ${isMale ? '남성' : '여성'})`;
+
+  const birthKstMs = Date.UTC(solarYear, solarMonth - 1, solarDay, timeKnown ? hour : 12, timeKnown ? minute : 0, 0);
+  const birthJdUTC = (birthKstMs - 9 * 3600000) / 86400000 + 2440587.5;
+  const { prev, next } = getSurroundingJieQi(birthJdUTC, solarYear);
+
+  const refTerm = isForward ? next : prev;
+  const deltaDays = isForward ? (next.jd - birthJdUTC) : (birthJdUTC - prev.jd);
+
+  // 3일 = 1년, 1일 = 4개월, 1시간 = 5일 (연속 환산 연수 = deltaDays / 3.0)
+  const exactStartYears = deltaDays / 3.0;
+  const startYearsInt = Math.floor(exactStartYears);
+  const startMonthsRem = Math.round((exactStartYears - startYearsInt) * 12);
+  const adjYears = startMonthsRem === 12 ? startYearsInt + 1 : startYearsInt;
+  const adjMonths = startMonthsRem === 12 ? 0 : startMonthsRem;
+  const displayDaeunNumber = Math.max(1, Math.round(exactStartYears));
+
+  // 출생 시간 모름일 때의 시작 시점 불확실성 (당일 00:00~23:59 KST = ±0.5일 = ±2개월)
+  const startUncertaintyDays = timeKnown ? 0 : Math.round((0.5 / 3.0) * 365.2425);
+  const birthDateStr = toDateInputString(solarYear, solarMonth, solarDay);
+  const sameDayAsJieQi = !timeKnown && (prev.kstStr.slice(0, 10) === birthDateStr || next.kstStr.slice(0, 10) === birthDateStr);
+
+  const birthSolarUTC = Date.UTC(solarYear, solarMonth - 1, solarDay);
+  const TROPICAL_YEAR_DAYS = 365.2425;
+  const pillars = [];
+  for (let i = 1; i <= 10; i++) {
+    const stem = ((monthPillar.stem + direction * i) % 10 + 10) % 10;
+    const branch = ((monthPillar.branch + direction * i) % 12 + 12) % 12;
+    const startOffsetDays = Math.round((exactStartYears + (i - 1) * 10) * TROPICAL_YEAR_DAYS);
+    const endOffsetDays = Math.round((exactStartYears + i * 10) * TROPICAL_YEAR_DAYS) - 1;
+    const startUTC = birthSolarUTC + startOffsetDays * 86400000;
+    const endUTC = birthSolarUTC + endOffsetDays * 86400000;
+    const sDt = new Date(startUTC);
+    const eDt = new Date(endUTC);
+    const roundedStartAge = displayDaeunNumber + (i - 1) * 10;
+    const roundedEndAge = roundedStartAge + 9;
+    const roundedStartUTC = birthSolarUTC + Math.round(roundedStartAge * TROPICAL_YEAR_DAYS) * 86400000;
+    pillars.push({
+      order: i,
+      stem,
+      branch,
+      ganji: STEMS[stem] + BRANCHES[branch],
+      displayAgeRange: `대운수 ${roundedStartAge} (${roundedStartAge}~${roundedEndAge}세 구간)`,
+      exactAgeStartLabel: `만 ${adjYears + (i - 1) * 10}년 ${adjMonths}개월`,
+      startUTC,
+      endUTC,
+      startDateStr: sDt.toISOString().slice(0, 10),
+      endDateStr: eDt.toISOString().slice(0, 10),
+      roundedStartUTC
+    });
+  }
+
+  return {
+    enabled: true,
+    gender,
+    isYangYear,
+    isForward,
+    direction,
+    directionLabel,
+    refTerm,
+    prevTerm: prev,
+    nextTerm: next,
+    deltaDays: Number(deltaDays.toFixed(3)),
+    exactStartYears: Number(exactStartYears.toFixed(2)),
+    exactStartLabel: timeKnown
+      ? `출생 후 만 ${adjYears}년 ${adjMonths}개월 (절입 간격 ${deltaDays.toFixed(2)}일 ÷ 3)`
+      : `출생 후 약 만 ${adjYears}년 ${adjMonths}개월 ± 2개월 (정오 기준 절입 간격 ${deltaDays.toFixed(1)}일 ÷ 3, 시간 미상으로 ±2개월 범위 존재)`,
+    displayDaeunNumber,
+    startUncertaintyDays,
+    sameDayAsJieQi,
+    pillars
+  };
+}
+
+// 대상 날짜에 적용되는 대운 조회 및 대운 경계(교운기·반올림 오차·시간 미상 불확실성) 판정
+function getActiveDaeunForDate(daeunProfile, targetY, targetM, targetD) {
+  if (!daeunProfile || !daeunProfile.enabled) {
+    return { active: null, isPreDaeun: false, boundaryNotes: [] };
+  }
+  const targetUTC = Date.UTC(targetY, targetM - 1, targetD);
+  const boundaryNotes = [];
+
+  if (daeunProfile.sameDayAsJieQi) {
+    boundaryNotes.push(`출생일이 절입일 당일이고 ‘시간 모름’ 상태여서, 실제 출생 시각이 절입 시각 전후인지에 따라 월주 및 대운 간지·방향이 달라질 수 있습니다.`);
+  }
+
+  let active = null;
+  let isPreDaeun = false;
+  if (targetUTC < daeunProfile.pillars[0].startUTC) {
+    isPreDaeun = true;
+  } else {
+    for (const p of daeunProfile.pillars) {
+      if (targetUTC >= p.startUTC && targetUTC <= p.endUTC) {
+        active = p;
+        break;
+      }
+    }
+    if (!active) active = daeunProfile.pillars[daeunProfile.pillars.length - 1];
+  }
+
+  for (let i = 0; i < daeunProfile.pillars.length; i++) {
+    const p = daeunProfile.pillars[i];
+    const diffDaysFromStart = Math.round((targetUTC - p.startUTC) / 86400000);
+    if (Math.abs(diffDaysFromStart) <= Math.max(45, daeunProfile.startUncertaintyDays)) {
+      const prevDesc = i === 0 ? '대운 시작 전(초년 월주 기운)' : `${i}대운(${daeunProfile.pillars[i - 1].ganji})`;
+      if (daeunProfile.startUncertaintyDays > 0) {
+        boundaryNotes.push(`대상 날짜(${toDateInputString(targetY, targetM, targetD)})가 ${prevDesc}에서 ${p.order}대운(${p.ganji}, 정오 기준 전환일 약 ${p.startDateStr})으로 넘어가는 경계에 걸려 있어, 출생 시간 미입력에 따른 시작 시점 차이(약 ±2개월)로 적용 대운이 달라질 수 있습니다.`);
+      } else {
+        boundaryNotes.push(`대상 날짜가 ${prevDesc}에서 ${p.order}대운(${p.ganji}, 전환일 ${p.startDateStr})으로 바뀌는 교운기(전환 시점 전후 약 ${Math.abs(diffDaysFromStart)}일)에 해당합니다.`);
+      }
+    }
+  }
+
+  if (active) {
+    let roundedActive = null;
+    for (const p of daeunProfile.pillars) {
+      const nextRoundedUTC = p.order < 10 ? daeunProfile.pillars[p.order].roundedStartUTC : Infinity;
+      if (targetUTC >= p.roundedStartUTC && targetUTC < nextRoundedUTC) {
+        roundedActive = p;
+        break;
+      }
+    }
+    if (roundedActive && roundedActive.order !== active.order) {
+      boundaryNotes.push(`반올림된 대운수(${daeunProfile.displayDaeunNumber})만 단순 적용하면 ${roundedActive.order}대운(${roundedActive.ganji})으로 잘못 분류될 수 있으나, 실제 절입 간격 환산(3일=1년) 기준으로는 ${active.order}대운(${active.ganji}, ${active.startDateStr} ~ ${active.endDateStr})이 적용됩니다.`);
+    }
+  }
+
+  return { active, isPreDaeun, boundaryNotes };
+}
+
+// 대상 날짜의 세운(입춘 기준)·월운(12절기 기준)·일진(자정 기준) 산출
+function computeTargetDatePillars(targetY, targetM, targetD) {
+  const noonKstMs = Date.UTC(targetY, targetM - 1, targetD, 12, 0, 0);
+  const jdUTC = (noonKstMs - 9 * 3600000) / 86400000 + 2440587.5;
+  const ipchunJD = findSolarTermJD(targetY, 2, 315);
+  const ipchunKST = formatJDtoKSTString(ipchunJD);
+  const dateStr = toDateInputString(targetY, targetM, targetD);
+
+  const sajuYear = (jdUTC < ipchunJD) ? (targetY - 1) : targetY;
+  const seunStem = ((sajuYear - 4) % 10 + 10) % 10;
+  const seunBranch = ((sajuYear - 4) % 12 + 12) % 12;
+
+  const lon = solarApparentLongitude(jdUTC);
+  const monthTermIndex = Math.floor(((lon + 45) % 360) / 30);
+  const wolunBranch = (monthTermIndex + 2) % 12;
+  const monthStartStem = (((seunStem % 5) * 2 + 2) % 10);
+  const wolunStem = (monthStartStem + monthTermIndex) % 10;
+
+  const monthTermDef = SOLAR_TERMS_12[targetM - 1];
+  const monthTermJD = findSolarTermJD(targetY, monthTermDef.month, monthTermDef.deg);
+  const monthTermKST = formatJDtoKSTString(monthTermJD);
+  const isTermTransitionDay = (monthTermKST.slice(0, 10) === dateStr);
+
+  const iljin = getDayGanjiFromSolarYMD(targetY, targetM, targetD);
+
+  return {
+    seun: { stem: seunStem, branch: seunBranch, ganji: STEMS[seunStem] + BRANCHES[seunBranch], sajuYear, ipchunKST, isIpchunDay: (ipchunKST.slice(0, 10) === dateStr) },
+    wolun: { stem: wolunStem, branch: wolunBranch, ganji: STEMS[wolunStem] + BRANCHES[wolunBranch], termName: monthTermDef.name, termKST: monthTermKST, isTermTransitionDay },
+    iljin: { stem: iljin.stem, branch: iljin.branch, ganji: STEMS[iljin.stem] + BRANCHES[iljin.branch] }
+  };
+}
+
+function analyzeNatalChart(saju, timeKnown) {
+  const dm = saju.dayMaster;
+  const stems = [saju.yearPillar.stem, saju.monthPillar.stem];
+  const branches = [saju.yearPillar.branch, saju.monthPillar.branch, saju.dayPillar.branch];
+  if (timeKnown && saju.hourPillar) {
+    stems.push(saju.hourPillar.stem);
+    branches.push(saju.hourPillar.branch);
+  }
+  const groupCounts = { 비겁: 1, 식상: 0, 재성: 0, 관성: 0, 인성: 0 };
+  for (const s of stems) groupCounts[getTenGod(dm, s).group]++;
+  for (const b of branches) groupCounts[getTenGod(dm, BRANCH_MAIN_STEM[b]).group]++;
+  const supportCount = groupCounts.비겁 + groupCounts.인성;
+  const drainCount = groupCounts.식상 + groupCounts.재성 + groupCounts.관성;
+  return {
+    dm,
+    groupCounts,
+    supportCount,
+    drainCount,
+    isSupportStrong: supportCount >= drainCount,
+    hasNatalSikSang: groupCounts.식상 > 0,
+    hasNatalWealth: groupCounts.재성 > 0
+  };
+}
+
+function evaluateCandidateDate(saju, natal, daeunProfile, y, m, d, timeKnown, nowKST) {
+  const targetPillars = computeTargetDatePillars(y, m, d);
+  const { seun, wolun, iljin } = targetPillars;
+  const daeunState = getActiveDaeunForDate(daeunProfile, y, m, d);
+  const activeDaeun = daeunState.active;
+
+  const dm = saju.dayMaster;
+  const dmKo = STEMS_KO[dm];
+
+  const iljinStemGod = getTenGod(dm, iljin.stem);
+  const iljinBranchGod = getTenGod(dm, BRANCH_MAIN_STEM[iljin.branch]);
+  const wolunStemGod = getTenGod(dm, wolun.stem);
+  const wolunBranchGod = getTenGod(dm, BRANCH_MAIN_STEM[wolun.branch]);
+  const seunStemGod = getTenGod(dm, seun.stem);
+  const seunBranchGod = getTenGod(dm, BRANCH_MAIN_STEM[seun.branch]);
+  const daeunStemGod = activeDaeun ? getTenGod(dm, activeDaeun.stem) : null;
+  const daeunBranchGod = activeDaeun ? getTenGod(dm, BRANCH_MAIN_STEM[activeDaeun.branch]) : null;
+
+  // 원국 일지 또는 월지와 정면 육충이면 제외
+  if (isYukChung(iljin.branch, saju.dayPillar.branch)) return null;
+  if (isYukChung(iljin.branch, saju.monthPillar.branch)) return null;
+
+  const hasIljinPyeonJae = (iljinStemGod.code === '편재' || iljinBranchGod.code === '편재');
+  const hasIljinJeongJae = (iljinStemGod.code === '정재' || iljinBranchGod.code === '정재');
+  const hasIljinWealth = hasIljinPyeonJae || hasIljinJeongJae;
+  const hasIljinSikSang = (iljinStemGod.group === '식상' || iljinBranchGod.group === '식상');
+  const hasIljinSupport = (iljinStemGod.group === '인성' || iljinStemGod.group === '비겁' || iljinBranchGod.group === '인성' || iljinBranchGod.group === '비겁');
+
+  const hasDaeunWealth = activeDaeun ? (daeunStemGod.group === '재성' || daeunBranchGod.group === '재성') : false;
+  const hasDaeunSikSang = activeDaeun ? (daeunStemGod.group === '식상' || daeunBranchGod.group === '식상') : false;
+  const hasDaeunSupport = activeDaeun ? (daeunStemGod.group === '인성' || daeunStemGod.group === '비겁' || daeunBranchGod.group === '인성' || daeunBranchGod.group === '비겁') : false;
+
+  const hasSeunWolunWealth = (seunStemGod.group === '재성' || seunBranchGod.group === '재성' || wolunStemGod.group === '재성' || wolunBranchGod.group === '재성');
+  const hasSeunWolunSikSang = (seunStemGod.group === '식상' || seunBranchGod.group === '식상' || wolunStemGod.group === '식상' || wolunBranchGod.group === '식상');
+  const hasSeunWolunSupport = (seunStemGod.group === '인성' || seunStemGod.group === '비겁' || wolunStemGod.group === '인성' || wolunBranchGod.group === '비겁');
+
+  const fWealth = hasIljinWealth || (hasIljinSikSang && (natal.hasNatalWealth || hasDaeunWealth || hasSeunWolunWealth));
+  const anySikSang = natal.hasNatalSikSang || hasDaeunSikSang || hasSeunWolunSikSang || hasIljinSikSang;
+  const anyWealth = natal.hasNatalWealth || hasDaeunWealth || hasSeunWolunWealth || hasIljinWealth;
+  const fSikSangSaengJae = (hasIljinWealth && anySikSang) || (hasIljinSikSang && anyWealth);
+
+  const effectiveStrong = activeDaeun
+    ? (natal.supportCount + (hasDaeunSupport ? 1.5 : 0) >= natal.drainCount + ((hasDaeunWealth || hasDaeunSikSang) ? 1.5 : 0))
+    : natal.isSupportStrong;
+  const fBalance = effectiveStrong
+    ? (hasIljinWealth || hasIljinSikSang)
+    : (hasIljinSupport || (hasDaeunSupport && (hasIljinWealth || hasIljinSikSang)) || (hasSeunWolunSupport && hasIljinWealth));
+
+  const hasDayYukHap = isYukHap(iljin.branch, saju.dayPillar.branch);
+  const hasDaySamHap = isSamHap(iljin.branch, saju.dayPillar.branch) || isSamHap(iljin.branch, saju.monthPillar.branch);
+  const hasDaeunHap = activeDaeun && (isYukHap(iljin.branch, activeDaeun.branch) || isSamHap(iljin.branch, activeDaeun.branch));
+  const hasDaeunChung = activeDaeun && isYukChung(iljin.branch, activeDaeun.branch);
+  const hasStemHapWithDM = isCheonGanHap(iljin.stem, dm);
+  const fHarmony = (hasDayYukHap || hasDaySamHap || hasDaeunHap) && !hasDaeunChung;
+
+  const factors = [];
+  if (fWealth) factors.push('wealth');
+  if (fSikSangSaengJae) factors.push('siksang');
+  if (fBalance) factors.push('balance');
+  if (fHarmony) factors.push('harmony');
+
+  // 단일 요소 하나만으로 길일 확정 금지: 최소 2개 이상 조건 충족 필수
+  if (!fWealth && !fSikSangSaengJae) return null;
+  if (factors.length < 2) return null;
+
+  let score = 0;
+  if (hasIljinPyeonJae) score += 24;
+  else if (hasIljinJeongJae) score += 20;
+  else if (fWealth) score += 14;
+
+  if (fSikSangSaengJae) score += 22;
+  if (fBalance) score += 20;
+  if (hasDayYukHap) score += 18;
+  else if (hasDaySamHap) score += 14;
+
+  if (activeDaeun) {
+    if (hasDaeunHap) score += 10;
+    if (effectiveStrong && (hasDaeunWealth || hasDaeunSikSang) && (hasIljinWealth || hasIljinSikSang)) score += 8;
+    if (!effectiveStrong && hasDaeunSupport && (hasIljinWealth || hasIljinSikSang)) score += 10;
+    if (hasDaeunChung) score -= 12;
+  }
+  if (hasSeunWolunWealth && hasIljinSikSang) score += 6;
+  if (hasSeunWolunSikSang && hasIljinWealth) score += 6;
+
+  const dateObj = new Date(Date.UTC(y, m - 1, d));
+  const dow = dateObj.getUTCDay();
+  const dateStr = toDateInputString(y, m, d);
+  const todayStr = toDateInputString(nowKST.year, nowKST.month, nowKST.day);
+
+  if (dateStr === todayStr && dow === 6 && nowKST.hour >= 20) return null;
+
+  let validSlots = [];
+  if (timeKnown && saju.hourPillar) {
+    for (const slot of PURCHASE_SLOTS) {
+      if (dow === 6 && !slot.allowSat) continue;
+      if (dateStr === todayStr && nowKST.hour >= slot.endHour) continue;
+      const hGanji = getHourGanji(iljin.stem, slot.branch);
+      if (isYukChung(hGanji.branch, saju.dayPillar.branch) || isYukChung(hGanji.branch, saju.hourPillar.branch) || isYukChung(hGanji.branch, iljin.branch)) {
+        continue;
+      }
+      const hStemGod = getTenGod(dm, hGanji.stem);
+      const hBranchGod = getTenGod(dm, BRANCH_MAIN_STEM[hGanji.branch]);
+      const slotHasWealthOrSikSang = (hStemGod.group === '재성' || hBranchGod.group === '재성' || hStemGod.group === '식상' || hBranchGod.group === '식상');
+      const slotHasSupport = (hStemGod.group === '인성' || hStemGod.group === '비겁' || hBranchGod.group === '인성' || hBranchGod.group === '비겁');
+      const slotHarmony = isYukHap(hGanji.branch, saju.dayPillar.branch) || isYukHap(hGanji.branch, iljin.branch) || isSamHap(hGanji.branch, saju.dayPillar.branch);
+
+      let slotScore = 0;
+      if (slotHarmony) slotScore += 20;
+      if (effectiveStrong && slotHasWealthOrSikSang) slotScore += 18;
+      if (!effectiveStrong && slotHasSupport) slotScore += 18;
+      if (hStemGod.code === '편재' || hBranchGod.code === '편재') slotScore += 12;
+
+      if (slotScore >= 28) {
+        validSlots.push({
+          ...slot,
+          ganji: formatPillar(hGanji),
+          stemGod: hStemGod.code,
+          branchGod: hBranchGod.code,
+          slotScore
+        });
+      }
+    }
+    validSlots.sort((a, b) => b.slotScore - a.slotScore);
+    validSlots = validSlots.slice(0, 2);
+  }
+
+  // 상세 풀이: 유리하게 해석한 요소 & 상충하거나 주의해서 해석할 요소
+  const pros = [];
+  const cautions = [];
+
+  if (hasIljinPyeonJae || hasIljinJeongJae) {
+    pros.push(`일진(${iljin.ganji})에 일간(${dmKo}) 기준 ${iljinStemGod.group === '재성' ? `천간 ${iljinStemGod.code}` : ''}${iljinStemGod.group === '재성' && iljinBranchGod.group === '재성' ? '·' : ''}${iljinBranchGod.group === '재성' ? `지지 ${iljinBranchGod.code}` : ''} 기운이 들어와 재성(결실·목표 지향성 상징)이 활성화됩니다.`);
+  }
+  if (fSikSangSaengJae) {
+    pros.push(`원국·운(대운·세운·월운)과 일진 사이에 식상(${iljinStemGod.group === '식상' ? iljinStemGod.code : '식상'})과 재성이 연결되는 ‘식상생재(활동이 결실로 이어지는 상징 흐름)’ 구조가 형성됩니다.`);
+  }
+  if (fBalance) {
+    pros.push(effectiveStrong
+      ? `원국${activeDaeun ? '과 적용 대운' : ''}에서 일간을 돕는 기운이 충분하여, 일진의 식상·재성 기운을 무리 없이 소화할 수 있는 균형 구조입니다.`
+      : `일간을 생조(인성·비겁)하는 보완 기운이 ${hasIljinSupport ? '일진' : (hasDaeunSupport ? '적용 대운' : '세운·월운')}에서 뒷받침되어 재성 추구로 인한 기운 소모를 완충해 줍니다.`);
+  }
+  if (hasDayYukHap || hasDaySamHap) {
+    pros.push(`일진 지지(${BRANCHES[iljin.branch]})가 원국 ${hasDayYukHap ? `일지(${BRANCHES[saju.dayPillar.branch]})와 육합` : '지지와 삼합'} 관계를 이루어 원국과의 정면 충돌(육충) 없이 유정하게 연결됩니다.`);
+  }
+  if (activeDaeun && hasDaeunHap) {
+    pros.push(`적용 대운(${activeDaeun.ganji})의 지지와 일진 지지가 합(조화)을 이루어 대운의 흐름과 당일 일진이 부드럽게 맞물립니다.`);
+  }
+  if (validSlots.length > 0) {
+    pros.push(`구매 시간 후보 시진(${validSlots.map(s => `${s.label} ${s.ganji}`).join(', ')})이 원국·일진과 충(沖)하지 않고 조화·보완 기운을 더합니다.`);
+  }
+
+  if (hasDayYukHap || hasDaySamHap || hasDaeunHap || hasStemHapWithDM) {
+    cautions.push(`합(合)의 양면성 안내: 일진에 합(${hasStemHapWithDM ? '천간합·' : ''}지지합)이 형성되어 조화·완충 작용을 기대할 수 있으나, 합이 곧바로 다른 오행으로 완전히 변하는 ‘합화(合化) 성립’을 뜻하지는 않으며 경우에 따라 기운이 묶이는(합거) 제약으로 작용할 수도 있습니다.`);
+  }
+  if (!effectiveStrong && hasIljinWealth && !hasIljinSupport) {
+    cautions.push(`기운 소모 주의: 원국 기준 설기·소모 기운이 다소 많은 편이므로, 일진의 강한 재성 기운이 일간에 부담(재다신약 경향)을 줄 수 있어 무리한 기대보다는 가벼운 오락으로 즐기는 것이 좋습니다.`);
+  }
+  if (activeDaeun && hasDaeunChung) {
+    cautions.push(`대운·일진 충 주의: 원국과는 충돌하지 않으나 적용 대운(${activeDaeun.ganji}) 지지와 일진 지지가 충(沖) 관계여서 환경적 변동성이 함께 따를 수 있습니다.`);
+  }
+  if (isYukChung(iljin.branch, seun.branch) || isYukChung(iljin.branch, wolun.branch)) {
+    cautions.push(`세운·월운과의 부분 충돌: 원국 일지·월지와는 충이 없으나, ${isYukChung(iljin.branch, seun.branch) ? `세운(${seun.ganji})` : `월운(${wolun.ganji})`} 지지와는 충 관계가 있어 외부 흐름의 작은 변동을 감안해야 합니다.`);
+  }
+  if (cautions.length === 0) {
+    cautions.push(`특이 충·극 없음: 원국 및 주요 운과 정면 충돌은 없으나, 명리학의 재성·식상생재는 상징적 조화를 뜻할 뿐 실제 금전적 횡재나 당첨을 보장하지 않습니다.`);
+  }
+
+  const summaryParts = [];
+  if (activeDaeun) {
+    summaryParts.push(`${activeDaeun.order}대운(${activeDaeun.ganji})과 ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
+  } else if (daeunProfile.enabled && daeunState.isPreDaeun) {
+    summaryParts.push(`초년 대운 시작 전(월주 기운 참조) ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
+  } else {
+    summaryParts.push(`${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서(대운 미반영 간이 풀이),`);
+  }
+  if (hasIljinPyeonJae || hasIljinJeongJae) {
+    const wType = hasIljinPyeonJae ? '편재(유동적 재물 상징)' : '정재(안정적 결실 상징)';
+    summaryParts.push(`일진(${iljin.ganji})에 일간 ${dmKo} 기준 ${wType} 기운이 들어오고`);
+  } else {
+    summaryParts.push(`일진(${iljin.ganji})에 식상(활동·표현 기운)이 들어와 재성 흐름을 이어주며`);
+  }
+  if (fSikSangSaengJae && fHarmony) {
+    summaryParts.push(`식상생재 흐름과 지지 합(조화)이 함께 갖춰져 태어난 날의 지지와 충(부딪힘) 없이 조화를 이루는 날입니다.`);
+  } else if (fHarmony) {
+    summaryParts.push(`원국·대운 지지와 합(조화)을 이루어 충(부딪힘) 없이 안정적인 균형을 이루는 날입니다.`);
+  } else if (fBalance) {
+    summaryParts.push(effectiveStrong
+      ? `원국과 운의 에너지를 식상과 재성 방향으로 무리 없이 순환시켜 주는 날입니다.`
+      : `일간을 돕는 인성·비겁 기운이 함께 뒷받침되어 기운의 소모를 덜어주는 날입니다.`);
+  } else {
+    summaryParts.push(`식상과 재성의 흐름이 연결되면서 원국과 충돌하지 않는 날입니다.`);
+  }
+
+  const uncertainties = [];
+  if (saju.boundaryNote) uncertainties.push(saju.boundaryNote);
+  if (saju.termBoundaryNote) uncertainties.push(saju.termBoundaryNote);
+  for (const bn of daeunState.boundaryNotes) uncertainties.push(bn);
+  if (!timeKnown) {
+    uncertainties.push(`‘출생 시간 모름’ 선택으로 시주(時柱)를 제외한 삼주(연·월·일주) 기준 풀이이며, 대운 시작 시점에 약 ±2개월의 불확실성이 존재하고 구매 시간대 추천은 제공하지 않습니다.`);
+  }
+  if (!daeunProfile.enabled) {
+    uncertainties.push(`성별 미입력으로 대운(10년 주기 운)을 제외한 ‘대운 미반영 간이 풀이’가 적용되었습니다. 성별을 선택하면 대운을 반영한 5단계 풀이로 확인할 수 있습니다.`);
+  }
+  if (seun.isIpchunDay) {
+    uncertainties.push(`대상 날짜는 입춘 절입일(${seun.ipchunKST} KST) 당일이므로, 절입 시각 전후로 세운과 월운이 전환됩니다.`);
+  } else if (wolun.isTermTransitionDay) {
+    uncertainties.push(`대상 날짜는 ‘${wolun.termName}’ 절입일(${wolun.termKST} KST) 당일이므로, 절입 시각 전후로 월운이 전환됩니다.`);
+  }
+  if (uncertainties.length === 0) {
+    uncertainties.push(`입력된 출생 시각과 대상 날짜가 자시(23:00~00:00) 경계나 절입 시각, 대운 전환 경계에 걸리지 않아 기준 차이에 따른 간지 변동이 없습니다.`);
+  }
+
+  const tier = (factors.length >= 3 && score >= 68) ? '날짜 후보' : '보조 후보';
+  return {
+    dateStr,
+    year: y,
+    month: m,
+    day: d,
+    dow,
+    dayPillarStr: iljin.ganji,
+    tier,
+    score,
+    daeunModeLabel: daeunProfile.enabled ? '대운 반영 풀이' : '대운 미반영 간이 풀이',
+    activeDaeunOrder: activeDaeun ? activeDaeun.order : null,
+    reason: summaryParts.join(' '),
+    slots: validSlots,
+    detail: {
+      natalSummary: `연주 ${formatPillar(saju.yearPillar)} · 월주 ${formatPillar(saju.monthPillar)} · 일주 ${formatPillar(saju.dayPillar)} · 시주 ${birthParamsTimeLabel(saju, timeKnown)} (일간: ${dmKo})`,
+      natalStrengthNote: `간이 억부 분포(생조[인성·비겁] ${natal.supportCount} : 설기·소모[식상·재성·관성] ${natal.drainCount} → ${natal.isSupportStrong ? '생조 우세/신강 경향' : '소모 우세/신약 경향'}) — ※ 신강·신약과 용신은 억부·조후·격국 등 학파마다 판정 기준이 다르므로, 본 사이트는 원국 오행·십성 비중을 단순 비교한 억부 참고 지표만 보조적으로 활용하며 절대적 판정이 아닙니다.`,
+      daeunSummary: daeunProfile.enabled
+        ? (daeunState.isPreDaeun
+            ? `대운 시작 전 초년 구간 (1대운 ${daeunProfile.pillars[0].ganji} 시작일: ${daeunProfile.pillars[0].startDateStr}, ${daeunProfile.directionLabel}, ${daeunProfile.exactStartLabel})`
+            : `${activeDaeun.order}대운 ${activeDaeun.ganji} [일간 대비 천간 ${daeunStemGod.code} · 지지 ${daeunBranchGod.code}] / 적용 기간: ${activeDaeun.startDateStr} ~ ${activeDaeun.endDateStr} (${activeDaeun.displayAgeRange}, ${daeunProfile.directionLabel})`)
+        : `성별 미입력 — 대운 미반영 간이 풀이 (대운을 제외하고 세운·월운·일진과 원국을 비교)`,
+      seunWolunIljinSummary: `세운 ${seun.ganji}[${seunStemGod.code}·${seunBranchGod.code}, 입춘 ${seun.ipchunKST} KST 기준] · 월운 ${wolun.ganji}[${wolunStemGod.code}·${wolunBranchGod.code}, 12절기 기준] · 일진 ${iljin.ganji}[${iljinStemGod.code}·${iljinBranchGod.code}, 자정 기준]`,
+      pros,
+      cautions,
+      ruleVersionText: `해석 규칙 ${SAJU_RULE_VERSION} · 번호 생성 규칙 ${NUM_GEN_VERSION} (만세력: KASI 1900~2050 음양력·VSOP87 12절기 절입 시각·대운 3일=1년 비례 환산·자정 일진 전환·구매 시간 한국표준시 KST 기준)`,
+      uncertainties
+    }
+  };
+}
+
+function birthParamsTimeLabel(saju, timeKnown) {
+  return timeKnown && saju.hourPillar ? formatPillar(saju.hourPillar) : '시간 모름(제외)';
+}
+
+function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) {
+  const nowKST = getCurrentKST();
+  const natal = analyzeNatalChart(saju, timeKnown);
+  const [sy, sm, sd] = startStr.split('-').map(Number);
+  const [ey, em, ed] = endStr.split('-').map(Number);
+  const startUTC = Date.UTC(sy, sm - 1, sd);
+  const endUTC = Date.UTC(ey, em - 1, ed);
+  const todayUTC = Date.UTC(nowKST.year, nowKST.month - 1, nowKST.day);
+
+  const list = [];
+  for (let t = startUTC; t <= endUTC; t += 86400000) {
+    if (t < todayUTC) continue;
+    const dt = new Date(t);
+    const cand = evaluateCandidateDate(saju, natal, daeunProfile, dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate(), timeKnown, nowKST);
+    if (cand) list.push(cand);
+  }
+  list.sort((a, b) => b.score - a.score || a.dateStr.localeCompare(b.dateStr));
+  return list.slice(0, 2);
+}
+
+// ============================================================================
+// 번호 생성기 (1. 무작위 추천 / 2. 나의 날짜로 만든 결정론적 번호)
+// ============================================================================
 // 나머지 연산 편향을 피하는 균등 난수 생성.
 function randomInt(max) {
   const range = 4294967296;
@@ -99,6 +1360,228 @@ function recommend() {
 function color(number) {
   return number <= 10 ? 'yellow' : number <= 20 ? 'blue' : number <= 30 ? 'red' : number <= 40 ? 'gray' : 'green';
 }
+
+// 순수 JS SHA-256 (file://, https://, 모든 기기·시점에서 동일한 바이트 출력 보장)
+function sha256Words(asciiStr) {
+  const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
+  const K = [
+    0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+    0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+    0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+    0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+    0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+    0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+    0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+    0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+  ];
+  const utf8 = unescape(encodeURIComponent(asciiStr));
+  const words = [];
+  for (let i = 0; i < utf8.length; i++) {
+    words[i >> 2] |= (utf8.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+  }
+  const bitLen = utf8.length * 8;
+  words[bitLen >> 5] |= 0x80 << (24 - (bitLen % 32));
+  words[(((bitLen + 64) >> 9) << 4) + 15] = bitLen;
+  const H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const W = new Array(64);
+  for (let i = 0; i < words.length; i += 16) {
+    for (let t = 0; t < 16; t++) W[t] = words[i + t] | 0;
+    for (let t = 16; t < 64; t++) {
+      const s0 = rightRotate(W[t - 15], 7) ^ rightRotate(W[t - 15], 18) ^ (W[t - 15] >>> 3);
+      const s1 = rightRotate(W[t - 2], 17) ^ rightRotate(W[t - 2], 19) ^ (W[t - 2] >>> 10);
+      W[t] = (W[t - 16] + s0 + W[t - 7] + s1) | 0;
+    }
+    let [a, b, c, d, e, f, g, h] = H;
+    for (let t = 0; t < 64; t++) {
+      const S1 = rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25);
+      const ch = (e & f) ^ (~e & g);
+      const temp1 = (h + S1 + ch + K[t] + W[t]) | 0;
+      const S0 = rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22);
+      const maj = (a & b) ^ (a & c) ^ (b & c);
+      const temp2 = (S0 + maj) | 0;
+      h = g; g = f; f = e; e = (d + temp1) | 0;
+      d = c; c = b; b = a; a = (temp1 + temp2) | 0;
+    }
+    H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+    H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+  }
+  return H.map(w => w >>> 0);
+}
+
+// 정규화된 개인화 번호 시드 (파생값인 대운·세운 간지는 중복 삽입하지 않고 정규화 입력값과 규칙 버전만 포함)
+function normalizePersonalSeed({ solarYear, solarMonth, solarDay, calType, isLeapMonth, timeKnown, hour, minute, cityCode, gender, selectedDate, selectedSlotCode }) {
+  const yStr = String(solarYear).padStart(4, '0');
+  const mStr = String(solarMonth).padStart(2, '0');
+  const dStr = String(solarDay).padStart(2, '0');
+  const calStr = calType === 'lunar' ? (isLeapMonth ? 'lunar-leap' : 'lunar-normal') : 'solar';
+  const timeStr = timeKnown ? `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}` : 'UNKNOWN';
+  const cityStr = cityCode || 'NONE';
+  const genderStr = (gender === 'M' || gender === 'F') ? gender : 'NONE';
+  const slotStr = selectedSlotCode || 'ANY';
+  return `v=${NUM_GEN_VERSION}|solar=${yStr}-${mStr}-${dStr}|cal=${calStr}|time=${timeStr}|city=${cityStr}|gender=${genderStr}|date=${selectedDate}|slot=${slotStr}`;
+}
+
+function generateDeterministicSetsFromSeed(canonicalSeed) {
+  let counter = 0;
+  let poolWords = [];
+  function nextUint32() {
+    if (poolWords.length === 0) {
+      poolWords = sha256Words(canonicalSeed + '|ctr=' + (counter++));
+    }
+    return poolWords.shift();
+  }
+  function randIntDet(max) {
+    const range = 4294967296;
+    const limit = range - (range % max);
+    let val;
+    do { val = nextUint32(); } while (val >= limit);
+    return val % max;
+  }
+  const sets = [];
+  const seen = new Set();
+  while (sets.length < 5) {
+    const pool = Array.from({ length: 45 }, (_, i) => i + 1);
+    for (let i = 0; i < 6; i++) {
+      const j = i + randIntDet(45 - i);
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    const picked = pool.slice(0, 6).sort((a, b) => a - b);
+    const key = picked.join(',');
+    if (!seen.has(key)) {
+      seen.add(key);
+      sets.push(picked);
+    }
+  }
+  const bonuses = sets.map(numbers => {
+    const remaining = Array.from({ length: 45 }, (_, i) => i + 1).filter(n => !numbers.includes(n));
+    return remaining[randIntDet(remaining.length)];
+  });
+  return { sets, bonuses };
+}
+
+function setModeUI(mode, personalMeta = null) {
+  currentMode = mode;
+  currentPersonalMeta = personalMeta;
+  if (mode === 'personal' && personalMeta) {
+    modePill.textContent = `현재 모드: 나의 날짜로 만든 번호 (${personalMeta.selectedDate}${personalMeta.selectedSlotLabel ? ' · ' + personalMeta.selectedSlotLabel : ''})`;
+    personalModeDesc.style.display = 'block';
+    switchRandomBtn.style.display = 'inline-block';
+  } else {
+    modePill.textContent = '현재 모드: 무작위 추천';
+    personalModeDesc.style.display = 'none';
+    switchRandomBtn.style.display = 'none';
+  }
+}
+
+function generateSets() {
+  setModeUI('random', null);
+  currentNumbers = [];
+  const seen = new Set();
+  while (currentNumbers.length < 5) {
+    const numbers = recommend();
+    const key = numbers.join(',');
+    if (!seen.has(key)) { seen.add(key); currentNumbers.push(numbers); }
+  }
+  bonusNumbers = currentNumbers.map(numbers => {
+    const remaining = Array.from({length:45}, (_, i) => i + 1).filter(n => !numbers.includes(n));
+    return remaining[randomInt(remaining.length)];
+  });
+  renderSets();
+}
+
+function generatePersonalSets(birthParams, selectedDate, selectedSlotCode, selectedSlotLabel) {
+  const seed = normalizePersonalSeed({
+    ...birthParams,
+    selectedDate,
+    selectedSlotCode
+  });
+  const { sets, bonuses } = generateDeterministicSetsFromSeed(seed);
+  currentNumbers = sets;
+  bonusNumbers = bonuses;
+  setModeUI('personal', {
+    selectedDate,
+    selectedSlotCode: selectedSlotCode || '',
+    selectedSlotLabel: selectedSlotLabel || '시간대 미지정',
+    ruleVersion: `${SAJU_RULE_VERSION} / ${NUM_GEN_VERSION}`
+  });
+  renderSets();
+  balls.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function renderSets() {
+  balls.classList.toggle('with-bonus', includeBonus);
+  balls.replaceChildren(...currentNumbers.map((numbers, index) => {
+    const row = document.createElement('div');
+    row.className = 'set';
+    const label = document.createElement('span');
+    label.className = 'set-label';
+    label.textContent = String.fromCharCode(65 + index);
+    const group = document.createElement('div');
+    group.className = 'balls';
+    group.append(...numbers.map(number => {
+      const ball = document.createElement('span');
+      ball.className = 'ball ' + color(number);
+      ball.textContent = number;
+      return ball;
+    }));
+    row.append(label, group);
+    if (includeBonus) {
+      const bonus = document.createElement('div');
+      bonus.className = 'bonus-group';
+      const caption = document.createElement('span');
+      caption.className = 'bonus-caption';
+      caption.textContent = '+ 보너스';
+      const ball = document.createElement('span');
+      ball.className = 'ball ' + color(bonusNumbers[index]);
+      ball.textContent = bonusNumbers[index];
+      bonus.append(caption, ball);
+      row.append(bonus);
+    }
+    return row;
+  }));
+  balls.setAttribute('aria-label', '추천 번호 5세트: ' + formatNumbers());
+  copyButton.disabled = false;
+  saveRecordButton.disabled = false;
+  if (currentMode === 'personal' && currentPersonalMeta) {
+    status.textContent = `선택한 날짜(${currentPersonalMeta.selectedDate}) 기준으로 개인화 번호 5세트가 준비됐어요!`;
+  } else {
+    status.textContent = includeBonus ? '보너스번호를 포함한 5세트가 준비됐어요!' : '추천 번호 5세트가 준비됐어요!';
+  }
+}
+
+document.getElementById('generate').addEventListener('click', generateSets);
+switchRandomBtn.addEventListener('click', generateSets);
+
+bonusButton.addEventListener('click', () => {
+  includeBonus = !includeBonus;
+  bonusButton.setAttribute('aria-pressed', String(includeBonus));
+  bonusButton.textContent = includeBonus ? '✓ 보너스번호 포함 중' : '보너스번호 포함';
+  if (currentNumbers.length === 0) generateSets();
+  else renderSets();
+});
+
+function formatNumbers() {
+  return currentNumbers.map((numbers, i) => String.fromCharCode(65 + i) + ': ' + numbers.join(', ') + (includeBonus ? ' + 보너스 ' + bonusNumbers[i] : '')).join('\n');
+}
+
+copyButton.addEventListener('click', async () => {
+  const text = formatNumbers();
+  try {
+    await navigator.clipboard.writeText(text);
+    status.textContent = '번호를 복사했습니다.';
+  } catch {
+    status.textContent = '자동 복사가 제한되어 있습니다. 아래 번호를 선택해 복사하세요.';
+    const input = document.createElement('textarea');
+    input.rows = 5; input.readOnly = true; input.value = text;
+    input.setAttribute('aria-label', '복사할 추천 번호');
+    input.style.cssText = 'display:block;margin:12px auto;width:100%;max-width:300px;padding:12px;text-align:center;font-size:16px';
+    status.appendChild(input); input.focus(); input.select();
+  }
+});
+
+// ============================================================================
+// 오늘 날짜 및 지난회차 공식 당첨 데이터 표시
+// ============================================================================
 function renderTodayDate() {
   const now = new Date();
   const formatted = new Intl.DateTimeFormat('ko-KR', {
@@ -109,19 +1592,22 @@ function renderTodayDate() {
   }).format(now);
   document.getElementById('today-date').textContent = '📅 오늘 날짜: ' + formatted;
 }
+
 function formatPrizeKRW(amount, winners) {
-  if (!amount || isNaN(amount)) return '-';
+  if (!amount || isNaN(amount)) return '확인 대기';
   const formatted = Number(amount).toLocaleString('ko-KR') + '원';
   return winners ? formatted + ' (1인당 · ' + winners + '명)' : formatted;
 }
+
 function formatDrawDate(dateStr) {
   const d = new Date(dateStr);
-  if (isNaN(d.getTime())) return dateStr;
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
+  if (isNaN(d.getTime())) return dateStr || '확인 대기';
+  const yyyy = d.getUTCFullYear();
+  const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(d.getUTCDate()).padStart(2, '0');
   return yyyy + '. ' + mm + '. ' + dd + '.';
 }
+
 function renderLastDraw(draw) {
   document.getElementById('last-draw-round').textContent = '지난회차 (제' + draw.round + '회)';
   document.getElementById('last-draw-date').textContent = formatDrawDate(draw.date);
@@ -142,109 +1628,670 @@ function renderLastDraw(draw) {
   bonusEl.title = '보너스 번호';
   container.replaceChildren(...nodes, plus, bonusEl);
 }
+
 async function loadLastDraw() {
-  // 오프라인이거나 응답 대기 중일 때 즉시 표시할 기본 회차 데이터
-  renderLastDraw({
-    round: 1161,
-    date: '2025-03-01',
-    numbers: [2, 12, 20, 24, 34, 42],
-    bonus: 37,
-    firstPrize: 1792654969,
-    winners: 16
-  });
   try {
     const res = await fetch('https://smok95.github.io/lotto/results/latest.json');
     if (!res.ok) throw new Error('Network error');
     const data = await res.json();
     const firstDiv = Array.isArray(data.divisions) && data.divisions[0] ? data.divisions[0] : {};
-    renderLastDraw({
+    const parsed = {
       round: data.draw_no,
       date: data.date,
       numbers: data.numbers,
       bonus: data.bonus_no,
       firstPrize: firstDiv.prize,
       winners: firstDiv.winners
-    });
+    };
+    verifiedLatestDraw = parsed;
+    drawResultCache[parsed.round] = parsed;
+    renderLastDraw(parsed);
+    updatePeriodHint();
+    renderSavedRecords();
   } catch {
-    // 네트워크 제한 시 기본 표시 데이터 유지
+    document.getElementById('last-draw-round').textContent = '지난회차 (확인 대기)';
+    document.getElementById('last-draw-date').textContent = '공식 데이터 연결 대기';
+    document.getElementById('last-draw-prize').textContent = '확인 대기';
+    const container = document.getElementById('last-draw-balls');
+    const msg = document.createElement('span');
+    msg.style.fontSize = '12px';
+    msg.style.color = '#717b91';
+    msg.textContent = '네트워크 연결 시 확인된 공식 당첨 번호가 표시됩니다.';
+    container.replaceChildren(msg);
   }
 }
-renderTodayDate();
-loadLastDraw();
-function generateSets() {
-  currentNumbers = [];
-  const seen = new Set();
-  while (currentNumbers.length < 5) {
-    const numbers = recommend();
-    const key = numbers.join(',');
-    if (!seen.has(key)) { seen.add(key); currentNumbers.push(numbers); }
+
+// ============================================================================
+// 사주 폼 이벤트 및 후보 카드 렌더링
+// ============================================================================
+const calSolarRadio = document.getElementById('cal-solar');
+const calLunarRadio = document.getElementById('cal-lunar');
+const leapMonthWrap = document.getElementById('leap-month-wrap');
+const isLeapMonthCheckbox = document.getElementById('is-leap-month');
+const genderNoneRadio = document.getElementById('gender-none');
+const genderMaleRadio = document.getElementById('gender-male');
+const genderFemaleRadio = document.getElementById('gender-female');
+const timeInput = document.getElementById('birth-time');
+const timeUnknownCheckbox = document.getElementById('time-unknown');
+const rememberBirthCheckbox = document.getElementById('remember-birth');
+const clearSavedBirthBtn = document.getElementById('clear-saved-birth');
+const sajuErrorEl = document.getElementById('saju-error');
+const sajuResultEl = document.getElementById('saju-result');
+const pillarsSummaryEl = document.getElementById('pillars-summary');
+const candidatesContainerEl = document.getElementById('candidates-container');
+
+function getSelectedGender() {
+  if (genderMaleRadio.checked) return 'M';
+  if (genderFemaleRadio.checked) return 'F';
+  return 'NONE';
+}
+
+function setSelectedGender(g) {
+  if (g === 'M') genderMaleRadio.checked = true;
+  else if (g === 'F') genderFemaleRadio.checked = true;
+  else genderNoneRadio.checked = true;
+}
+
+function syncCalendarTypeUI() {
+  if (calLunarRadio.checked) {
+    leapMonthWrap.style.display = 'inline-flex';
+  } else {
+    leapMonthWrap.style.display = 'none';
+    isLeapMonthCheckbox.checked = false;
   }
-  bonusNumbers = currentNumbers.map(numbers => {
-    const remaining = Array.from({length:45}, (_, i) => i + 1).filter(n => !numbers.includes(n));
-    return remaining[randomInt(remaining.length)];
-  });
-  renderSets();
 }
-function renderSets() {
-  balls.classList.toggle('with-bonus', includeBonus);
-  balls.replaceChildren(...currentNumbers.map((numbers, index) => {
-    const row = document.createElement('div');
-    row.className = 'set';
-    const label = document.createElement('span');
-    label.className = 'set-label';
-    label.textContent = String.fromCharCode(65 + index);
-    const group = document.createElement('div');
-    group.className = 'balls';
-    group.append(...numbers.map(number => {
-    const ball = document.createElement('span');
-    ball.className = 'ball ' + color(number);
-    ball.textContent = number;
-    return ball;
-    }));
-    row.append(label, group);
-    if (includeBonus) {
-      const bonus = document.createElement('div');
-      bonus.className = 'bonus-group';
-      const caption = document.createElement('span');
-      caption.className = 'bonus-caption';
-      caption.textContent = '+ 보너스';
-      const ball = document.createElement('span');
-      ball.className = 'ball ' + color(bonusNumbers[index]);
-      ball.textContent = bonusNumbers[index];
-      bonus.append(caption, ball);
-      row.append(bonus);
-    }
-    return row;
-  }));
-  balls.setAttribute('aria-label', '추천 번호 5세트: ' + formatNumbers());
-  copyButton.disabled = false;
-  status.textContent = includeBonus ? '보너스번호를 포함한 5세트가 준비됐어요!' : '추천 번호 5세트가 준비됐어요!';
-}
-document.getElementById('generate').addEventListener('click', generateSets);
-bonusButton.addEventListener('click', () => {
-  includeBonus = !includeBonus;
-  bonusButton.setAttribute('aria-pressed', String(includeBonus));
-  bonusButton.textContent = includeBonus ? '✓ 보너스번호 포함 중' : '보너스번호 포함';
-  if (currentNumbers.length === 0) generateSets();
-  else renderSets();
+calSolarRadio.addEventListener('change', syncCalendarTypeUI);
+calLunarRadio.addEventListener('change', syncCalendarTypeUI);
+
+timeUnknownCheckbox.addEventListener('change', () => {
+  timeInput.disabled = timeUnknownCheckbox.checked;
+  if (timeUnknownCheckbox.checked) timeInput.value = '';
 });
-function formatNumbers() {
-  return currentNumbers.map((numbers, i) => String.fromCharCode(65 + i) + ': ' + numbers.join(', ') + (includeBonus ? ' + 보너스 ' + bonusNumbers[i] : '')).join('\n');
+
+function showSajuError(msg) {
+  if (!msg) {
+    sajuErrorEl.style.display = 'none';
+    sajuErrorEl.textContent = '';
+  } else {
+    sajuErrorEl.style.display = 'block';
+    sajuErrorEl.textContent = msg;
+  }
 }
-copyButton.addEventListener('click', async () => {
-  const text = formatNumbers();
+
+function loadSavedBirthInfoIfOptedIn() {
   try {
-    await navigator.clipboard.writeText(text);
-    status.textContent = '번호를 복사했습니다.';
-  } catch {
-    status.textContent = '자동 복사가 제한되어 있습니다. 아래 번호를 선택해 복사하세요.';
-    const input = document.createElement('textarea');
-    input.rows = 5; input.readOnly = true; input.value = text;
-    input.setAttribute('aria-label', '복사할 추천 번호');
-    input.style.cssText = 'display:block;margin:12px auto;width:100%;max-width:300px;padding:12px;text-align:center;font-size:16px';
-    status.appendChild(input); input.focus(); input.select();
+    const raw = localStorage.getItem(STORAGE_BIRTH_KEY);
+    if (!raw) {
+      clearSavedBirthBtn.style.display = 'none';
+      return;
+    }
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.remember) {
+      clearSavedBirthBtn.style.display = 'none';
+      return;
+    }
+    document.getElementById('birth-year').value = saved.year || '';
+    document.getElementById('birth-month').value = saved.month || '';
+    document.getElementById('birth-day').value = saved.day || '';
+    if (saved.calType === 'lunar') {
+      calLunarRadio.checked = true;
+      isLeapMonthCheckbox.checked = Boolean(saved.isLeapMonth);
+    } else {
+      calSolarRadio.checked = true;
+    }
+    syncCalendarTypeUI();
+    setSelectedGender(saved.gender || 'NONE');
+    timeUnknownCheckbox.checked = Boolean(saved.timeKnown === false);
+    timeInput.disabled = timeUnknownCheckbox.checked;
+    timeInput.value = saved.timeKnown ? (saved.timeStr || '') : '';
+    document.getElementById('birth-city').value = saved.cityCode || '';
+    rememberBirthCheckbox.checked = true;
+    clearSavedBirthBtn.style.display = 'inline-block';
+  } catch {}
+}
+
+rememberBirthCheckbox.addEventListener('change', () => {
+  if (!rememberBirthCheckbox.checked) {
+    try { localStorage.removeItem(STORAGE_BIRTH_KEY); } catch {}
+    clearSavedBirthBtn.style.display = 'none';
   }
 });
+
+clearSavedBirthBtn.addEventListener('click', () => {
+  try { localStorage.removeItem(STORAGE_BIRTH_KEY); } catch {}
+  document.getElementById('birth-year').value = '';
+  document.getElementById('birth-month').value = '';
+  document.getElementById('birth-day').value = '';
+  calSolarRadio.checked = true;
+  syncCalendarTypeUI();
+  setSelectedGender('NONE');
+  timeUnknownCheckbox.checked = false;
+  timeInput.disabled = false;
+  timeInput.value = '';
+  document.getElementById('birth-city').value = '';
+  rememberBirthCheckbox.checked = false;
+  clearSavedBirthBtn.style.display = 'none';
+  status.textContent = '기기에 저장된 출생 정보(성별 포함)를 삭제했습니다.';
+});
+
+document.getElementById('saju-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  showSajuError('');
+
+  const rawYear = Number(document.getElementById('birth-year').value.trim());
+  const rawMonth = Number(document.getElementById('birth-month').value.trim());
+  const rawDay = Number(document.getElementById('birth-day').value.trim());
+  const calType = calLunarRadio.checked ? 'lunar' : 'solar';
+  const isLeapMonth = calLunarRadio.checked && isLeapMonthCheckbox.checked;
+  const gender = getSelectedGender();
+  const timeKnown = !timeUnknownCheckbox.checked;
+  const timeVal = timeInput.value.trim();
+  const cityCode = document.getElementById('birth-city').value;
+  const rangeStart = document.getElementById('range-start').value;
+  const rangeEnd = document.getElementById('range-end').value;
+
+  if (!document.getElementById('birth-year').value || !document.getElementById('birth-month').value || !document.getElementById('birth-day').value) {
+    showSajuError('생년월일(연·월·일)을 모두 입력해 주세요.');
+    return;
+  }
+
+  let solarYear = rawYear;
+  let solarMonth = rawMonth;
+  let solarDay = rawDay;
+  let convertedDesc = '';
+
+  if (calType === 'lunar') {
+    const conv = lunarToSolar(rawYear, rawMonth, rawDay, isLeapMonth);
+    if (!conv.ok) {
+      showSajuError(conv.error);
+      return;
+    }
+    solarYear = conv.year;
+    solarMonth = conv.month;
+    solarDay = conv.day;
+    convertedDesc = `음력 ${rawYear}년 ${isLeapMonth ? '윤' : ''}${rawMonth}월 ${rawDay}일 → 양력 ${solarYear}년 ${solarMonth}월 ${solarDay}일`;
+  } else {
+    if (!isValidSolarYMD(solarYear, solarMonth, solarDay)) {
+      showSajuError('유효하지 않은 양력 날짜입니다. 연도(1900~2050)와 월·일(윤년 2월 29일 등)을 확인해 주세요.');
+      return;
+    }
+    const lunarConv = solarToLunar(solarYear, solarMonth, solarDay);
+    if (!lunarConv.ok) {
+      showSajuError(lunarConv.error);
+      return;
+    }
+    convertedDesc = `양력 ${solarYear}년 ${solarMonth}월 ${solarDay}일 (음력 ${lunarConv.year}년 ${lunarConv.isLeapMonth ? '윤' : ''}${lunarConv.month}월 ${lunarConv.day}일)`;
+  }
+
+  // 미래 생년월일 방지
+  const nowKST = getCurrentKST();
+  const todayStr = toDateInputString(nowKST.year, nowKST.month, nowKST.day);
+  const birthSolarStr = toDateInputString(solarYear, solarMonth, solarDay);
+  if (birthSolarStr > todayStr) {
+    showSajuError('생년월일은 오늘 날짜 이전이어야 합니다.');
+    return;
+  }
+
+  let hour = 12;
+  let minute = 0;
+  if (timeKnown) {
+    if (!timeVal || !/^\d{2}:\d{2}$/.test(timeVal)) {
+      showSajuError('출생 시간을 입력하거나, 시간을 모르면 ‘시간 모름’을 선택해 주세요.');
+      return;
+    }
+    [hour, minute] = timeVal.split(':').map(Number);
+  }
+
+  if (!rangeStart || !rangeEnd) {
+    showSajuError('살펴볼 시작일과 종료일을 입력해 주세요.');
+    return;
+  }
+  if (rangeStart > rangeEnd) {
+    showSajuError('살펴볼 시작일이 종료일보다 늦을 수 없습니다.');
+    return;
+  }
+  if (rangeEnd < todayStr) {
+    showSajuError('이미 지난 기간입니다. 오늘 이후의 구매 가능 기간을 선택해 주세요.');
+    return;
+  }
+  // 과도한 기간 조회 방지 (최대 31일)
+  const diffRangeDays = (new Date(rangeEnd).getTime() - new Date(rangeStart).getTime()) / 86400000;
+  if (diffRangeDays > 31) {
+    showSajuError('살펴볼 기간은 최대 31일 이내로 설정해 주세요.');
+    return;
+  }
+
+  // 사용자가 직접 선택한 경우에만 출생 정보(성별 포함) 기기 저장
+  try {
+    if (rememberBirthCheckbox.checked) {
+      localStorage.setItem(STORAGE_BIRTH_KEY, JSON.stringify({
+        remember: true,
+        year: rawYear,
+        month: rawMonth,
+        day: rawDay,
+        calType,
+        isLeapMonth,
+        gender,
+        timeKnown,
+        timeStr: timeKnown ? timeVal : '',
+        cityCode
+      }));
+      clearSavedBirthBtn.style.display = 'inline-block';
+    } else {
+      localStorage.removeItem(STORAGE_BIRTH_KEY);
+      clearSavedBirthBtn.style.display = 'none';
+    }
+  } catch {}
+
+  const birthParams = { solarYear, solarMonth, solarDay, calType, isLeapMonth, gender, timeKnown, hour, minute, cityCode };
+  const saju = computeFourPillars(birthParams);
+  const daeunProfile = computeDaeunProfile({
+    solarYear,
+    solarMonth,
+    solarDay,
+    timeKnown,
+    hour,
+    minute,
+    gender,
+    yearPillar: saju.yearPillar,
+    monthPillar: saju.monthPillar
+  });
+  const candidates = findCandidatesInRange(saju, daeunProfile, timeKnown, rangeStart, rangeEnd);
+
+  renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeStart, candidates);
+});
+
+function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeStart, candidates) {
+  sajuResultEl.style.display = 'block';
+
+  // 원국 요약 렌더링
+  pillarsSummaryEl.replaceChildren();
+  const topLine = document.createElement('div');
+  const cityInfo = saju.offsetMin !== 0
+    ? `${saju.city.name} 경도 시차 ${saju.offsetMin}분 보정 적용 (원국 보정 시각 ${saju.correctedTimeStr})`
+    : '동경 135° 표준시 기준 (경도 시차 보정 미적용)';
+  const genderInfo = birthParams.gender === 'M' ? '남성 (대운 반영)' : (birthParams.gender === 'F' ? '여성 (대운 반영)' : '성별 미입력 (대운 미반영 간이 풀이)');
+  topLine.innerHTML = `<strong>만세력 원국 및 대운 요약</strong> · <span>${convertedDesc}</span> · <span>${genderInfo}</span><br><span style="font-size:12px;color:#717b91">${birthParams.timeKnown ? cityInfo : '출생 시간 모름 선택 (시주 및 구매 시간대 후보 제외)'}</span>`;
+  pillarsSummaryEl.appendChild(topLine);
+
+  const grid = document.createElement('div');
+  grid.className = 'pillars-grid';
+  const items = [
+    { title: '시주(時柱)', val: birthParams.timeKnown ? formatPillar(saju.hourPillar) : '시간 모름(제외)' },
+    { title: '일주(日柱 · 본원)', val: formatPillar(saju.dayPillar) },
+    { title: '월주(月柱 · 절기)', val: formatPillar(saju.monthPillar) },
+    { title: '연주(年柱 · 입춘)', val: formatPillar(saju.yearPillar) }
+  ];
+  for (const it of items) {
+    const box = document.createElement('div');
+    box.className = 'pillar-item';
+    const t = document.createElement('span');
+    t.className = 'pillar-title';
+    t.textContent = it.title;
+    const v = document.createElement('span');
+    v.className = 'pillar-val';
+    v.textContent = it.val;
+    box.append(t, v);
+    grid.appendChild(box);
+  }
+  pillarsSummaryEl.appendChild(grid);
+
+  // 대운 흐름 요약 영역
+  const daeunBox = document.createElement('div');
+  daeunBox.className = 'daeun-summary-box';
+  if (!daeunProfile.enabled) {
+    daeunBox.innerHTML = `<strong>대운(大運) 안내:</strong> 성별 미입력으로 <strong>‘대운 미반영 간이 풀이’</strong>가 적용되었습니다. (세운·월운·일진 비교는 정상 제공되며, 성별을 선택하면 10년 주기 대운까지 함께 반영합니다)`;
+  } else {
+    const [rsY, rsM, rsD] = rangeStart.split('-').map(Number);
+    const refDaeunState = getActiveDaeunForDate(daeunProfile, rsY, rsM, rsD);
+    const activeOrder = refDaeunState.active ? refDaeunState.active.order : null;
+    const refTermText = `${daeunProfile.refTerm.name}(${daeunProfile.refTerm.kstStr} KST)`;
+    const headerDiv = document.createElement('div');
+    headerDiv.innerHTML = `<strong>대운(大運) 진행:</strong> ${daeunProfile.directionLabel} · 기준 절입(${refTermText})까지 ${daeunProfile.exactStartLabel} · <strong>표시 대운수 ${daeunProfile.displayDaeunNumber}</strong>`;
+    daeunBox.appendChild(headerDiv);
+
+    const strip = document.createElement('div');
+    strip.className = 'daeun-strip';
+    for (const p of daeunProfile.pillars) {
+      const chip = document.createElement('div');
+      chip.className = 'daeun-chip' + (p.order === activeOrder ? ' active' : '');
+      chip.innerHTML = `<div>${p.order}대운(대운수 ${daeunProfile.displayDaeunNumber + (p.order - 1) * 10})</div><div><strong>${p.ganji}</strong></div><div style="font-size:10px;opacity:.85">${p.startDateStr.slice(0, 7)}~</div>`;
+      strip.appendChild(chip);
+    }
+    daeunBox.appendChild(strip);
+
+    for (const note of refDaeunState.boundaryNotes) {
+      const dAlert = document.createElement('div');
+      dAlert.className = 'boundary-alert';
+      dAlert.textContent = '⚠️ 대운 경계·불확실성 안내: ' + note;
+      pillarsSummaryEl.appendChild(dAlert);
+    }
+  }
+  pillarsSummaryEl.appendChild(daeunBox);
+
+  if (saju.boundaryNote) {
+    const alertBox = document.createElement('div');
+    alertBox.className = 'boundary-alert';
+    alertBox.textContent = '⚠️ 날짜 경계 안내: ' + saju.boundaryNote;
+    pillarsSummaryEl.appendChild(alertBox);
+  }
+  if (saju.termBoundaryNote) {
+    const termBox = document.createElement('div');
+    termBox.className = 'boundary-alert';
+    termBox.textContent = '⚠️ 절입 경계 안내: ' + saju.termBoundaryNote;
+    pillarsSummaryEl.appendChild(termBox);
+  }
+
+  // 날짜 후보 카드 렌더링
+  candidatesContainerEl.replaceChildren();
+  if (candidates.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-candidates';
+    empty.textContent = '이번 기간에는 설정한 풀이 기준에서 두드러진 날짜 후보가 없습니다.';
+    candidatesContainerEl.appendChild(empty);
+    return;
+  }
+
+  candidates.forEach((cand, idx) => {
+    const card = document.createElement('div');
+    card.className = 'candidate-card';
+
+    const top = document.createElement('div');
+    top.className = 'candidate-top';
+    const dateTitle = document.createElement('div');
+    dateTitle.className = 'candidate-date';
+    dateTitle.textContent = `${cand.year}년 ${cand.month}월 ${cand.day}일 (${WEEKDAYS_KO[cand.dow]}요일) · 일진 ${cand.dayPillarStr}`;
+
+    const badgeGroup = document.createElement('div');
+    badgeGroup.className = 'badge-group';
+    const modeTag = document.createElement('span');
+    modeTag.className = 'mode-tag';
+    modeTag.textContent = cand.daeunModeLabel;
+    const badge = document.createElement('span');
+    badge.className = 'tier-badge ' + (cand.tier === '날짜 후보' ? 'tier-primary' : 'tier-secondary');
+    badge.textContent = cand.tier;
+    badgeGroup.append(modeTag, badge);
+    top.append(dateTitle, badgeGroup);
+
+    const reason = document.createElement('p');
+    reason.className = 'candidate-reason';
+    reason.textContent = cand.reason;
+
+    const slotBox = document.createElement('div');
+    slotBox.className = 'slot-box';
+    const radioName = `slot-choice-${idx}`;
+
+    if (!birthParams.timeKnown) {
+      slotBox.textContent = '구매 시간대 후보: ‘시간 모름’ 선택으로 시간대 후보를 제공하지 않습니다.';
+    } else if (cand.slots.length === 0) {
+      slotBox.innerHTML = `<strong>구매 시간대 후보:</strong> 이 날짜에는 두드러진 특정 시간대 후보가 없습니다. 판매 가능 시간 내 편한 시간대에 이용해 보세요.<div class="slot-meta">시간대 기준: 실제 구매 지역 한국표준시(KST, 동경 135°) 2시간 시진 · 출생지를 구매 지역으로 자동 간주하지 않음 · 동행복권 판매 시간 반영</div>`;
+    } else {
+      const slotTitle = document.createElement('div');
+      slotTitle.innerHTML = '<strong>구매 시간대 후보 (2시간 단위):</strong>';
+      const slotList = document.createElement('div');
+      slotList.className = 'slot-list';
+
+      cand.slots.forEach((slot, sIdx) => {
+        const lbl = document.createElement('label');
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = radioName;
+        radio.value = slot.code;
+        radio.dataset.label = slot.label;
+        if (sIdx === 0) radio.checked = true;
+        lbl.append(radio, document.createTextNode(`${slot.label} [시주 ${slot.ganji} · ${slot.stemGod}/${slot.branchGod}]`));
+        slotList.appendChild(lbl);
+      });
+
+      const meta = document.createElement('div');
+      meta.className = 'slot-meta';
+      meta.textContent = '시간대 기준: 실제 구매 지역 한국표준시(KST, 동경 135° 시계 시각) 2시간 시진 기준 · 출생지를 구매 지역으로 자동 간주하지 않음 · 마감 시간 제외';
+      slotBox.append(slotTitle, slotList, meta);
+    }
+
+    // ‘상세 풀이’ 펼치기 영역 (7대 필수 구분 항목)
+    const detailEl = document.createElement('details');
+    detailEl.className = 'candidate-detail';
+    const detailSummary = document.createElement('summary');
+    detailSummary.textContent = '상세 풀이 펼치기 (원국 · 대운 · 세운·월운·일진 · 유리/주의 요소 · 기준 및 불확실성)';
+    const detailGrid = document.createElement('div');
+    detailGrid.className = 'detail-grid';
+
+    const sections = [
+      { label: '1. 원국 (사주 구조 및 일간·재성 관계)', text: `${cand.detail.natalSummary}\n${cand.detail.natalStrengthNote}` },
+      { label: '2. 적용 대운과 기간', text: cand.detail.daeunSummary },
+      { label: '3. 세운·월운·일진', text: cand.detail.seunWolunIljinSummary },
+      { label: '4. 유리하게 해석한 요소', list: cand.detail.pros },
+      { label: '5. 상충하거나 주의해서 해석할 요소', list: cand.detail.cautions },
+      { label: '6. 적용한 계산 기준과 해석 규칙 버전', text: cand.detail.ruleVersionText },
+      { label: '7. 출생 시간이나 계산 방식에 따른 불확실성', list: cand.detail.uncertainties }
+    ];
+
+    for (const sec of sections) {
+      const row = document.createElement('div');
+      row.className = 'detail-row';
+      const lbl = document.createElement('span');
+      lbl.className = 'detail-label';
+      lbl.textContent = sec.label;
+      row.appendChild(lbl);
+      if (sec.list) {
+        const ul = document.createElement('ul');
+        ul.className = 'detail-list';
+        for (const itemText of sec.list) {
+          const li = document.createElement('li');
+          li.textContent = itemText;
+          ul.appendChild(li);
+        }
+        row.appendChild(ul);
+      } else {
+        const p = document.createElement('div');
+        p.style.whiteSpace = 'pre-line';
+        p.textContent = sec.text;
+        row.appendChild(p);
+      }
+      detailGrid.appendChild(row);
+    }
+    detailEl.append(detailSummary, detailGrid);
+
+    const genBtn = document.createElement('button');
+    genBtn.type = 'button';
+    genBtn.className = 'candidate-btn';
+    genBtn.textContent = '이 날짜로 번호 5세트 만들기';
+    genBtn.addEventListener('click', () => {
+      let chosenSlotCode = '';
+      let chosenSlotLabel = '시간대 미지정';
+      if (birthParams.timeKnown && cand.slots.length > 0) {
+        const checked = card.querySelector(`input[name="${radioName}"]:checked`);
+        if (checked) {
+          chosenSlotCode = checked.value;
+          chosenSlotLabel = checked.dataset.label;
+        }
+      }
+      generatePersonalSets(birthParams, cand.dateStr, chosenSlotCode, chosenSlotLabel);
+    });
+
+    card.append(top, reason, slotBox, detailEl, genBtn);
+    candidatesContainerEl.appendChild(card);
+  });
+}
+
+// ============================================================================
+// 기기 저장 및 기록 대조 (출생 정보 비저장 원칙 준수)
+// ============================================================================
+function getSavedRecords() {
+  try {
+    const raw = localStorage.getItem(STORAGE_RECORDS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecordsToStorage(records) {
+  try {
+    localStorage.setItem(STORAGE_RECORDS_KEY, JSON.stringify(records));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function fetchDrawResultIfNeeded(round) {
+  if (!round || isNaN(round)) return null;
+  if (drawResultCache[round]) return drawResultCache[round];
+  try {
+    const res = await fetch(`https://smok95.github.io/lotto/results/${round}.json`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data || !Array.isArray(data.numbers)) return null;
+    const parsed = {
+      round: data.draw_no,
+      date: data.date,
+      numbers: data.numbers,
+      bonus: data.bonus_no
+    };
+    drawResultCache[round] = parsed;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function evaluateSetMatch(setNumbers, draw) {
+  const hitCount = setNumbers.filter(n => draw.numbers.includes(n)).length;
+  const bonusHit = setNumbers.includes(draw.bonus);
+  if (hitCount === 6) return `6개 일치 (1등)`;
+  if (hitCount === 5 && bonusHit) return `5개 + 보너스 일치 (2등)`;
+  if (hitCount === 5) return `5개 일치 (3등)`;
+  if (hitCount === 4) return `4개 일치 (4등)`;
+  if (hitCount === 3) return `3개 일치 (5등)`;
+  return `${hitCount}개 일치 (미당첨)`;
+}
+
+async function renderSavedRecords() {
+  const listEl = document.getElementById('records-list');
+  const clearBtn = document.getElementById('clear-records');
+  const records = getSavedRecords();
+  listEl.replaceChildren();
+
+  if (records.length === 0) {
+    clearBtn.style.display = 'none';
+    const empty = document.createElement('p');
+    empty.className = 'description';
+    empty.style.fontSize = '13px';
+    empty.style.margin = '0';
+    empty.textContent = '아직 저장된 기록이 없습니다. 번호를 생성한 뒤 ‘이 5세트 기록 저장하기’를 눌러 보관할 수 있습니다.';
+    listEl.appendChild(empty);
+    return;
+  }
+
+  clearBtn.style.display = 'inline-block';
+
+  for (const rec of records) {
+    const card = document.createElement('div');
+    card.className = 'record-card';
+
+    const top = document.createElement('div');
+    top.className = 'record-top';
+
+    const meta = document.createElement('div');
+    meta.className = 'record-meta';
+    const roundText = rec.targetRound
+      ? `대상 회차: 제${rec.targetRound}회 (추첨일 ${rec.targetDrawDate})`
+      : '대상 회차·추첨일: 확인 대기';
+    const modeText = rec.mode === 'personal' ? '나의 날짜로 만든 번호' : '무작위 추천';
+    const dateSlotText = rec.selectedDate
+      ? `선택 날짜: ${rec.selectedDate} (${rec.selectedSlot || '시간대 미지정'})`
+      : `생성 일자: ${rec.createdDate || '-'}`;
+
+    meta.innerHTML = `<strong>[${modeText}]</strong> ${roundText}<br>${dateSlotText} · 보너스 옵션: ${rec.includeBonus ? '포함' : '미포함'}<br><span style="font-size:11px">규칙 버전: ${rec.ruleVersion}</span>`;
+
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'delete-btn';
+    delBtn.textContent = '삭제';
+    delBtn.addEventListener('click', () => {
+      const updated = getSavedRecords().filter(r => r.id !== rec.id);
+      saveRecordsToStorage(updated);
+      renderSavedRecords();
+    });
+
+    top.append(meta, delBtn);
+
+    const setsBox = document.createElement('div');
+    setsBox.className = 'record-sets';
+    setsBox.textContent = rec.sets.map((nums, i) => {
+      const bStr = (rec.includeBonus && rec.bonuses && rec.bonuses[i]) ? ` + 보너스 ${rec.bonuses[i]}` : '';
+      return `${String.fromCharCode(65 + i)}: ${nums.join(', ')}${bStr}`;
+    }).join('\n');
+
+    const checkBox = document.createElement('div');
+    checkBox.className = 'record-check';
+    if (!rec.targetRound) {
+      checkBox.textContent = '당첨 대조 결과: 확인 대기 (대상 회차 공식 데이터 미확정)';
+    } else {
+      const draw = await fetchDrawResultIfNeeded(rec.targetRound);
+      if (!draw) {
+        checkBox.textContent = `당첨 대조 결과: 확인 대기 (제${rec.targetRound}회 추첨 전이거나 공식 당첨 데이터 미확보)`;
+      } else {
+        const summaryLines = rec.sets.map((nums, i) => `${String.fromCharCode(65 + i)}세트: ${evaluateSetMatch(nums, draw)}`);
+        checkBox.textContent = `제${draw.round}회 당첨 번호(${draw.numbers.join(', ')} + 보너스 ${draw.bonus}) 대조: ` + summaryLines.join(' / ');
+      }
+    }
+
+    card.append(top, setsBox, checkBox);
+    listEl.appendChild(card);
+  }
+}
+
+saveRecordButton.addEventListener('click', () => {
+  if (currentNumbers.length === 0) return;
+  const kst = getCurrentKST();
+  const todayStr = toDateInputString(kst.year, kst.month, kst.day);
+  const refDate = (currentMode === 'personal' && currentPersonalMeta) ? currentPersonalMeta.selectedDate : todayStr;
+  const confirmedTarget = getConfirmedTargetDrawForDate(refDate);
+
+  const newRecord = {
+    id: 'rec-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+    targetRound: confirmedTarget ? confirmedTarget.round : null,
+    targetDrawDate: confirmedTarget ? confirmedTarget.drawDate : null,
+    selectedDate: (currentMode === 'personal' && currentPersonalMeta) ? currentPersonalMeta.selectedDate : null,
+    selectedSlot: (currentMode === 'personal' && currentPersonalMeta) ? currentPersonalMeta.selectedSlotLabel : null,
+    createdDate: todayStr,
+    sets: currentNumbers.map(s => [...s]),
+    bonuses: [...bonusNumbers],
+    includeBonus,
+    mode: currentMode,
+    ruleVersion: (currentMode === 'personal' && currentPersonalMeta)
+      ? currentPersonalMeta.ruleVersion
+      : RANDOM_GEN_VERSION
+  };
+
+  const records = getSavedRecords();
+  records.unshift(newRecord);
+  const ok = saveRecordsToStorage(records.slice(0, 30));
+  if (ok) {
+    status.textContent = '현재 5세트를 기기 기록에 저장했습니다. (출생 정보는 기록에 포함되지 않습니다)';
+    renderSavedRecords();
+  } else {
+    status.textContent = '브라우저 저장 공간 제한으로 기록 저장에 실패했지만, 번호 생성과 복사는 정상 이용 가능합니다.';
+  }
+});
+
+document.getElementById('clear-records').addEventListener('click', () => {
+  try { localStorage.removeItem(STORAGE_RECORDS_KEY); } catch {}
+  renderSavedRecords();
+  status.textContent = '저장된 모든 기록을 삭제했습니다.';
+});
+
+// 초기 실행
+renderTodayDate();
+initPeriodInputs();
+loadSavedBirthInfoIfOptedIn();
+loadLastDraw();
+renderSavedRecords();
 </script>
 </body>
 </html>
