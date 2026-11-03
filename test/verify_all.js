@@ -242,7 +242,7 @@ runCheck(
     assert.strictEqual(sandbox.isSupportedSolarYMD(2051, 1, 1).ok, false);
 
     // .NET KoreanLunisolarCalendar (1900~2050, 151개년 1,868개월) 독립 대조
-    const dotnetRef = JSON.parse(fs.readFileSync('c:/Users/ukino/OneDrive/Desktop/바이브코딩/test/dotnet_lunar_ref.json', 'utf8').replace(/^\uFEFF/, ''));
+    const dotnetRef = JSON.parse(fs.readFileSync(path.join(__dirname, 'dotnet_lunar_ref.json'), 'utf8').replace(/^\uFEFF/, ''));
     let checkedMonths = 0;
     for (const row of dotnetRef) {
       const y = row.y;

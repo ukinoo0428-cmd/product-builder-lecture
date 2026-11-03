@@ -244,6 +244,14 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 .hero-quip-cursor.is-typing{opacity:1;animation:none}
 .record-purchase-numbers>.record-balls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));width:min(100%,12.3rem);gap:clamp(2px,1vw,.3rem)}
 .record-purchase-numbers>.record-balls .mini-ball{width:100%;height:auto;aspect-ratio:1;min-width:0;font-size:clamp(.65rem,3vw,.85rem)}
+#record-integrity-notice:empty{display:none}
+@media(max-width:620px){
+  .card{min-width:0}
+  .set{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px}
+  .set .balls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(3px,1.2vw,8px);width:100%;max-width:380px}
+  .set .ball{width:100%;height:auto;aspect-ratio:1;min-width:0;font-size:clamp(.85rem,4vw,1.25rem)}
+  .set>button{grid-column:2;justify-self:end;padding:.4rem .65rem}
+}
 </style>
 </head>
 <body>
@@ -256,7 +264,8 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 
 <section id="last-draw" class="info-panel" aria-label="지난회차 당첨 정보">
   <div class="info-header">
-    <span id="last-draw-round" class="info-round">공식 데이터 확인 중...</span>
+    <span class="info-source">외부 제공 데이터 · <a href="https://www.dhlottery.co.kr/lt645/intro" target="_blank" rel="noopener noreferrer">공식 확인</a></span>
+    <span id="last-draw-round" class="info-round">외부 제공 데이터 확인 중...</span>
     <span>당첨 일자: <strong id="last-draw-date" class="info-date">확인 대기</strong></span>
   </div>
   <div id="last-draw-balls" class="mini-balls" aria-label="지난회차 당첨번호"></div>
@@ -364,7 +373,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
     </p>
         <p class="field-hint">대한제국 근대 법정 표준시 시행일(양력 1908년 4월 1일, 음력 1908년 3월 1일)부터 2050년 12월 31일(음력 2050년 11월 18일)까지 지원하며, 범위 밖의 날짜는 추정값으로 처리하지 않습니다.</p>
         <p class="field-hint">전통적인 대운 진행 방향을 계산하는 데 사용합니다. (성별 미입력 시 대운을 제외하고 ‘대운 미반영 간이 풀이’로 세운·월운·일진 비교를 제공합니다)</p>
-        <p id="birth-time-hint" class="field-hint">💡 출생 시각은 출생 당시 법정 시각(역사적 표준시·서머타임 <code>Asia/Seoul</code> 반영)으로 해석해 UTC 출생 순간과 지방평균태양시를 분리 계산합니다. ‘시간 모름’ 선택 시 정오를 실제 출생 시각으로 확정하지 않고 당일 전체 범위(절입 전후 및 경도 보정에 따른 자정 직후 전날 일주 가능성)를 함께 검토하며, 시주와 구매 시간대 후보를 제외합니다.</p>
+        <p id="birth-time-hint" class="field-hint">💡 출생 시각은 출생 당시 법정 시각(역사적 표준시·서머타임 <code>Asia/Seoul</code> 반영)으로 해석해 UTC 출생 순간과 지방평균태양시를 분리 계산합니다. ‘시간 모름’ 선택 시 정오를 실제 출생 시각으로 확정하지 않고 절입 전후와 경도 보정에 따른 자정 경계 등 대표 시나리오를 비교하며, 시주와 구매 시간대 후보를 제외합니다.</p>
         <p class="field-hint">출생지 경도에 따른 지방평균태양시 보정은 출생 원국의 일주·시주 산출에만 사용하며(연주·월주 절입 및 대운 기산은 UTC 순간 비교), 구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 대한민국 내 구매 기준(KST)으로 표시합니다.</p></details>
 
     <div id="saju-result" class="saju-result" aria-live="polite">
@@ -388,7 +397,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
             <li><strong>5. 대운 순역행과 시작 시점 (‘전통 단위 분해 후 달력 가산’ 고정):</strong>
               절입 기준으로 계산한 출생 연주 천간의 음양에 따라 <strong>양년생 남성·음년생 여성은 순행, 음년생 남성·양년생 여성은 역행</strong>하며, 첫 대운은 월주에서 순행·역행으로 한 칸 이동한 간지입니다. 기산 간격은 순행 시 <code>출생 순간(UTC) → 다음 12절 절입 순간(UTC)</code>, 역행 시 <code>이전 12절 절입 순간(UTC) → 출생 순간(UTC)</code>의 차이로 계산하며(절입과 출생이 같으면 <code>0</code> 처리), 다음 <strong>‘전통 단위 분해 후 달력 가산’</strong> 방식으로만 산출합니다: ① <code>3일 → 1년</code> 분해, ② 남은 간격 <code>6시간 → 1개월(1일 → 4개월)</code> 분해, ③ 남은 간격 <code>1초 → 120초(2시간 → 10일)</code> 환산, ④ 출생지 법정 시각 달력에 연·월을 함께 가산(월말 클램핑 및 서머타임 결손 <code>later</code>·중복 <code>earlier</code> 적용)한 뒤 남은 경과시간을 더해 <strong>채택한 환산법에 따른 대운 시작 시점</strong>을 구합니다. 후속 대운(2~10대운)은 첫 시작 시점으로부터 달력 기준 10년씩 산출해 누적 오차를 방지하며, 반개구간 <code>[시작 시점, 다음 대운 시작 시점)</code>으로 판정하고 첫 대운 시작 전은 <strong>‘대운 시작 전’</strong>으로 표시합니다.</li>
             <li><strong>6. 출생 시간 모름·성별 미입력 및 불확실성 결과 제한:</strong>
-              성별 미입력 시에는 대운을 제외하고 <strong>‘대운 미반영 간이 풀이’</strong>로 표시합니다. 출생 시간 모름 선택 시에는 시주와 구매 시간 후보를 제외하며, 정오(12:00)를 실제 출생 시각처럼 확정하지 않고 당일 법정 시각 전체 범위(<code>00:00:00 ~ 23:59:59</code>)에 대해 <strong>① 당일 12절 절입 전후, ② 경도 보정에 따른 자정 직후(예: 현대 KST 기준 <code>00:00~00:34</code>경) 전날 일주(<code>prevDayPillar</code>) 변경 가능성, ③ 대운 전환 가능 구간(약 4개월 폭)</strong>을 모두 검토합니다. 출생 시간 미상이나 계산 방식 차이(경도 보정 전후 일주 차이, 보정 후 <code>00:00</code> vs <code>23:00</code> 자시 일주 전환 기준 차이, 서머타임 중복·결손 시각, 절입 <code>±1분</code> 경계)로 후보 날짜가 달라지는 경우 <strong>단일 후보를 임의로 확정하지 않고 불확실성 및 시나리오별 후보 차이를 안내</strong>합니다(단, 사용자가 자정·야자시 경계 출생이 아님을 직접 체크한 경우 자정 일주 변동을 제외한 일반 시간대 범위를 적용).</li>
+              성별 미입력 시에는 대운을 제외하고 <strong>‘대운 미반영 간이 풀이’</strong>로 표시합니다. 출생 시간 모름 선택 시에는 시주와 구매 시간 후보를 제외하며, 정오(12:00)를 실제 출생 시각처럼 확정하지 않고 당일 법정 시각의 대표 경계 시나리오(<code>00:00:00 ~ 23:59:59</code>)에 대해 <strong>① 당일 12절 절입 전후, ② 경도 보정에 따른 자정 직후(예: 현대 KST 기준 <code>00:00~00:34</code>경) 전날 일주(<code>prevDayPillar</code>) 변경 가능성, ③ 대운 전환 가능 구간(약 4개월 폭)</strong>을 모두 검토합니다. 출생 시간 미상이나 계산 방식 차이(경도 보정 전후 일주 차이, 보정 후 <code>00:00</code> vs <code>23:00</code> 자시 일주 전환 기준 차이, 서머타임 중복·결손 시각, 절입 <code>±1분</code> 경계)로 후보 날짜가 달라지는 경우 <strong>단일 후보를 임의로 확정하지 않고 불확실성 및 시나리오별 후보 차이를 안내</strong>합니다(단, 사용자가 자정·야자시 경계 출생이 아님을 직접 체크한 경우 자정 일주 변동을 제외한 일반 시간대 범위를 적용).</li>
             <li><strong>7. 명리 날짜·시간 후보 선정 규칙(<code>LOTTO-CALC-v2.1</code>)과 설명문 생성:</strong>
               10천간·12지지 및 12지지 <strong>지장간(여기·중기·본기 비율)</strong>의 오행·십성 매핑을 고정하고, 원국 천간(연간 <code>1.0</code>, 월간 <code>1.2</code>, 시간 <code>1.0</code>)과 지지 지장간(연지 <code>1.0</code>, <strong>월지[월령] <code>2.0</code></strong>, 일지 <code>1.5</code>, 시지 <code>1.0</code>) 가중치를 합산해 생조(<code>비겁+인성</code>) 대 설기·소모(<code>식상+재성+관성</code>) 비중 및 득령·통근 여부를 계산합니다(조후·합화·특수격은 판정하지 않으며 억부 참고 지표로만 활용). 후보 제외 규칙(<code>RULE-EXCL-*</code>: 원국 일지·월지 육충, 재성·식상생재 부재, 핵심 영역 2개 미만, 설기 과다+운 충 복합 시 제외), 유리 규칙(<code>RULE-FAV-*</code>: 일진 편재·정재, 식상생재, 억부 균형, 원국·대운 지지합, 대운·세운·월운 호응, KST 시진 조화), 상충·주의 규칙(<code>RULE-CAUT-*</code>: 합의 양면성, 설기 부담, 대운·세운·월운 충)을 명시적 규칙 ID로 평가합니다. 동률 시에는 <code>후보 등급(날짜 후보 &gt; 보조 후보) → 규칙 가중치 합산 → 충족 영역 수 → 유리 시간 후보 가중치 → 빠른 날짜</code> 순으로 최대 2개 후보를 선정하며, 기준 충족일이 없으면 억지 후보 없이 <strong>‘뚜렷한 후보 없음’</strong>으로 처리합니다. 카드 설명문은 실제로 발동한 규칙 ID(<code>triggeredRuleIds</code>)에서만 생성하며 화면에는 점수나 확률처럼 보이는 숫자를 노출하지 않습니다.</li>
             <li><strong>8. 대한민국 내 구매 기준(KST), 판매 시간 구분 및 개인화 번호 생성 시드·스트림(<code>LOTTO-NUM-GEN-v1.2</code>):</strong>
@@ -429,6 +438,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
   <div class="record-top">
     <span id="backup-status" role="status"></span>
   </div>
+  <p id="record-integrity-notice" role="status"></p>
   <div id="record-save-notice" role="status"></div>
   <div id="records-list" class="records-list">
     <p class="description" style="font-size:13px;margin:0">아직 저장된 기록이 없습니다. 번호를 생성한 뒤 ‘이 5세트 기록 저장하기’를 눌러 보관할 수 있습니다.</p>
@@ -1165,6 +1175,10 @@ function formatPillar(p) {
   return STEMS[p.stem] + BRANCHES[p.branch];
 }
 
+function candidateSignature(cands, datesOnly = false) {
+  return JSON.stringify(cands.map(c => [c.dateStr,c.tier,datesOnly ? [] :
+    (c.slots || []).map(slot => [slot.branch,slot.startHour,slot.endHour,slot.label])]));
+}
 function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, timeUnknownNonMidnight = false, hour = 0, minute = 0, cityCode = 'SEOUL' }) {
   const hasExplicitCity = Boolean(cityCode && CITIES[cityCode]);
   const city = hasExplicitCity ? CITIES[cityCode] : CITIES.SEOUL;
@@ -2222,9 +2236,7 @@ function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) 
     return cands.map(c => `${c.dateStr}(일진 ${c.dayPillarStr}, ${c.tier})`).join(', ');
   }
 
-  function sigOf(cands) {
-    return cands.map(c => `${c.dateStr}:${c.tier}`).join('|');
-  }
+  const sigOf = candidateSignature;
 
   if (timeKnown) {
     const primarySched = daeunProfile.enabled ? daeunProfile : null;
@@ -2292,7 +2304,7 @@ function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) 
       const diffText = differingVariants.map(d => `${d.label}: [${d.summary}]`).join(' / ');
       return {
         restrictedByUncertainty: true,
-        restrictionReason: `입력하신 출생 시각이 명리 계산 방식 경계(자시 일주 전환 기준·경도 보정 자정 경계·서머타임 전환·절입 ±1분 경계)에 해당하여, 본 사이트 기본 기준 후보[${primaryDesc}]와 대안 계산 기준 후보(${diffText})가 서로 달라집니다. 본 사이트 규칙(출생 시간이나 계산 방식 차이로 후보 날짜가 달라지면 단일 후보를 임의로 확정하지 않음)에 따라 단일 후보를 임의 확정하지 않고 각 기준별 후보 비교와 불확실성을 함께 안내합니다.`,
+        restrictionReason: `입력하신 출생 시각이 명리 계산 방식 경계(자시 일주 전환 기준·경도 보정 자정 경계·서머타임 전환·절입 ±1분 경계)에 해당하여, 본 사이트 기본 기준 후보(날짜·시간대)[${primaryDesc}]와 대안 계산 기준 후보(${diffText})가 서로 달라집니다. 본 사이트 규칙(출생 시간이나 계산 방식 차이로 후보 날짜 또는 시간대가 달라지면 단일 후보를 임의로 확정하지 않음)에 따라 단일 후보를 임의 확정하지 않고 각 기준별 후보 비교와 불확실성을 함께 안내합니다.`,
         candsPrimary: primaryCands,
         differingVariants,
         candidates: []
@@ -2352,7 +2364,7 @@ function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) 
 
     return {
       restrictedByUncertainty: true,
-      restrictionReason: `‘출생 시간 모름’ 상태에서 당일 범위를 검토한 결과, ${causes.join(' 또한 ')}이 확인되었습니다. 본 사이트 규칙(출생 시간이나 계산 방식 차이로 후보 날짜가 달라지면 단일 후보를 임의로 확정하지 않음)에 따라 단일 후보를 임의 확정하지 않고 불확실성을 안내합니다. 정확한 출생 시간을 입력하시거나, 자정·야자시 경계(00:00~01:35 · 23:00~24:00) 출생이 아님을 아시는 경우 ‘자정·야자시 경계 출생 아님’ 옵션을 선택해 다시 확인해 주세요.`,
+      restrictionReason: `‘출생 시간 모름’ 상태에서 대표 경계 시나리오를 비교한 결과, ${causes.join(' 또한 ')}이 확인되었습니다. 본 사이트 규칙(출생 시간이나 계산 방식 차이로 후보 날짜가 달라지면 단일 후보를 임의로 확정하지 않음)에 따라 단일 후보를 임의 확정하지 않고 불확실성을 안내합니다. 정확한 출생 시간을 입력하시거나, 자정·야자시 경계(00:00~01:35 · 23:00~24:00) 출생이 아님을 아시는 경우 ‘자정·야자시 경계 출생 아님’ 옵션을 선택해 다시 확인해 주세요.`,
       candsEarly,
       candsLate,
       candsLmstAlt,
@@ -2708,6 +2720,13 @@ function renderLastDraw(draw) {
   container.replaceChildren(...nodes, plus, bonusEl);
 }
 
+function expectedLatestDrawDate(now) {
+  const local = new Date(now + 9*3600000);
+  const weekday = local.getUTCDay();
+  const days = (weekday+1)%7;
+  local.setUTCDate(local.getUTCDate()-days-(weekday===6 && (local.getUTCHours()*60+local.getUTCMinutes())<1235 ? 7 : 0));
+  return local.toISOString().slice(0,10);
+}
 async function loadLastDraw() {
   try {
     const res = await fetch('https://smok95.github.io/lotto/results/latest.json');
@@ -2724,20 +2743,22 @@ async function loadLastDraw() {
       winners: firstDiv.winners
     };
     if (!validDraw(parsed, parsed.round, parsed.date) || !/^\d{4}-\d{2}-\d{2}$/.test(parsed.date)) throw new Error('Invalid draw');
+    if (parsed.date !== expectedLatestDrawDate(Date.now())) throw new Error('Not the latest scheduled draw');
     verifiedLatestDraw = parsed;
     drawResultCache[parsed.round] = parsed;
     renderLastDraw(parsed);
     updatePeriodHint();
     renderSavedRecords();
   } catch {
+    if (verifiedLatestDraw?.date !== expectedLatestDrawDate(Date.now())) verifiedLatestDraw = null;
     document.getElementById('last-draw-round').textContent = '지난회차 (확인 대기)';
-    document.getElementById('last-draw-date').textContent = '공식 데이터 연결 대기';
+    document.getElementById('last-draw-date').textContent = '최신 결과 확인 대기';
     document.getElementById('last-draw-prize').textContent = '확인 대기';
     const container = document.getElementById('last-draw-balls');
     const msg = document.createElement('span');
     msg.style.fontSize = '12px';
     msg.style.color = '#717b91';
-    msg.textContent = '네트워크 연결 시 확인된 공식 당첨 번호가 표시됩니다.';
+    msg.textContent = '외부 제공 데이터에서 최신 추첨 결과를 확인하고 있어요.';
     container.replaceChildren(msg);
   }
 }
@@ -2843,15 +2864,26 @@ function loadSavedBirthInfoIfOptedIn() {
   } catch {}
 }
 
+function removeSavedBirth() {
+  try {
+    localStorage.removeItem(STORAGE_BIRTH_KEY);
+    if (localStorage.getItem(STORAGE_BIRTH_KEY) === null) return true;
+  } catch {}
+  status.textContent = '저장된 출생 정보를 삭제하지 못했어요. 다시 시도해 주세요.';
+  rememberBirthCheckbox.checked = true;
+  clearSavedBirthBtn.style.display = 'inline-block';
+  return false;
+}
 rememberBirthCheckbox.addEventListener('change', () => {
   if (!rememberBirthCheckbox.checked) {
-    try { localStorage.removeItem(STORAGE_BIRTH_KEY); } catch {}
+    if (!removeSavedBirth()) return;
     clearSavedBirthBtn.style.display = 'none';
   }
 });
 
 clearSavedBirthBtn.addEventListener('click', () => {
-  try { localStorage.removeItem(STORAGE_BIRTH_KEY); } catch {}
+  if (!removeSavedBirth()) return;
+  invalidateSajuResults();
   document.getElementById('birth-year').value = '';
   document.getElementById('birth-month').value = '';
   document.getElementById('birth-day').value = '';
@@ -2868,7 +2900,31 @@ clearSavedBirthBtn.addEventListener('click', () => {
   status.textContent = '기기에 저장된 출생 정보(성별 포함)를 삭제했습니다.';
 });
 
-document.getElementById('saju-form').addEventListener('submit', (e) => {
+function invalidateSajuResults() {
+  candidatesContainerEl.replaceChildren();
+  const result = document.getElementById('saju-result');
+  result.style.display = 'none';
+  if (currentMode !== 'personal') return;
+  currentNumbers = [];
+  bonusNumbers = [];
+  lockedSets.clear();
+  personalSeed = null;
+  balls.replaceChildren();
+  copyButton.disabled = true;
+  saveRecordButton.disabled = true;
+  const generate = document.getElementById('generate');
+  generate.disabled = true;
+  status.textContent = '입력이 바뀌었어요. 날짜 후보를 다시 확인해 주세요.';
+}
+const sajuForm = document.getElementById('saju-form');
+for (const event of ['input','change']) {
+  sajuForm.addEventListener(event,e=>{
+    if (['remember-birth','clear-saved-birth'].includes(e.target?.id)) return;
+    invalidateSajuResults();
+  });
+}
+sajuForm.addEventListener('submit', (e) => {
+  invalidateSajuResults();
   e.preventDefault();
   showSajuError('');
 
@@ -2984,8 +3040,7 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
       }));
       clearSavedBirthBtn.style.display = 'inline-block';
     } else {
-      localStorage.removeItem(STORAGE_BIRTH_KEY);
-      clearSavedBirthBtn.style.display = 'none';
+      if (removeSavedBirth()) clearSavedBirthBtn.style.display = 'none';
     }
   } catch {}
 
@@ -3245,6 +3300,18 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
 // ============================================================================
 // 기기 저장 및 기록 대조 (출생 정보 비저장 원칙 준수)
 // ============================================================================
+function validNumberSet(nums) {
+  return Array.isArray(nums) && nums.length === 6 && new Set(nums).size === 6 &&
+    nums.every(n => Number.isInteger(n) && n >= 1 && n <= 45);
+}
+function validSavedRecord(rec) {
+  const date = d => typeof d === 'string' && normalizeDrawDate(d) === d;
+  return rec && typeof rec === 'object' && typeof rec.id === 'string' && !!rec.id &&
+    (!rec.createdDate || date(rec.createdDate)) && (!rec.selectedDate || date(rec.selectedDate)) &&
+    (rec.targetRound == null ? rec.targetDrawDate == null :
+      Number.isSafeInteger(rec.targetRound) && rec.targetRound > 0 && date(rec.targetDrawDate)) &&
+    Array.isArray(rec.sets) && rec.sets.length > 0 && rec.sets.length <= 5 && rec.sets.every(validNumberSet);
+}
 function getSavedRecords() {
   try {
     const raw = localStorage.getItem(STORAGE_RECORDS_KEY);
@@ -3314,6 +3381,7 @@ async function fetchDrawResultIfNeeded(round, date) {
 }
 
 function evaluateSetMatch(setNumbers, draw) {
+  if (!validNumberSet(setNumbers)) return '번호를 확인할 수 없음';
   const hits = setNumbers.filter(n => draw.numbers.includes(n)).length;
   const bonus = hits === 5 && setNumbers.includes(draw.bonus);
   const rank = hits === 6 ? 1 : bonus ? 2 : hits >= 3 ? 8-hits : null;
@@ -3403,7 +3471,7 @@ function makeEntryView(date) {
 }
 function setPurchased(id, index, checked) {
   const records = getSavedRecords();
-  const rec = records.find(item => item.id === id);
+  const rec = records.find(item => item?.id === id);
   if (!rec) return false;
   rec.purchased = rec.sets.map((_, i) => i === index ? checked : rec.purchased?.[i] === true);
   return saveRecordsToStorage(records);
@@ -3454,6 +3522,7 @@ function makeRecordResult(rec,i,draw,purchased) {
   return line;
 }
 function matchRank(nums, draw) {
+  if (!validNumberSet(nums)) return 6;
   const hits = nums.filter(n => draw.numbers.includes(n)).length;
   return hits === 6 ? 1 : hits === 5 && nums.includes(draw.bonus) ? 2 : hits >= 3 ? 8-hits : 6;
 }
@@ -3522,8 +3591,7 @@ function recordIndices(rec, purchasedOnly) {
 }
 async function renderSavedRecords() {
   const revision = ++recordsRenderRevision;
-  renderRecordList();
-  await Promise.all(getSavedRecords().map(async rec => {
+  const pending = getSavedRecords().filter(validSavedRecord).map(async rec => {
     if (!rec.targetRound) {
       // Restore the currently selling round for legacy records with a valid purchase window.
       const date = rec.selectedDate || rec.createdDate;
@@ -3531,7 +3599,7 @@ async function renderSavedRecords() {
       const upcoming = day != null ? getConfirmedTargetDrawForDate(date) : null;
       if (upcoming && Date.now() < Date.parse(upcoming.drawDate + 'T20:35:00+09:00')) {
         const latest = getSavedRecords();
-        const stored = latest.find(item => item.id === rec.id);
+        const stored = latest.find(item => item?.id === rec.id);
         if (stored && !stored.targetRound) {
           stored.targetRound = upcoming.round;
           stored.targetDrawDate = upcoming.drawDate;
@@ -3555,22 +3623,26 @@ async function renderSavedRecords() {
     }
     if (rec.targetRound && recordGroup(rec) === 'past') {
       const request = fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate);
-      if (revision === recordsRenderRevision) renderRecordList();
       await request;
     }
-    if (revision === recordsRenderRevision) renderRecordList();
-  }));
+  });
+  renderRecordList();
+  await Promise.all(pending);
   if (revision === recordsRenderRevision) renderRecordList();
 }
 function renderRecordList() {
   const listEl = document.getElementById('records-list');
-  const records = getSavedRecords();
+  const storedRecords = getSavedRecords();
+  const records = storedRecords.filter(validSavedRecord);
+  const skipped = storedRecords.length-records.length;
+  document.getElementById('record-integrity-notice').textContent = skipped ?
+    '형식이 맞지 않는 기록 '+skipped+'건은 표시하지 않았어요. 원본은 보존했어요.' : '';
   scheduleRecordRefresh(records);
   const purchasedOnly = document.getElementById('purchased-only').getAttribute('aria-pressed') === 'true';
   document.getElementById('clear-records').style.display = records.length ? 'inline-block' : 'none';
   const notice = document.getElementById('record-save-notice');
   notice.replaceChildren();
-  const saved = records.find(rec => rec.id === lastSavedId);
+  const saved = records.find(rec => rec?.id === lastSavedId);
   const hiddenSaved = saved && !recordIndices(saved, purchasedOnly).length;
   if (hiddenSaved) {
     notice.append(document.createTextNode('저장했어요. 현재 보기 조건에서는 숨겨져 있어요. '),
@@ -3631,10 +3703,10 @@ function renderRecordList() {
     delBtn.className = 'delete-btn';
     delBtn.textContent = '삭제';
     delBtn.addEventListener('click', () => {
-      const updated = getSavedRecords().filter(r => r.id !== rec.id);
+      const updated = getSavedRecords().filter(r => r?.id !== rec.id);
       if (saveRecordsToStorage(updated)) {
-        localStorage.removeItem('lotto-ticket:'+rec.id);
-        localStorage.removeItem('lotto-ticket:'+rec.id+':qr');
+        localStorage.removeItem('lotto-ticket:'+rec?.id);
+        localStorage.removeItem('lotto-ticket:'+rec?.id+':qr');
         renderSavedRecords();
       }
     });
