@@ -176,6 +176,9 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
   .mini-ball{width:28px;height:28px;font-size:12px}
   .pillars-grid{grid-template-columns:repeat(2,1fr)}
 }
+.entry-numbers{font-size:clamp(1rem,5vw,1.5rem);font-weight:700;white-space:pre;font-variant-numeric:tabular-nums}
+.record-meta{white-space:pre-line;overflow-wrap:anywhere}
+#records-section .record-top{flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -351,6 +354,14 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
   <div class="records-header">
     <h2>🗂️ 저장된 번호 기록</h2>
     <button id="clear-records" type="button" class="delete-btn" style="display:none">전체 기록 삭제</button>
+  </div>
+  <div class="record-top">
+    <label>기록 상태 <select id="record-filter"><option>전체</option><option>회차 확인 대기</option><option>추첨 대기</option><option>결과 확인 대기</option><option>대조 완료</option></select></label>
+    <label><input id="purchased-only" type="checkbox"> 구매한 번호만 보기</label>
+    <button id="export-records" type="button">백업 파일 내보내기</button>
+    <button id="import-records" type="button">백업 파일 가져오기</button>
+    <input id="backup-file" type="file" accept=".json,application/json" hidden>
+    <span id="backup-status" role="status"></span>
   </div>
   <div id="records-list" class="records-list">
     <p class="description" style="font-size:13px;margin:0">아직 저장된 기록이 없습니다. 번호를 생성한 뒤 ‘이 5세트 기록 저장하기’를 눌러 보관할 수 있습니다.</p>
@@ -2420,19 +2431,24 @@ function setModeUI(mode, personalMeta = null) {
   }
 }
 
+const lockedSets = new Set();
 function generateSets() {
+  if (currentMode !== 'random') lockedSets.clear();
   setModeUI('random', null);
-  currentNumbers = [];
-  const seen = new Set();
-  while (currentNumbers.length < 5) {
-    const numbers = recommend();
-    const key = numbers.join(',');
-    if (!seen.has(key)) { seen.add(key); currentNumbers.push(numbers); }
+  const seen = new Set([...lockedSets].map(i => currentNumbers[i].join(',')));
+  if (!currentNumbers.length || lockedSets.size === 0) {
+    currentNumbers = [];
+    bonusNumbers = [];
   }
-  bonusNumbers = currentNumbers.map(numbers => {
-    const remaining = Array.from({length:45}, (_, i) => i + 1).filter(n => !numbers.includes(n));
-    return remaining[randomInt(remaining.length)];
-  });
+  for (let i = 0; i < 5; i++) {
+    if (lockedSets.has(i)) continue;
+    let numbers;
+    do { numbers = recommend(); } while (seen.has(numbers.join(',')));
+    seen.add(numbers.join(','));
+    currentNumbers[i] = numbers;
+    const remaining = Array.from({length:45}, (_, j) => j + 1).filter(n => !numbers.includes(n));
+    bonusNumbers[i] = remaining[randomInt(remaining.length)];
+  }
   renderSets();
 }
 
@@ -2443,6 +2459,7 @@ function generatePersonalSets(birthParams, selectedDate, selectedSlotCode, selec
     selectedSlotCode
   });
   const { sets, bonuses } = generateDeterministicSetsFromSeed(seed);
+  lockedSets.clear();
   currentNumbers = sets;
   bonusNumbers = bonuses;
   setModeUI('personal', {
@@ -2484,8 +2501,23 @@ function renderSets() {
       bonus.append(caption, ball);
       row.append(bonus);
     }
+    if (currentMode === 'random') {
+      const lock = actionButton(lockedSets.has(index) ? '고정 해제' : '고정', () => {
+        if (lockedSets.has(index)) lockedSets.delete(index); else lockedSets.add(index);
+        renderSets();
+        document.getElementById('lock-set-' + index).focus();
+      });
+      lock.id = 'lock-set-' + index;
+      lock.setAttribute('aria-pressed', String(lockedSets.has(index)));
+      lock.setAttribute('aria-label', setName(index) + '세트 ' + lock.textContent);
+      row.append(lock);
+    }
     return row;
   }));
+  balls.append(makeEntryView(currentNumbers, currentNumbers.map((_, i) => i), currentPersonalMeta?.selectedDate));
+  const generate = document.getElementById('generate');
+  generate.disabled = currentMode === 'random' && lockedSets.size === 5;
+  generate.textContent = currentMode === 'random' && lockedSets.size ? '고정하지 않은 세트 다시 뽑기' : '로또 번호 5세트 추천받기 ↻';
   balls.setAttribute('aria-label', '추천 번호 5세트: ' + formatNumbers());
   copyButton.disabled = false;
   saveRecordButton.disabled = false;
@@ -2494,6 +2526,7 @@ function renderSets() {
   } else {
     status.textContent = includeBonus ? '보너스번호를 포함한 5세트가 준비됐어요!' : '추천 번호 5세트가 준비됐어요!';
   }
+  if (generate.disabled) status.textContent = '모든 세트가 고정되어 있어요. 한 세트 이상 고정을 해제해 주세요.';
 }
 
 document.getElementById('generate').addEventListener('click', generateSets);
@@ -3039,7 +3072,7 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
 
       const meta = document.createElement('div');
       meta.className = 'slot-meta';
-      meta.innerHTML = `${excludedNoteHtml ? excludedNoteHtml + '<br>' : ''}구매 지역 및 판매 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 동행복권 공식 판매 시간[매일 06:00~24:00 KST, 토요일 20:00 마감, 일요일 06:00 재개] 반영 · 개별 복권 판매점의 실제 영업시간은 매장마다 다를 수 있음 · 시간대 내부 절입/대운 전환 구간 제외).`;
+      meta.textContent = `[${modeText}] ${roundText} · ${state}\n${dateSlotText} · 보너스 옵션: ${rec.includeBonus ? '포함' : '미포함'}\n규칙 버전: ${rec.ruleVersion || '-'}`;
       slotBox.append(slotTitle, slotList, meta);
     }
 
@@ -3182,21 +3215,34 @@ function validDraw(draw, round, date) {
     !draw.numbers.includes(draw.bonus);
 }
 
+function recordPurchaseDay(date, label, time) {
+  if (normalizeDrawDate(date) !== date) return null;
+  const day = Date.parse(date + 'T00:00:00Z');
+  if (!Number.isFinite(day)) return null;
+  const dow = new Date(day).getUTCDay();
+  const close = dow === 6 ? 1200 : 1440;
+  const slot = /^(\d{2}):(\d{2})\s*~\s*(\d{2}):(\d{2})(?:\s|$)/.exec(label || '');
+  if (slot) {
+    const [, h,m,eh,em] = slot.map(Number);
+    const start=h*60+m,end=eh*60+em;
+    return m < 60 && em < 60 && start >= 360 && end > start && end <= close ? day : null;
+  }
+  if (label && label !== '시간대 미지정') return null;
+  if (time) {
+    const parts = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(time);
+    if (!parts) return null;
+    const minutes = Number(parts[1])*60 + Number(parts[2]);
+    return minutes >= 360 && minutes < close ? day : null;
+  }
+  return dow === 0 || dow === 6 ? null : day;
+}
 function recordDrawCandidate(rec) {
   const date = rec.selectedDate || rec.createdDate;
-  const parse = value => /^\d{4}-\d{2}-\d{2}$/.test(value || '') ? Date.parse(value + 'T00:00:00Z') : NaN;
-  const day = parse(date);
-  const anchor = parse(verifiedLatestDraw?.date);
-  if (!Number.isFinite(day) || new Date(day).toISOString().slice(0,10) !== date ||
-      !Number.isFinite(anchor) || new Date(anchor).getUTCDay() !== 6 ||
+  const day = recordPurchaseDay(date, rec.selectedSlot, rec.selectedDate ? null : rec.createdTime);
+  const anchor = Date.parse(verifiedLatestDraw?.date + 'T00:00:00Z');
+  if (day == null || !Number.isFinite(anchor) || new Date(anchor).getUTCDay() !== 6 ||
       !validDraw(verifiedLatestDraw, verifiedLatestDraw.round, verifiedLatestDraw.date)) return null;
   const dow = new Date(day).getUTCDay();
-  const slot = /^(\d{2}):(\d{2})\s*~\s*(\d{2}):(\d{2})(?:\s|$)/.exec(rec.selectedSlot || '');
-  if (slot) {
-    const [, h, m, eh, em] = slot.map(Number);
-    const start = h * 60 + m, end = eh * 60 + em;
-    if (m >= 60 || em >= 60 || start < 360 || end <= start || end > (dow === 6 ? 1200 : 1440)) return null;
-  } else if (rec.selectedSlot && rec.selectedSlot !== '시간대 미지정' || dow === 0 || dow === 6) return null;
   const drawDay = day + (6 - dow) * 86400000;
   const round = verifiedLatestDraw.round + (drawDay - anchor) / 604800000;
   if (!Number.isSafeInteger(round) || round < 1 ||
@@ -3206,6 +3252,61 @@ function recordDrawCandidate(rec) {
 
 let recordsRenderRevision = 0;
 
+function setName(i) { return String.fromCharCode(65 + i); }
+function actionButton(label, handler) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = label;
+  button.addEventListener('click', handler);
+  return button;
+}
+function makeEntryView(sets, indices, date) {
+  const panel = document.createElement('details');
+  const summary = document.createElement('summary');
+  summary.textContent = '입력용 번호 보기';
+  panel.append(summary);
+  for (const i of indices) {
+    const label = document.createElement('label');
+    const toggle = document.createElement('input');
+    toggle.type = 'checkbox';
+    toggle.checked = true;
+    const row = document.createElement('p');
+    row.className = 'entry-numbers';
+    row.textContent = setName(i) + ': ' + sets[i].join('  ');
+    toggle.addEventListener('change', () => { row.hidden = !toggle.checked; });
+    label.append(toggle, document.createTextNode(setName(i) + '세트 선택'));
+    panel.append(label, row);
+  }
+  const guide = document.createElement('p');
+  const now = getCurrentKST();
+  guide.textContent = '번호는 동행복권에서 직접 선택해 주세요.' +
+    (date && date > toDateInputString(now.year, now.month, now.day)
+      ? ' 동행복권에서는 현재 판매 중인 회차를 확인할 수 있습니다.' : '');
+  const link = document.createElement('a');
+  link.href = 'https://www.dhlottery.co.kr/lt645/intro';
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = '동행복권 공식 페이지 열기 ↗';
+  panel.append(guide, link);
+  return panel;
+}
+function setPurchased(id, index, checked) {
+  const records = getSavedRecords();
+  const rec = records.find(item => item.id === id);
+  if (!rec) return false;
+  rec.purchased = rec.sets.map((_, i) => i === index ? checked : rec.purchased?.[i] === true);
+  return saveRecordsToStorage(records);
+}
+function recordState(rec, draw) {
+  if (!rec.targetRound) return '회차 확인 대기';
+  if (draw) return '대조 완료';
+  const cutoff = Date.parse(rec.targetDrawDate + 'T20:35:00+09:00');
+  return Date.now() < cutoff ? '추첨 대기' : '결과 확인 대기';
+}
+function recordIndices(rec, purchasedOnly) {
+  return rec.sets.map((_, i) => i).filter(i => !purchasedOnly || rec.purchased?.[i] === true)
+    .sort((a,b) => Number(rec.purchased?.[b] === true) - Number(rec.purchased?.[a] === true) || a-b);
+}
 async function renderSavedRecords() {
   const listEl = document.getElementById('records-list');
   const clearBtn = document.getElementById('clear-records');
@@ -3225,6 +3326,7 @@ async function renderSavedRecords() {
   }
 
   clearBtn.style.display = 'inline-block';
+  let visible = 0;
 
   for (const rec of records) {
     if (!rec.targetRound) {
@@ -3243,6 +3345,13 @@ async function renderSavedRecords() {
         }
       }
     }
+    const draw = rec.targetRound ? await fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate) : null;
+    if (revision !== recordsRenderRevision) return;
+    const state = recordState(rec, draw);
+    const filter = document.getElementById('record-filter').value || '전체';
+    const indices = recordIndices(rec, document.getElementById('purchased-only').checked);
+    if ((filter !== '전체' && filter !== state) || !indices.length) continue;
+    visible++;
     const card = document.createElement('div');
     card.className = 'record-card';
 
@@ -3275,29 +3384,118 @@ async function renderSavedRecords() {
 
     const setsBox = document.createElement('div');
     setsBox.className = 'record-sets';
-    setsBox.textContent = rec.sets.map((nums, i) => {
-      const bStr = (rec.includeBonus && rec.bonuses && rec.bonuses[i]) ? ` + 보너스 ${rec.bonuses[i]}` : '';
-      return `${String.fromCharCode(65 + i)}: ${nums.join(', ')}${bStr}`;
-    }).join('\n');
-
+    for (const i of indices) {
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = rec.purchased?.[i] === true;
+      checkbox.addEventListener('change', () => {
+        if (!setPurchased(rec.id, i, checkbox.checked)) {
+          checkbox.checked = !checkbox.checked;
+          document.getElementById('backup-status').textContent = '구매 표시를 저장하지 못했습니다.';
+          return;
+        }
+        renderSavedRecords();
+      });
+      const bonus = rec.includeBonus && rec.bonuses?.[i] ? ' + 보너스 ' + rec.bonuses[i] : '';
+      label.append(checkbox, document.createTextNode(' 구매함 · ' + setName(i) + ': ' + rec.sets[i].join(', ') + bonus));
+      const row = document.createElement('div');
+      row.append(label);
+      setsBox.append(row);
+    }
     const checkBox = document.createElement('div');
     checkBox.className = 'record-check';
-    if (!rec.targetRound) {
-      checkBox.textContent = '당첨 대조 결과: 확인 대기 (대상 회차 공식 데이터 미확정)';
-    } else {
-      const draw = await fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate);
-      if (revision !== recordsRenderRevision) return;
-      if (!draw) {
-        checkBox.textContent = `당첨 대조 결과: 확인 대기 (제${rec.targetRound}회 추첨 전이거나 공식 당첨 데이터 미확보)`;
-      } else {
-        const summaryLines = rec.sets.map((nums, i) => `${String.fromCharCode(65 + i)}세트: ${evaluateSetMatch(nums, draw)}`);
-        checkBox.textContent = `제${draw.round}회 당첨 번호(${draw.numbers.join(', ')} + 보너스 ${draw.bonus}) 대조: ` + summaryLines.join(' / ');
-      }
-    }
-
-    card.append(top, setsBox, checkBox);
+    checkBox.textContent = !draw ? '당첨 대조 결과: ' + state :
+      '제' + draw.round + '회 당첨 번호(' + draw.numbers.join(', ') + ' + 보너스 ' + draw.bonus + ') 대조: ' +
+      indices.map(i => setName(i) + '세트 (' + (rec.purchased?.[i] ? '구매 표시한 번호' : '추천 번호 대조') +
+        '): ' + evaluateSetMatch(rec.sets[i], draw)).join(' / ');
+    card.append(top, setsBox, checkBox, makeEntryView(rec.sets, indices, rec.selectedDate));
     listEl.appendChild(card);
   }
+  if (!visible) {
+    const empty = document.createElement('p');
+    empty.textContent = '선택한 조건에 해당하는 기록이 없습니다.';
+    listEl.appendChild(empty);
+  }
+}
+
+const BACKUP_VERSION = 1;
+function backupRecord(rec) {
+  const {id, createdDate, createdTime, selectedDate, selectedSlot, targetRound, targetDrawDate,
+    sets, bonuses, includeBonus, mode, ruleVersion, purchased} = rec;
+  return {id, createdDate, createdTime, selectedDate, selectedSlot, targetRound, targetDrawDate,
+    sets, bonuses, includeBonus, mode, ruleVersion, purchased};
+}
+function parseBackup(text) {
+  const data = JSON.parse(text);
+  if (data?.version !== BACKUP_VERSION || !Array.isArray(data.records)) throw new Error('지원하지 않는 백업 형식입니다.');
+  const number = n => Number.isInteger(n) && n >= 1 && n <= 45;
+  const date = d => typeof d === 'string' && normalizeDrawDate(d) === d;
+  const optional = (v, check) => v == null || check(v);
+  const shortText = v => typeof v === 'string' && v.length <= 200;
+  return data.records.map((r,i) => {
+    if (!r || !shortText(r.id) || !r.id || !date(r.createdDate) ||
+        !optional(r.createdTime, v => typeof v === 'string' && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(v)) ||
+        !optional(r.selectedDate,date) || !optional(r.selectedSlot,shortText) ||
+        !optional(r.targetDrawDate,date) ||
+        !optional(r.targetRound,n => Number.isSafeInteger(n) && n > 0) ||
+        ((r.targetRound == null) !== (r.targetDrawDate == null)) ||
+        !['random','personal'].includes(r.mode) || !optional(r.ruleVersion,shortText) ||
+        !optional(r.includeBonus,v => typeof v === 'boolean') ||
+        !Array.isArray(r.sets) || r.sets.length !== 5 ||
+        r.sets.some(set => !Array.isArray(set) || set.length !== 6 || !set.every(number) || new Set(set).size !== 6) ||
+        !optional(r.bonuses,v => Array.isArray(v) && (v.length === 0 ? !r.includeBonus :
+          v.length === 5 && v.every((n,j) => number(n) && !r.sets[j].includes(n)))) ||
+        (r.includeBonus && !r.bonuses?.length) ||
+        !optional(r.purchased,v => Array.isArray(v) && v.length === 5 && v.every(b => typeof b === 'boolean'))) {
+      throw new Error((i+1) + '번째 기록의 날짜, 회차 또는 번호 형식이 올바르지 않습니다.');
+    }
+    return backupRecord(r);
+  });
+}
+function mergeBackup(existing, incoming) {
+  const seen = new Set(existing.map(r => r.id));
+  const added = incoming.filter(r => {
+    if (seen.has(r.id)) return false;
+    seen.add(r.id);
+    return true;
+  });
+  return {records: [...existing, ...added], added: added.length, skipped: incoming.length - added.length};
+}
+document.getElementById('export-records').addEventListener('click', () => {
+  const url = URL.createObjectURL(new Blob([JSON.stringify({
+    version: BACKUP_VERSION, records: getSavedRecords().map(backupRecord)
+  }, null, 2)], {type:'application/json'}));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'lotto-records.json';
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+const backupFile = document.getElementById('backup-file');
+document.getElementById('import-records').addEventListener('click', () => backupFile.click());
+backupFile.addEventListener('change', async () => {
+  const file = backupFile.files[0];
+  backupFile.value = '';
+  if (!file) return;
+  const message = document.getElementById('backup-status');
+  try {
+    const incoming = parseBackup(await file.text());
+    const preview = mergeBackup(getSavedRecords(), incoming);
+    const summary = '추가 ' + preview.added + '건 · 중복 건너뜀 ' + preview.skipped + '건';
+    message.textContent = summary;
+    if (!preview.added || !window.confirm(summary + '. 기존 기록에 합칠까요?')) return;
+    const merged = mergeBackup(getSavedRecords(), incoming);
+    if (!saveRecordsToStorage(merged.records)) throw new Error('기기 저장 공간에 기록을 저장하지 못했습니다.');
+    message.textContent = merged.added + '건을 복원했습니다.';
+    renderSavedRecords();
+  } catch (error) {
+    message.textContent = '가져오기 실패: ' + error.message;
+  }
+});
+
+for (const id of ['record-filter', 'purchased-only']) {
+  document.getElementById(id).addEventListener('change', renderSavedRecords);
 }
 
 for (const id of ['range-start', 'range-end']) {
@@ -3310,7 +3508,10 @@ saveRecordButton.addEventListener('click', () => {
   const kst = getCurrentKST();
   const todayStr = toDateInputString(kst.year, kst.month, kst.day);
   const refDate = (currentMode === 'personal' && currentPersonalMeta) ? currentPersonalMeta.selectedDate : todayStr;
-  const confirmedTarget = getConfirmedTargetDrawForDate(refDate);
+  const createdTime = String(kst.hour).padStart(2,'0') + ':' + String(kst.minute).padStart(2,'0');
+  const slot = currentPersonalMeta?.selectedSlotLabel;
+  const confirmedTarget = recordPurchaseDay(refDate, slot, currentMode === 'random' ? createdTime : null) != null
+    ? getConfirmedTargetDrawForDate(refDate) : null;
 
   const newRecord = {
     id: 'rec-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
@@ -3319,6 +3520,7 @@ saveRecordButton.addEventListener('click', () => {
     selectedDate: (currentMode === 'personal' && currentPersonalMeta) ? currentPersonalMeta.selectedDate : null,
     selectedSlot: (currentMode === 'personal' && currentPersonalMeta) ? currentPersonalMeta.selectedSlotLabel : null,
     createdDate: todayStr,
+    createdTime: currentMode === 'random' ? createdTime : null,
     sets: currentNumbers.map(s => [...s]),
     bonuses: [...bonusNumbers],
     includeBonus,
@@ -3330,7 +3532,7 @@ saveRecordButton.addEventListener('click', () => {
 
   const records = getSavedRecords();
   records.unshift(newRecord);
-  const ok = saveRecordsToStorage(records.slice(0, 30));
+  const ok = saveRecordsToStorage(records);
   if (ok) {
     status.textContent = '현재 5세트를 기기 기록에 저장했습니다. (출생 정보는 기록에 포함되지 않습니다)';
     renderSavedRecords();
