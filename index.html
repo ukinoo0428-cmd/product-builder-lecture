@@ -179,6 +179,8 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 .entry-numbers{font-size:clamp(1rem,5vw,1.5rem);font-weight:700;white-space:pre;font-variant-numeric:tabular-nums}
 .record-meta{white-space:pre-line;overflow-wrap:anywhere}
 #records-section .record-top{flex-wrap:wrap}
+.official-lotto-link{display:inline-block;margin-top:.6rem;padding:.55rem .8rem;background:#fff;color:#182033;border:1px solid #687184;text-decoration:underline}
+.official-lotto-link:focus-visible{outline:3px solid #7066ff;outline-offset:3px}
 </style>
 </head>
 <body>
@@ -356,13 +358,16 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
     <button id="clear-records" type="button" class="delete-btn" style="display:none">전체 기록 삭제</button>
   </div>
   <div class="record-top">
-    <label>기록 상태 <select id="record-filter"><option>전체</option><option>회차 확인 대기</option><option>추첨 대기</option><option>결과 확인 대기</option><option>대조 완료</option></select></label>
+    <label>당첨 확인 단계 <select id="record-filter" aria-describedby="record-filter-guide record-filter-detail"></select></label>
     <label><input id="purchased-only" type="checkbox"> 구매한 번호만 보기</label>
     <button id="export-records" type="button">백업 파일 내보내기</button>
     <button id="import-records" type="button">백업 파일 가져오기</button>
     <input id="backup-file" type="file" accept=".json,application/json" hidden>
     <span id="backup-status" role="status"></span>
   </div>
+  <p id="record-filter-guide">저장한 번호를 어느 회차와 비교하는지, 결과를 확인했는지 보여줘요.</p>
+  <p id="record-filter-detail"></p>
+  <div id="record-save-notice" role="status"></div>
   <div id="records-list" class="records-list">
     <p class="description" style="font-size:13px;margin:0">아직 저장된 기록이 없습니다. 번호를 생성한 뒤 ‘이 5세트 기록 저장하기’를 눌러 보관할 수 있습니다.</p>
   </div>
@@ -3072,7 +3077,7 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
 
       const meta = document.createElement('div');
       meta.className = 'slot-meta';
-      meta.textContent = `[${modeText}] ${roundText} · ${state}\n${dateSlotText} · 보너스 옵션: ${rec.includeBonus ? '포함' : '미포함'}\n규칙 버전: ${rec.ruleVersion || '-'}`;
+      meta.innerHTML = `${excludedNoteHtml ? excludedNoteHtml + '<br>' : ''}구매 지역 및 판매 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 동행복권 공식 판매 시간[매일 06:00~24:00 KST, 토요일 20:00 마감, 일요일 06:00 재개] 반영 · 개별 복권 판매점의 실제 영업시간은 매장마다 다를 수 있음 · 시간대 내부 절입/대운 전환 구간 제외).`;
       slotBox.append(slotTitle, slotList, meta);
     }
 
@@ -3287,8 +3292,10 @@ function makeEntryView(sets, indices, date) {
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
   link.textContent = '동행복권 공식 페이지 열기 ↗';
-  panel.append(guide, link);
-  return panel;
+  link.className = 'official-lotto-link';
+  const wrapper = document.createElement('div');
+  wrapper.append(panel, link, guide);
+  return wrapper;
 }
 function setPurchased(id, index, checked) {
   const records = getSavedRecords();
@@ -3297,38 +3304,44 @@ function setPurchased(id, index, checked) {
   rec.purchased = rec.sets.map((_, i) => i === index ? checked : rec.purchased?.[i] === true);
   return saveRecordsToStorage(records);
 }
+const RECORD_STAGES = {
+  all: ['모든 기록', '저장한 기록을 모두 봐요.'],
+  round: ['대상 회차 확인 중', '이 번호를 어느 회차와 비교할지 아직 확인하지 못했어요.'],
+  upcoming: ['추첨 전', '비교할 회차가 정해졌고, 아직 추첨 전이에요.'],
+  results: ['추첨 결과 확인 중', '추첨은 지났지만 결과를 아직 불러오지 못했어요.'],
+  complete: ['당첨 번호와 비교 완료', '저장한 번호를 해당 회차의 당첨 번호와 비교했어요.']
+};
+const recordFilter = document.getElementById('record-filter');
+for (const [key, [label]] of Object.entries(RECORD_STAGES)) {
+  const option = document.createElement('option');
+  option.value = key;
+  option.textContent = label;
+  recordFilter.append(option);
+}
+recordFilter.value = 'all';
+let lastSavedId = null;
 function recordState(rec, draw) {
-  if (!rec.targetRound) return '회차 확인 대기';
-  if (draw) return '대조 완료';
-  const cutoff = Date.parse(rec.targetDrawDate + 'T20:35:00+09:00');
-  return Date.now() < cutoff ? '추첨 대기' : '결과 확인 대기';
+  if (!rec.targetRound) return 'round';
+  if (draw) return 'complete';
+  return Date.now() < Date.parse(rec.targetDrawDate + 'T20:35:00+09:00') ? 'upcoming' : 'results';
+}
+function showAllRecords() {
+  recordFilter.value = 'all';
+  document.getElementById('purchased-only').checked = false;
+  renderRecordList();
+}
+function cachedRecordDraw(rec) {
+  const draw = drawResultCache[rec.targetRound];
+  return validDraw(draw, rec.targetRound, rec.targetDrawDate) ? draw : null;
 }
 function recordIndices(rec, purchasedOnly) {
   return rec.sets.map((_, i) => i).filter(i => !purchasedOnly || rec.purchased?.[i] === true)
     .sort((a,b) => Number(rec.purchased?.[b] === true) - Number(rec.purchased?.[a] === true) || a-b);
 }
 async function renderSavedRecords() {
-  const listEl = document.getElementById('records-list');
-  const clearBtn = document.getElementById('clear-records');
   const revision = ++recordsRenderRevision;
-  const records = getSavedRecords();
-  listEl.replaceChildren();
-
-  if (records.length === 0) {
-    clearBtn.style.display = 'none';
-    const empty = document.createElement('p');
-    empty.className = 'description';
-    empty.style.fontSize = '13px';
-    empty.style.margin = '0';
-    empty.textContent = '아직 저장된 기록이 없습니다. 번호를 생성한 뒤 ‘이 5세트 기록 저장하기’를 눌러 보관할 수 있습니다.';
-    listEl.appendChild(empty);
-    return;
-  }
-
-  clearBtn.style.display = 'inline-block';
-  let visible = 0;
-
-  for (const rec of records) {
+  renderRecordList();
+  await Promise.all(getSavedRecords().map(async rec => {
     if (!rec.targetRound) {
       const candidate = recordDrawCandidate(rec);
       if (candidate) {
@@ -3345,12 +3358,34 @@ async function renderSavedRecords() {
         }
       }
     }
-    const draw = rec.targetRound ? await fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate) : null;
-    if (revision !== recordsRenderRevision) return;
+    if (rec.targetRound) await fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate);
+    if (revision === recordsRenderRevision) renderRecordList();
+  }));
+  if (revision === recordsRenderRevision) renderRecordList();
+}
+function renderRecordList() {
+  const listEl = document.getElementById('records-list');
+  const records = getSavedRecords();
+  const filter = recordFilter.value || 'all';
+  const purchasedOnly = document.getElementById('purchased-only').checked;
+  document.getElementById('record-filter-detail').textContent = RECORD_STAGES[filter][1];
+  document.getElementById('clear-records').style.display = records.length ? 'inline-block' : 'none';
+  const notice = document.getElementById('record-save-notice');
+  notice.replaceChildren();
+  const saved = records.find(rec => rec.id === lastSavedId);
+  if (saved && ((filter !== 'all' && filter !== recordState(saved, cachedRecordDraw(saved))) ||
+      !recordIndices(saved, purchasedOnly).length)) {
+    notice.append(document.createTextNode('저장했어요. 현재 보기 조건에서는 숨겨져 있어요. '),
+      actionButton('전체 기록 보기', showAllRecords));
+  }
+  listEl.replaceChildren();
+  let visible = 0;
+  for (const rec of records) {
+    const draw = cachedRecordDraw(rec);
     const state = recordState(rec, draw);
-    const filter = document.getElementById('record-filter').value || '전체';
-    const indices = recordIndices(rec, document.getElementById('purchased-only').checked);
-    if ((filter !== '전체' && filter !== state) || !indices.length) continue;
+    const [stage, description] = RECORD_STAGES[state];
+    const indices = recordIndices(rec, purchasedOnly);
+    if ((filter !== 'all' && filter !== state) || !indices.length) continue;
     visible++;
     const card = document.createElement('div');
     card.className = 'record-card';
@@ -3368,7 +3403,7 @@ async function renderSavedRecords() {
       ? `선택 날짜: ${rec.selectedDate} (${rec.selectedSlot || '시간대 미지정'})`
       : `생성 일자: ${rec.createdDate || '-'}`;
 
-    meta.innerHTML = `<strong>[${modeText}]</strong> ${roundText}<br>${dateSlotText} · 보너스 옵션: ${rec.includeBonus ? '포함' : '미포함'}<br><span style="font-size:11px">규칙 버전: ${rec.ruleVersion}</span>`;
+    meta.textContent = `[${modeText}] ${roundText} · ${stage}\n${description}\n${dateSlotText} · 보너스 옵션: ${rec.includeBonus ? '포함' : '미포함'}\n규칙 버전: ${rec.ruleVersion || '-'}`;
 
     const delBtn = document.createElement('button');
     delBtn.type = 'button';
@@ -3405,7 +3440,7 @@ async function renderSavedRecords() {
     }
     const checkBox = document.createElement('div');
     checkBox.className = 'record-check';
-    checkBox.textContent = !draw ? '당첨 대조 결과: ' + state :
+    checkBox.textContent = !draw ? '당첨 대조 결과: ' + stage :
       '제' + draw.round + '회 당첨 번호(' + draw.numbers.join(', ') + ' + 보너스 ' + draw.bonus + ') 대조: ' +
       indices.map(i => setName(i) + '세트 (' + (rec.purchased?.[i] ? '구매 표시한 번호' : '추천 번호 대조') +
         '): ' + evaluateSetMatch(rec.sets[i], draw)).join(' / ');
@@ -3414,7 +3449,11 @@ async function renderSavedRecords() {
   }
   if (!visible) {
     const empty = document.createElement('p');
-    empty.textContent = '선택한 조건에 해당하는 기록이 없습니다.';
+    empty.textContent = records.length
+      ? '선택한 조건에 해당하는 기록이 없습니다. ' + RECORD_STAGES[filter][0] +
+        (purchasedOnly ? ' · 구매한 번호만 보기' : ' · 구매 여부 전체')
+      : '아직 저장된 기록이 없습니다.';
+    if (filter !== 'all' || purchasedOnly) empty.append(actionButton('전체 기록 보기', showAllRecords));
     listEl.appendChild(empty);
   }
 }
@@ -3495,7 +3534,7 @@ backupFile.addEventListener('change', async () => {
 });
 
 for (const id of ['record-filter', 'purchased-only']) {
-  document.getElementById(id).addEventListener('change', renderSavedRecords);
+  document.getElementById(id).addEventListener('change', renderRecordList);
 }
 
 for (const id of ['range-start', 'range-end']) {
@@ -3534,9 +3573,12 @@ saveRecordButton.addEventListener('click', () => {
   records.unshift(newRecord);
   const ok = saveRecordsToStorage(records);
   if (ok) {
+    lastSavedId = newRecord.id;
     status.textContent = '현재 5세트를 기기 기록에 저장했습니다. (출생 정보는 기록에 포함되지 않습니다)';
     renderSavedRecords();
   } else {
+    lastSavedId = null;
+    renderRecordList();
     status.textContent = '브라우저 저장 공간 제한으로 기록 저장에 실패했지만, 번호 생성과 복사는 정상 이용 가능합니다.';
   }
 });
