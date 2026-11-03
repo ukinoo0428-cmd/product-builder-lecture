@@ -242,6 +242,8 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 [data-theme="dark"] .hero-quip{color:#eef2ff}
 @media(prefers-reduced-motion:reduce){.hero-quip-cursor{animation:none}}
 .hero-quip-cursor.is-typing{opacity:1;animation:none}
+.record-purchase-numbers>.record-balls{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));width:min(100%,12.3rem);gap:clamp(2px,1vw,.3rem)}
+.record-purchase-numbers>.record-balls .mini-ball{width:100%;height:auto;aspect-ratio:1;min-width:0;font-size:clamp(.65rem,3vw,.85rem)}
 </style>
 </head>
 <body>
@@ -2517,6 +2519,8 @@ function setModeUI(mode, personalMeta = null) {
 }
 
 const lockedSets = new Set();
+let personalSeed = null;
+let personalReroll = 0;
 function generateSets() {
   if (currentMode !== 'random') lockedSets.clear();
   setModeUI('random', null);
@@ -2544,9 +2548,11 @@ function generatePersonalSets(birthParams, selectedDate, selectedSlotCode, selec
     selectedSlotCode
   });
   const { sets, bonuses } = generateDeterministicSetsFromSeed(seed);
-  lockedSets.clear();
-  currentNumbers = sets;
-  bonusNumbers = bonuses;
+  if (currentMode !== 'personal' || personalSeed !== seed) lockedSets.clear();
+  personalSeed = seed;
+  personalReroll = 0;
+  currentNumbers = sets.map((set,i) => lockedSets.has(i) ? currentNumbers[i] : set);
+  bonusNumbers = bonuses.map((n,i) => lockedSets.has(i) ? bonusNumbers[i] : n);
   setModeUI('personal', {
     selectedDate,
     selectedSlotCode: selectedSlotCode || 'NONE',
@@ -2573,7 +2579,7 @@ function renderSets() {
       return ball;
     }));
     row.append(label, group);
-    if (currentMode === 'random') {
+    {
       const lock = actionButton(lockedSets.has(index) ? '고정 해제' : '고정', () => {
         if (lockedSets.has(index)) lockedSets.delete(index); else lockedSets.add(index);
         renderSets();
@@ -2588,8 +2594,8 @@ function renderSets() {
   }));
   document.getElementById('official-link-area').replaceChildren(makeEntryView(currentPersonalMeta?.selectedDate));
   const generate = document.getElementById('generate');
-  generate.disabled = currentMode === 'random' && lockedSets.size === 5;
-  generate.textContent = currentMode === 'random' && lockedSets.size ? '고정하지 않은 세트 다시 뽑기' : '로또 번호 5세트 추천받기 ↻';
+  generate.disabled = lockedSets.size === 5;
+  generate.textContent = lockedSets.size ? '고정하지 않은 세트 다시 뽑기' : currentMode === 'personal' ? '사주 번호 다시 뽑기 ↻' : '로또 번호 5세트 추천받기 ↻';
   balls.setAttribute('aria-label', '추천 번호 5세트: ' + formatNumbers());
   copyButton.disabled = false;
   saveRecordButton.disabled = false;
@@ -2614,7 +2620,22 @@ document.getElementById('recommend-personal').addEventListener('click', () => {
   document.getElementById('saju-details').open = true;
   document.getElementById('birth-year').focus();
 });
-document.getElementById('generate').addEventListener('click', generateSets);
+document.getElementById('generate').addEventListener('click', () => {
+  if (currentMode !== 'personal' || !personalSeed) { generateSets(); return; }
+  if (lockedSets.size === 5) return;
+  const seen = new Set(currentNumbers.map(set => set.join(',')));
+  for (let i = 0; i < currentNumbers.length; i++) {
+    if (lockedSets.has(i)) continue;
+    let next;
+    do {
+      next = generateDeterministicSetsFromSeed(personalSeed + '|reroll=' + (++personalReroll));
+    } while (seen.has(next.sets[i].join(',')));
+    currentNumbers[i] = next.sets[i];
+    bonusNumbers[i] = next.bonuses[i];
+    seen.add(currentNumbers[i].join(','));
+  }
+  renderSets();
+});
 switchRandomBtn.addEventListener('click', generateSets);
 
 
