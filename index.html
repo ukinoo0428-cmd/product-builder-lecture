@@ -3481,58 +3481,12 @@ function saveRecordImage(rec) {
   link.href=canvas.toDataURL('image/png');link.click();
 }
 function ticketControls(rec) {
-  const box=document.createElement('div');
-  box.className='record-ticket-actions';
-  const key='lotto-ticket:'+rec.id;
-  const field=document.createElement('input');
-  field.type='file';field.accept='image/*';field.hidden=true;
-  const info=document.createElement('p');
-  const qrKey=key+':qr';
-  const qr=document.createElement('p');
-  const photo=document.createElement('img');
-  photo.alt='첨부한 복권 사진';photo.hidden=true;
-  const update=()=>{
-    const data=localStorage.getItem(key);
-    photo.hidden=!data;
-    if(data) photo.src=data; else photo.removeAttribute("src");
-    const savedQR=localStorage.getItem(qrKey);
-    qr.textContent=savedQR ? 'QR 기록: '+savedQR : '';
-  };
-  field.addEventListener('change',()=>{
-    const file=field.files[0];
-    if(!file)return;
-    if(!/^image\/(png|jpeg|webp|gif)$/.test(file.type)||file.size>1500000){
-      info.textContent='PNG, JPG, WEBP, GIF 사진을 1.5MB 이하로 선택해 주세요.';return;
-    }
-    const reader=new FileReader();
-    reader.onload=async ()=>{
-      try {
-        if(!getSavedRecords().some(r=>r.id===rec.id))return;
-        localStorage.setItem(key,reader.result); localStorage.removeItem(qrKey); update();
-        info.textContent='이 기기에 사진을 첨부했어요. 구매 여부는 자동으로 바뀌지 않아요.';
-        if (typeof BarcodeDetector !== 'undefined' && typeof createImageBitmap === 'function') {
-          try {
-            const bitmap=await createImageBitmap(file);
-            let codes;
-            try { codes=await new BarcodeDetector({formats:['qr_code']}).detect(bitmap); }
-            finally { bitmap.close(); }
-            const value=codes[0]?.rawValue;
-            if (value && value.length<=2048 && localStorage.getItem(key)===reader.result) {
-              localStorage.setItem(qrKey,value); update();
-            }
-          } catch { /* The attached image is still usable when QR detection is unavailable. */ }
-        }
-      } catch {info.textContent='저장 공간이 부족해 사진을 첨부하지 못했어요.';}
-    };
-    reader.onerror=()=>{info.textContent='사진을 읽지 못했어요.';};
-    reader.readAsDataURL(file);
-  });
-  if(typeof FileReader !== 'undefined')update();
-  box.append(actionButton('번호 이미지 저장',()=>saveRecordImage(rec)),
-    actionButton('복권 사진·QR 첨부',()=>field.click()),field,info,photo,qr);
+  const box = document.createElement('div');
+  box.className = 'record-ticket-actions';
+  box.append(actionButton('번호 이미지 저장', () => saveRecordImage(rec)));
   return box;
 }
-let recordTimer;
+
 const drawDeadline = rec => Date.parse(rec.targetDrawDate + 'T20:35:00+09:00');
 const recordGroup = rec => !rec.targetRound ? 'round' : Date.now() < drawDeadline(rec) ? 'upcoming' : 'past';
 function scheduleRecordRefresh(records) {
