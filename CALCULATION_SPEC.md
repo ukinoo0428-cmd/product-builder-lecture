@@ -45,7 +45,7 @@
 ## 2. 음양력 변환과 지원 범위
 
 ### 2.1 데이터 출처, 라이선스, 범위 구분 및 검증 내역
-- **내장 데이터 이름 및 출처:** `.NET System.Globalization.KoreanLunisolarCalendar` (`Windows / .NET Framework 4.8.9221.0`, MIT License)에서 추출한 한국 음양력 비트 패킹 테이블(`KR_LUNAR_1900_2050`, 1900~2050년 151개 연도 정수 배열)
+- **내장 데이터 이름 및 출처:** `.NET System.Globalization.KoreanLunisolarCalendar` ([dotnet/runtime MIT 라이선스](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT)) 기반의 한국 음양력 비트 패킹 테이블(`KR_LUNAR_1900_2050`, 1900~2050년 151개 연도 정수 배열)
 - **범위의 명확한 구분:**
   1. **한국천문연구원(KASI) 음양력 전체 제공 범위:** 양력 `1391년 2월 5일 ~ 2050년 12월 31일` (본 사이트는 KASI 전체 범위를 내장하거나 KASI 52,140일 전체 원천 표와 일대일 대조하지 않았으므로 ‘KASI 전수 대조 완료’라고 표기하지 않음)
   2. **내장 `.NET KoreanLunisolarCalendar` 테이블 수록 범위:** 양력 `1900년 1월 31일(음력 1900-01-01) ~ 2050년 12월 31일(음력 2050-11-18)`

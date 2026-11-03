@@ -648,6 +648,13 @@ function getConfirmedTargetDrawForDate(dateStr) {
 
 function updatePeriodHint() {
   const period = getDefaultSalesPeriod();
+  const start = document.getElementById('range-start').value;
+  const end = document.getElementById('range-end').value;
+  if (start !== period.startStr || end !== period.endStr) {
+    document.getElementById('range-period-hint').textContent =
+      start && end && start <= end ? `선택한 기간: ${start} ~ ${end} (KST)` : '조회 기간을 확인해 주세요.';
+    return;
+  }
   const confirmed = getConfirmedTargetDrawForDate(period.saturdayStr);
   const hintEl = document.getElementById('range-period-hint');
   if (confirmed) {
@@ -2583,6 +2590,7 @@ async function loadLastDraw() {
       firstPrize: firstDiv.prize,
       winners: firstDiv.winners
     };
+    if (!validDraw(parsed, parsed.round, parsed.date) || !/^\d{4}-\d{2}-\d{2}$/.test(parsed.date)) throw new Error('Invalid draw');
     verifiedLatestDraw = parsed;
     drawResultCache[parsed.round] = parsed;
     renderLastDraw(parsed);
@@ -3124,9 +3132,9 @@ function saveRecordsToStorage(records) {
   }
 }
 
-async function fetchDrawResultIfNeeded(round) {
+async function fetchDrawResultIfNeeded(round, date) {
   if (!round || isNaN(round)) return null;
-  if (drawResultCache[round]) return drawResultCache[round];
+  if (validDraw(drawResultCache[round], round, date)) return drawResultCache[round];
   try {
     const res = await fetch(`https://smok95.github.io/lotto/results/${round}.json`);
     if (!res.ok) return null;
@@ -3138,6 +3146,7 @@ async function fetchDrawResultIfNeeded(round) {
       numbers: data.numbers,
       bonus: data.bonus_no
     };
+    if (!validDraw(parsed, round, date)) return null;
     drawResultCache[round] = parsed;
     return parsed;
   } catch {
@@ -3156,9 +3165,43 @@ function evaluateSetMatch(setNumbers, draw) {
   return `${hitCount}개 일치 (미당첨)`;
 }
 
+function validDraw(draw, round, date) {
+  return !!draw && Number.isSafeInteger(round) && round > 0 &&
+    draw.round === round && draw.date === date &&
+    Array.isArray(draw.numbers) && draw.numbers.length === 6 &&
+    new Set(draw.numbers).size === 6 &&
+    [...draw.numbers, draw.bonus].every(n => Number.isInteger(n) && n >= 1 && n <= 45) &&
+    !draw.numbers.includes(draw.bonus);
+}
+
+function recordDrawCandidate(rec) {
+  const date = rec.selectedDate || rec.createdDate;
+  const parse = value => /^\d{4}-\d{2}-\d{2}$/.test(value || '') ? Date.parse(value + 'T00:00:00Z') : NaN;
+  const day = parse(date);
+  const anchor = parse(verifiedLatestDraw?.date);
+  if (!Number.isFinite(day) || new Date(day).toISOString().slice(0,10) !== date ||
+      !Number.isFinite(anchor) || new Date(anchor).getUTCDay() !== 6 ||
+      !validDraw(verifiedLatestDraw, verifiedLatestDraw.round, verifiedLatestDraw.date)) return null;
+  const dow = new Date(day).getUTCDay();
+  const slot = /^(\d{2}):(\d{2})\s*~\s*(\d{2}):(\d{2})(?:\s|$)/.exec(rec.selectedSlot || '');
+  if (slot) {
+    const [, h, m, eh, em] = slot.map(Number);
+    const start = h * 60 + m, end = eh * 60 + em;
+    if (m >= 60 || em >= 60 || start < 360 || end <= start || end > (dow === 6 ? 1200 : 1440)) return null;
+  } else if (rec.selectedSlot && rec.selectedSlot !== '시간대 미지정' || dow === 0 || dow === 6) return null;
+  const drawDay = day + (6 - dow) * 86400000;
+  const round = verifiedLatestDraw.round + (drawDay - anchor) / 604800000;
+  if (!Number.isSafeInteger(round) || round < 1 ||
+      Date.now() < drawDay + (11 * 60 + 35) * 60000) return null;
+  return { round, date: new Date(drawDay).toISOString().slice(0,10) };
+}
+
+let recordsRenderRevision = 0;
+
 async function renderSavedRecords() {
   const listEl = document.getElementById('records-list');
   const clearBtn = document.getElementById('clear-records');
+  const revision = ++recordsRenderRevision;
   const records = getSavedRecords();
   listEl.replaceChildren();
 
@@ -3176,6 +3219,22 @@ async function renderSavedRecords() {
   clearBtn.style.display = 'inline-block';
 
   for (const rec of records) {
+    if (!rec.targetRound) {
+      const candidate = recordDrawCandidate(rec);
+      if (candidate) {
+        const draw = await fetchDrawResultIfNeeded(candidate.round, candidate.date);
+        if (revision !== recordsRenderRevision) return;
+        if (validDraw(draw, candidate.round, candidate.date)) {
+          const latest = getSavedRecords();
+          const stored = latest.find(item => item.id === rec.id);
+          if (stored && !stored.targetRound) {
+            stored.targetRound = candidate.round;
+            stored.targetDrawDate = candidate.date;
+            if (saveRecordsToStorage(latest)) Object.assign(rec, stored);
+          }
+        }
+      }
+    }
     const card = document.createElement('div');
     card.className = 'record-card';
 
@@ -3218,7 +3277,8 @@ async function renderSavedRecords() {
     if (!rec.targetRound) {
       checkBox.textContent = '당첨 대조 결과: 확인 대기 (대상 회차 공식 데이터 미확정)';
     } else {
-      const draw = await fetchDrawResultIfNeeded(rec.targetRound);
+      const draw = await fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate);
+      if (revision !== recordsRenderRevision) return;
       if (!draw) {
         checkBox.textContent = `당첨 대조 결과: 확인 대기 (제${rec.targetRound}회 추첨 전이거나 공식 당첨 데이터 미확보)`;
       } else {
@@ -3230,6 +3290,11 @@ async function renderSavedRecords() {
     card.append(top, setsBox, checkBox);
     listEl.appendChild(card);
   }
+}
+
+for (const id of ['range-start', 'range-end']) {
+  document.getElementById(id).addEventListener('input', updatePeriodHint);
+  document.getElementById(id).addEventListener('change', updatePeriodHint);
 }
 
 saveRecordButton.addEventListener('click', () => {
