@@ -6,9 +6,9 @@
 <title>행운의 로또 번호 추천</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f0f3fa;font-family:Arial,'Malgun Gothic',sans-serif;color:#202942;padding:24px}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#F4F7F5;font-family:Arial,'Malgun Gothic',sans-serif;color:#202942;padding:24px}
 .card{width:100%;max-width:660px;background:white;border-radius:28px;padding:48px 28px;text-align:center;box-shadow:0 20px 70px #26355a12;position:relative}
-.label{font-size:12px;letter-spacing:3px;color:#6755db;font-weight:bold}
+.label{font-size:12px;letter-spacing:3px;color:#176B57;font-weight:bold}
 h1{font-size:30px;letter-spacing:-1px;margin:18px 0 12px}
 h2{font-size:18px;margin:0 0 8px}
 h3{font-size:15px;margin:0 0 6px}
@@ -27,41 +27,41 @@ h3{font-size:15px;margin:0 0 6px}
 .green{background:#52a773}
 button{font:inherit;border:0;border-radius:12px;cursor:pointer;padding:14px 20px;font-weight:bold}
 button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b3a8ff;outline-offset:3px}
-#generate{background:#6755db;color:white;width:100%;max-width:350px;padding:16px 24px}
-#generate:hover{background:#5443c4}
-.secondary-btn{background:#eeeafa;color:#5443c4;padding:12px 18px;font-size:14px}
+#generate{background:#176B57;color:white;width:100%;max-width:350px;padding:16px 24px}
+#generate:hover{background:#125444}
+.secondary-btn{background:#E8F4EF;color:#125444;padding:12px 18px;font-size:14px}
 .secondary-btn:hover{background:#e2dbf7}
 .secondary-btn:disabled{opacity:.55;cursor:default}
-#copy{display:inline-block;margin:10px 6px 0;background:transparent;color:#6755db;padding:10px 14px}
+#copy{display:inline-block;margin:10px 6px 0;background:transparent;color:#176B57;padding:10px 14px}
 #copy:disabled,#save-record:disabled{color:#a1a8b7;cursor:default;background:transparent}
-#save-record{display:inline-block;margin:10px 6px 0;background:#eeeafa;color:#5443c4;padding:10px 16px;font-size:14px}
+#save-record{display:inline-block;margin:10px 6px 0;background:#E8F4EF;color:#125444;padding:10px 16px;font-size:14px}
 .note{font-size:12px;color:#8790a1;margin:22px 0 0;line-height:1.8}
-#status{min-height:20px;color:#6755db;font-size:13px;margin:12px 0 0}
-#bonus{display:block;margin:12px auto 0;background:#eeeafa;color:#6755db;padding:12px 20px}
-#bonus[aria-pressed="true"]{background:#6755db;color:white}
+#status{min-height:20px;color:#176B57;font-size:13px;margin:12px 0 0}
+#bonus{display:block;margin:12px auto 0;background:#E8F4EF;color:#176B57;padding:12px 20px}
+#bonus[aria-pressed="true"]{background:#176B57;color:white}
 .with-bonus .ball{width:48px;height:48px;font-size:21px}
 .with-bonus .balls{gap:8px}
 .bonus-group{display:flex;flex-direction:column;align-items:center;gap:4px;border-left:1px solid #e4e7ef;padding-left:12px}
 .bonus-caption{font-size:10px;color:#717b91;white-space:nowrap}
 body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-card,.record-card{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
-#theme-toggle{position:absolute;top:20px;right:20px;padding:8px 14px;font-size:13px;border-radius:999px;background:#f0f3fa;color:#202942;border:1px solid #e4e7ef}
+#theme-toggle{position:absolute;top:20px;right:20px;padding:8px 14px;font-size:13px;border-radius:999px;background:#F4F7F5;color:#202942;border:1px solid #e4e7ef}
 #theme-toggle:hover{background:#e4e9f5}
-.today-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:999px;background:#f4f2ff;color:#5443c4;font-size:13px;font-weight:bold}
+.today-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 14px;border-radius:999px;background:#f4f2ff;color:#125444;font-size:13px;font-weight:bold}
 .info-panel{margin:18px 0;padding:16px;border-radius:18px;background:#f7f9fd;border:1px solid #e6ebf5;text-align:center}
 .info-header{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;color:#525d75;margin-bottom:10px}
-.info-round{font-weight:bold;color:#6755db;background:#eeeafa;padding:3px 10px;border-radius:999px}
+.info-round{font-weight:bold;color:#176B57;background:#E8F4EF;padding:3px 10px;border-radius:999px}
 .info-date{font-weight:bold;color:#202942}
 .mini-balls{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0}
 .mini-ball{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:white;font-size:13px;font-weight:bold;box-shadow:inset 0 -3px 0 #00000015}
 .mini-plus{font-size:14px;font-weight:bold;color:#717b91;margin:0 2px}
 .info-prize{font-size:13px;color:#202942;padding-top:8px;border-top:1px dashed #dde3f0}
-.info-prize strong{color:#6755db;font-size:15px}
+.info-prize strong{color:#176B57;font-size:15px}
 
 /* 사주로 나의 행운 날짜 보기 패널 */
 .saju-panel{margin:18px 0 22px;border-radius:20px;background:#f7f8fc;border:1px solid #e2e7f4;text-align:left;overflow:hidden}
 .saju-summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:16px;color:#202942;background:#f1f4fb}
 .saju-summary::-webkit-details-marker{display:none}
-.saju-summary-badge{font-size:12px;font-weight:bold;color:#6755db;background:#e8e3ff;padding:4px 10px;border-radius:999px}
+.saju-summary-badge{font-size:12px;font-weight:bold;color:#176B57;background:#e8e3ff;padding:4px 10px;border-radius:999px}
 .saju-body{padding:20px}
 .saju-intro{font-size:13px;color:#5d677e;line-height:1.6;margin:0 0 16px}
 .form-grid{display:grid;gap:14px}
@@ -74,8 +74,8 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 .field-hint{font-size:12px;color:#6c768d;line-height:1.5;margin:2px 0 0}
 .error-msg{font-size:13px;color:#c93b4b;background:#fff0f2;border:1px solid #f7c6cc;padding:10px 12px;border-radius:10px;margin:12px 0 0;display:none}
 .saju-actions{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.saju-submit{background:#6755db;color:white;padding:12px 20px;font-size:14px;width:100%}
-.saju-submit:hover{background:#5443c4}
+.saju-submit{background:#176B57;color:white;padding:12px 20px;font-size:14px;width:100%}
+.saju-submit:hover{background:#125444}
 
 /* 사주 분석 및 후보 결과 카드 */
 .saju-result{margin-top:18px;border-top:1px solid #e2e7f4;padding-top:16px;display:none}
@@ -87,7 +87,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 .daeun-summary-box{margin-top:10px;padding-top:10px;border-top:1px dashed #dde3f0;font-size:12px}
 .daeun-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px;text-align:center}
 .daeun-chip{background:#f7f8fc;border:1px solid #e2e7f4;border-radius:8px;padding:5px 4px;font-size:11px;line-height:1.35}
-.daeun-chip.active{background:#eeeafa;border-color:#6755db;color:#5443c4;font-weight:bold}
+.daeun-chip.active{background:#E8F4EF;border-color:#176B57;color:#125444;font-weight:bold}
 .boundary-alert{font-size:12px;color:#7a4f08;background:#fff8eb;border:1px solid #f5deb3;border-radius:10px;padding:9px 12px;margin-top:8px;line-height:1.5}
 .candidates-wrap{display:grid;gap:12px;margin:14px 0}
 .candidate-card{background:white;border:1px solid #d8dff0;border-radius:16px;padding:16px}
@@ -95,7 +95,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 .candidate-date{font-size:16px;font-weight:bold;color:#202942}
 .badge-group{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tier-badge{font-size:12px;font-weight:bold;padding:4px 10px;border-radius:999px}
-.tier-primary{background:#eeeafa;color:#5443c4}
+.tier-primary{background:#E8F4EF;color:#125444}
 .tier-secondary{background:#e9f5ee;color:#2e7d52}
 .mode-tag{font-size:11px;font-weight:bold;padding:4px 9px;border-radius:999px;background:#eef2fb;color:#43506c}
 .candidate-reason{font-size:13px;color:#434e68;line-height:1.6;margin:8px 0}
@@ -104,24 +104,24 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 .slot-list label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:13px}
 .slot-meta{font-size:11px;color:#717b91;margin-top:4px}
 .candidate-detail{margin:10px 0;background:#f9fafd;border:1px solid #e2e7f4;border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.6}
-.candidate-detail summary{cursor:pointer;font-weight:bold;color:#5443c4;font-size:13px}
+.candidate-detail summary{cursor:pointer;font-weight:bold;color:#125444;font-size:13px}
 .detail-grid{display:grid;gap:8px;margin-top:10px}
 .detail-row{padding-bottom:6px;border-bottom:1px dashed #e5eaf5}
 .detail-row:last-child{border-bottom:0;padding-bottom:0}
 .detail-label{font-weight:bold;color:#2c3652;display:block;margin-bottom:2px}
 .detail-list{margin:3px 0 0;padding-left:18px}
-.candidate-btn{width:100%;background:#6755db;color:white;padding:11px 16px;font-size:14px;margin-top:8px}
-.candidate-btn:hover{background:#5443c4}
+.candidate-btn{width:100%;background:#176B57;color:white;padding:11px 16px;font-size:14px;margin-top:8px}
+.candidate-btn:hover{background:#125444}
 .empty-candidates{background:white;border:1px dashed #cbd3e6;border-radius:14px;padding:18px;text-align:center;font-size:14px;color:#525d75}
 .saju-disclaimer{font-size:12px;color:#6c768d;background:#eef1f8;padding:10px 12px;border-radius:10px;margin:12px 0;text-align:center;line-height:1.5}
 .criteria-box{margin-top:10px;font-size:12px;color:#525d75;background:white;border:1px solid #e2e7f4;border-radius:12px;padding:10px 14px}
-.criteria-box summary{cursor:pointer;font-weight:bold;color:#5443c4}
+.criteria-box summary{cursor:pointer;font-weight:bold;color:#125444}
 .criteria-content{margin-top:10px;line-height:1.65}
 .criteria-content ul{margin:6px 0;padding-left:18px}
 
 /* 번호 생성 모드 표시 배너 */
 .mode-bar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;margin:14px 0 6px}
-.mode-pill{font-size:12px;font-weight:bold;padding:5px 12px;border-radius:999px;background:#eeeafa;color:#5443c4}
+.mode-pill{font-size:12px;font-weight:bold;padding:5px 12px;border-radius:999px;background:#E8F4EF;color:#125444}
 .mode-desc{font-size:13px;color:#525d75;background:#f7f9fd;border:1px solid #e6ebf5;border-radius:12px;padding:10px 14px;margin:10px 0;line-height:1.5;display:none}
 
 /* 저장된 기록 영역 */
@@ -138,22 +138,22 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 /* 다크모드 */
 [data-theme="dark"] body{background:#0f1420;color:#eef2ff}
 [data-theme="dark"] .card{background:#1a2234;box-shadow:0 20px 70px #00000066}
-[data-theme="dark"] .label,[data-theme="dark"] #copy,[data-theme="dark"] #status{color:#9d8df7}
+[data-theme="dark"] .label,[data-theme="dark"] #copy,[data-theme="dark"] #status{color:#9ED5C3}
 [data-theme="dark"] .description,[data-theme="dark"] .set-label,[data-theme="dark"] .bonus-caption,[data-theme="dark"] .saju-intro,[data-theme="dark"] .field-hint,[data-theme="dark"] .slot-meta{color:#9aa5bc}
 [data-theme="dark"] .bonus-group,[data-theme="dark"] .records-panel,[data-theme="dark"] .saju-result,[data-theme="dark"] .daeun-summary-box,[data-theme="dark"] .detail-row{border-color:#2d3852}
-[data-theme="dark"] #bonus,[data-theme="dark"] .secondary-btn,[data-theme="dark"] #save-record,[data-theme="dark"] .mode-pill,[data-theme="dark"] .tier-primary,[data-theme="dark"] .daeun-chip.active{background:#282446;color:#c4baff;border-color:#6755db}
-[data-theme="dark"] #bonus[aria-pressed="true"]{background:#6755db;color:white}
+[data-theme="dark"] #bonus,[data-theme="dark"] .secondary-btn,[data-theme="dark"] #save-record,[data-theme="dark"] .mode-pill,[data-theme="dark"] .tier-primary,[data-theme="dark"] .daeun-chip.active{background:#1D3933;color:#B6E3D3;border-color:#176B57}
+[data-theme="dark"] #bonus[aria-pressed="true"]{background:#176B57;color:white}
 [data-theme="dark"] #copy:disabled,[data-theme="dark"] #save-record:disabled{color:#535d73;background:transparent}
 [data-theme="dark"] .note{color:#6b768e}
 [data-theme="dark"] #theme-toggle{background:#263047;color:#eef2ff;border-color:#364362}
 [data-theme="dark"] #theme-toggle:hover{background:#313e5b}
-[data-theme="dark"] .today-badge,[data-theme="dark"] .info-round,[data-theme="dark"] .saju-summary-badge{background:#282446;color:#c4baff}
+[data-theme="dark"] .today-badge,[data-theme="dark"] .info-round,[data-theme="dark"] .saju-summary-badge{background:#1D3933;color:#B6E3D3}
 [data-theme="dark"] .info-panel,[data-theme="dark"] .saju-panel,[data-theme="dark"] .record-card,[data-theme="dark"] .mode-desc,[data-theme="dark"] .slot-box,[data-theme="dark"] .candidate-detail,[data-theme="dark"] .daeun-chip{background:#131929;border-color:#2a3550;color:#d6def0}
 [data-theme="dark"] .saju-summary{background:#161f33;color:#eef2ff}
 [data-theme="dark"] .info-header,[data-theme="dark"] .record-meta{color:#9aa5bc}
 [data-theme="dark"] .info-date,[data-theme="dark"] .info-prize,[data-theme="dark"] .form-label,[data-theme="dark"] .candidate-date,[data-theme="dark"] .pillar-val,[data-theme="dark"] .detail-label{color:#eef2ff}
 [data-theme="dark"] .info-prize{border-top-color:#2a3550}
-[data-theme="dark"] .info-prize strong,[data-theme="dark"] .criteria-box summary,[data-theme="dark"] .candidate-detail summary{color:#b6a9ff}
+[data-theme="dark"] .info-prize strong,[data-theme="dark"] .criteria-box summary,[data-theme="dark"] .candidate-detail summary{color:#A8DBCA}
 [data-theme="dark"] .input-field,[data-theme="dark"] select.input-field,[data-theme="dark"] .pillars-box,[data-theme="dark"] .candidate-card,[data-theme="dark"] .criteria-box,[data-theme="dark"] .record-sets,[data-theme="dark"] .empty-candidates{background:#1d273b;border-color:#32405f;color:#eef2ff}
 [data-theme="dark"] .pillar-item,[data-theme="dark"] .saju-disclaimer,[data-theme="dark"] .record-check,[data-theme="dark"] .mode-tag{background:#131929;color:#b8c3da}
 [data-theme="dark"] .candidate-reason,[data-theme="dark"] .criteria-content{color:#cbd5ea}
@@ -180,7 +180,68 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 .record-meta{white-space:pre-line;overflow-wrap:anywhere}
 #records-section .record-top{flex-wrap:wrap}
 .official-lotto-link{display:inline-block;margin-top:.6rem;padding:.55rem .8rem;background:#fff;color:#182033;border:1px solid #687184;text-decoration:underline}
-.official-lotto-link:focus-visible{outline:3px solid #7066ff;outline-offset:3px}
+.official-lotto-link:focus-visible{outline:3px solid #268471;outline-offset:3px}
+.record-group{display:block;min-width:0}.record-group>.record-card{margin-top:.65rem}
+.record-stage{margin-left:auto;overflow-wrap:anywhere;max-width:100%}
+.record-top>.record-meta{flex:1 1 14rem;min-width:0}
+.record-check{overflow-wrap:anywhere}
+.record-purchase-heading{margin:0 0 .35rem;font-weight:700}
+.record-purchase-row{display:grid;grid-template-columns:auto minmax(0,1fr) 4.5em;align-items:baseline;gap:.45rem}.record-purchase-row strong{justify-self:end;white-space:nowrap}.record-purchase-numbers{overflow-wrap:anywhere}
+.record-purchase-row input{margin:0 .2rem}
+.record-purchase-row{padding:.2rem .35rem;border:1px solid transparent;border-radius:5px}
+.record-purchase-row.is-winning-purchase{background:#fff7cf;border-color:#ead58a;color:#302500}
+.record-round{margin:.7rem 0;border:1px solid #a6b4cf;border-radius:12px;padding:.65rem}
+.record-round>summary{font-weight:700;cursor:pointer}
+.record-balls{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem;margin:.35rem 0}
+.record-balls .mini-ball{width:1.8rem;height:1.8rem;flex:none}
+.record-official{padding:.65rem .75rem;border:1px solid #d1dbee;border-radius:9px;background:#f5f7fd;color:#243550}
+.record-result-line{margin-top:.4rem;padding:.55rem .75rem;border:1px solid #d7dce7;border-radius:8px;background:#f6f7fa;color:#374151;line-height:1.55;overflow-wrap:anywhere}
+.record-result-line.is-winning{background:#eaf8ef;border-color:#a8d5b7;color:#173d28}
+.record-result-line strong{font-weight:750}
+[data-theme="dark"] .record-official{background:#1d2941;border-color:#3b4b68;color:#eef2ff}
+[data-theme="dark"] .record-result-line{background:#232d40;border-color:#45516a;color:#e3e9f5}
+[data-theme="dark"] .record-result-line.is-winning{background:#17372a;border-color:#47765d;color:#e1faeb}
+.record-ticket-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.record-ticket-actions p:empty{display:none}
+.record-ticket-actions img{max-width:100%;max-height:18rem;object-fit:contain}
+.record-round-info{display:inline-flex;align-items:center;flex-wrap:wrap;gap:.35rem .6rem;margin-left:.65rem;vertical-align:middle;max-width:100%;font-size:.85rem;font-weight:400}
+.record-round-info .record-balls{margin:0}
+.record-purchase-numbers{min-width:0}
+.record-purchase-numbers .record-result-line{margin-top:.3rem}
+@media(max-width:480px){.record-round-info{display:flex;margin:.4rem 0 0}.record-round-info .mini-ball{width:1.55rem;height:1.55rem}}
+.record-purchased-badge{padding:.1rem .35rem;border:1px solid #94c9a6;border-radius:4px;background:#dff4e6;color:#174b2d}
+.records-header{flex-wrap:wrap}
+#purchased-only{margin-left:auto}
+#purchased-only,.record-purchase-toggle{border:1px solid #8792a8;border-radius:6px;background:#f1f3f8;color:#243148;padding:.4rem .65rem;white-space:nowrap}
+#purchased-only[aria-pressed="true"],.record-purchase-toggle[aria-pressed="true"]{background:#dff4e6;border-color:#5c9871;color:#174b2d}
+#purchased-only:focus-visible,.record-purchase-toggle:focus-visible{outline:3px solid #268471;outline-offset:2px}
+.record-purchase-row{grid-template-columns:minmax(0,1fr) auto;align-items:start}
+.record-schedule{font-weight:700;margin-bottom:.45rem}
+.record-mode-switch{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.7rem}
+.record-mode-switch button{border:1px solid #8792a8;border-radius:6px;background:#f1f3f8;color:#243148;padding:.4rem .7rem}
+.record-mode-switch button[aria-pressed="true"]{background:#E8F4EF;border-color:#80B5A5;color:#184D40}
+.record-mode-switch button:focus-visible{outline:3px solid #268471;outline-offset:2px}
+.record-schedule{margin:.25rem 0 .45rem}
+.saju-input-guide{margin-top:1rem}.saju-input-guide summary{cursor:pointer;font-weight:700}.record-mode-switch[aria-label="번호 생성 방식"]{justify-content:center}
+.record-mode-badge{display:inline-block;padding:.22rem .6rem;margin-bottom:.3rem;border:1px solid;border-radius:6px;font-size:.875rem}
+.record-mode-badge.is-random{background:#e6efff;color:#183b72;border-color:#a4bdea}
+.record-mode-badge.is-personal{background:#f0e7ff;color:#542887;border-color:#c6a9e9}
+.record-round>.record-card + .record-card{margin-top:.85rem}
+#official-link-area:not(:empty){margin:1rem 0 1.25rem;text-align:center}
+#official-link-area .official-lotto-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.55rem 1rem;border:1px solid #B7D7CC;border-radius:12px;background:#E8F4EF;color:#184D40;text-decoration:none;font-size:.9rem;font-weight:700}
+#official-link-area .official-lotto-link:hover{background:#DCEFE7;border-color:#80B5A5}
+#official-link-area .official-lotto-link:focus-visible{outline:3px solid #268471;outline-offset:3px}
+#official-link-area p{margin:.45rem 0 0;font-size:.78rem;color:#5d677e;line-height:1.5}
+[data-theme="dark"] #official-link-area .official-lotto-link{background:#1D3933;border-color:#477D70;color:#D6F4E8}
+[data-theme="dark"] #official-link-area .official-lotto-link:hover{background:#26483F}
+[data-theme="dark"] #official-link-area p{color:#b8c3da}
+.hero-quip{width:min(100%,32rem);margin:0 auto 1.25rem;text-align:center;color:#243148}
+.hero-quip p{margin:.65rem 0 0;line-height:1.55;overflow-wrap:anywhere}
+.hero-quip-cursor{display:inline-block;width:2px;height:1em;margin-left:.25em;vertical-align:-.12em;background:currentColor;opacity:0;animation:draft-cursor .55s step-end 2}
+@keyframes draft-cursor{0%{opacity:1}50%,100%{opacity:0}}
+[data-theme="dark"] .hero-quip{color:#eef2ff}
+@media(prefers-reduced-motion:reduce){.hero-quip-cursor{animation:none}}
+.hero-quip-cursor.is-typing{opacity:1;animation:none}
 </style>
 </head>
 <body>
@@ -188,8 +249,8 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 <button id="theme-toggle" type="button" aria-pressed="false" aria-label="다크모드 전환">🌙 다크모드</button>
 <div class="label">YOUR LUCKY NUMBERS</div>
 <div id="today-date" class="today-badge" aria-label="오늘 날짜"></div>
-<h1>이번주의 행운을 뽑아보세요 🍀</h1>
-<p class="description">버튼 한 번으로 만나는 나만의 로또 번호.<br>1부터 45까지, 중복 없는 번호 6개를 5세트 추천합니다.</p>
+<h1>로또 1등 가즈아🔥</h1>
+<div class="hero-quip"><p><span id="hero-quip-text">당첨돼도 출근은 할 거임. 책상에 충전기 두고 왔음.</span><span class="hero-quip-cursor" aria-hidden="true"></span></p></div>
 
 <section id="last-draw" class="info-panel" aria-label="지난회차 당첨 정보">
   <div class="info-header">
@@ -201,15 +262,14 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 </section>
 
 <!-- 접고 펼칠 수 있는 '사주로 나의 행운 날짜 보기' 영역 (기본 접힘) -->
+<div class="record-mode-switch" role="group" aria-label="번호 생성 방식"><button type="button" id="recommend-random" aria-pressed="true">무작위 추천</button><button type="button" id="recommend-personal" aria-pressed="false" aria-controls="saju-details">사주 날짜 추천</button></div>
 <details id="saju-details" class="saju-panel">
   <summary class="saju-summary">
     <span>🧭 사주로 나의 행운 날짜 보기</span>
     <span class="saju-summary-badge">오락용 개인화 풀이</span>
   </summary>
   <div class="saju-body">
-    <p class="saju-intro">
-      생년월일시와 성별(선택)을 입력하면 전통 명리학의 만세력(절입 순간·음양력)과 대운·세운·월운·일진·시진의 오행(재성·식상생재·합충) 상징 기준에 따라 살펴볼 기간 안의 날짜·시간 후보를 찾아드립니다. (현재 버전은 <strong>대한민국 출생(양력 1908-04-01 ~ 2050-12-31) 및 대한민국 내 구매(KST 기준)</strong>를 지원합니다)
-    </p>
+
     <form id="saju-form" class="form-grid" novalidate>
       <div class="form-row">
         <span class="form-label" id="birth-date-label">생년월일 (양력 1908.4.1.~2050.12.31. / 음력 1908.3.1.~2050.11.18.)</span>
@@ -218,7 +278,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
           <input id="birth-month" class="input-field" type="number" min="1" max="12" placeholder="월 (1~12)" aria-label="출생 월" required>
           <input id="birth-day" class="input-field" type="number" min="1" max="31" placeholder="일 (1~31)" aria-label="출생 일" required>
         </div>
-        <p class="field-hint">대한제국 근대 법정 표준시 시행일(양력 1908년 4월 1일, 음력 1908년 3월 1일)부터 2050년 12월 31일(음력 2050년 11월 18일)까지 지원하며, 범위 밖의 날짜는 추정값으로 처리하지 않습니다.</p>
+
       </div>
 
       <div class="form-row">
@@ -237,7 +297,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
           <label><input type="radio" name="birth-gender" id="gender-male" value="M"> 남성</label>
           <label><input type="radio" name="birth-gender" id="gender-female" value="F"> 여성</label>
         </div>
-        <p class="field-hint">전통적인 대운 진행 방향을 계산하는 데 사용합니다. (성별 미입력 시 대운을 제외하고 ‘대운 미반영 간이 풀이’로 세운·월운·일진 비교를 제공합니다)</p>
+
       </div>
 
       <div class="form-row">
@@ -247,7 +307,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
           <label><input type="checkbox" id="time-unknown"> 시간 모름</label>
           <label id="time-unknown-non-midnight-wrap" style="display:none"><input type="checkbox" id="time-unknown-non-midnight"> 자정·야자시 경계(00:00~01:35 · 23:00~24:00) 출생 아님</label>
         </div>
-        <p id="birth-time-hint" class="field-hint">💡 출생 시각은 출생 당시 법정 시각(역사적 표준시·서머타임 <code>Asia/Seoul</code> 반영)으로 해석해 UTC 출생 순간과 지방평균태양시를 분리 계산합니다. ‘시간 모름’ 선택 시 정오를 실제 출생 시각으로 확정하지 않고 당일 전체 범위(절입 전후 및 경도 보정에 따른 자정 직후 전날 일주 가능성)를 함께 검토하며, 시주와 구매 시간대 후보를 제외합니다.</p>
+
       </div>
 
       <div class="form-row">
@@ -271,7 +331,7 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
           <option value="JEJU">제주특별자치도 (동경 126.5312° · 현대 KST 대비 표시 약 -34분)</option>
           <option value="OVERSEAS_UNSUPPORTED">기타 / 해외 지역 (역사적 시간대 상이로 현재 버전 지원 제한)</option>
         </select>
-        <p class="field-hint">출생지 경도에 따른 지방평균태양시 보정은 출생 원국의 일주·시주 산출에만 사용하며(연주·월주 절입 및 대운 기산은 UTC 순간 비교), 구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 대한민국 내 구매 기준(KST)으로 표시합니다.</p>
+
       </div>
 
       <div class="form-row">
@@ -298,6 +358,13 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
         <button id="analyze-saju" type="submit" class="saju-submit">나의 행운 날짜 후보 확인하기</button>
       </div>
     </form>
+    <details class="saju-input-guide"><summary>입력 방법과 지원 범위 보기</summary>    <p class="saju-intro">
+      생년월일시와 성별(선택)을 입력하면 전통 명리학의 만세력(절입 순간·음양력)과 대운·세운·월운·일진·시진의 오행(재성·식상생재·합충) 상징 기준에 따라 살펴볼 기간 안의 날짜·시간 후보를 찾아드립니다. (현재 버전은 <strong>대한민국 출생(양력 1908-04-01 ~ 2050-12-31) 및 대한민국 내 구매(KST 기준)</strong>를 지원합니다)
+    </p>
+        <p class="field-hint">대한제국 근대 법정 표준시 시행일(양력 1908년 4월 1일, 음력 1908년 3월 1일)부터 2050년 12월 31일(음력 2050년 11월 18일)까지 지원하며, 범위 밖의 날짜는 추정값으로 처리하지 않습니다.</p>
+        <p class="field-hint">전통적인 대운 진행 방향을 계산하는 데 사용합니다. (성별 미입력 시 대운을 제외하고 ‘대운 미반영 간이 풀이’로 세운·월운·일진 비교를 제공합니다)</p>
+        <p id="birth-time-hint" class="field-hint">💡 출생 시각은 출생 당시 법정 시각(역사적 표준시·서머타임 <code>Asia/Seoul</code> 반영)으로 해석해 UTC 출생 순간과 지방평균태양시를 분리 계산합니다. ‘시간 모름’ 선택 시 정오를 실제 출생 시각으로 확정하지 않고 당일 전체 범위(절입 전후 및 경도 보정에 따른 자정 직후 전날 일주 가능성)를 함께 검토하며, 시주와 구매 시간대 후보를 제외합니다.</p>
+        <p class="field-hint">출생지 경도에 따른 지방평균태양시 보정은 출생 원국의 일주·시주 산출에만 사용하며(연주·월주 절입 및 대운 기산은 UTC 순간 비교), 구매 시간대 후보는 출생지를 구매 지역으로 자동 간주하지 않고 대한민국 내 구매 기준(KST)으로 표시합니다.</p></details>
 
     <div id="saju-result" class="saju-result" aria-live="polite">
       <div id="pillars-summary" class="pillars-box"></div>
@@ -343,7 +410,6 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 
 <div id="balls" class="sets" role="status" aria-live="polite" aria-label="아직 추천된 번호가 없습니다"><p class="description">버튼을 눌러 추천 번호 5세트를 확인하세요.</p></div>
 <button id="generate" type="button">로또 번호 5세트 추천받기 ↻</button>
-<button id="bonus" type="button" aria-pressed="false">보너스번호 포함</button>
 <div>
   <button id="copy" type="button" disabled>5세트 모두 복사하기</button>
   <button id="save-record" type="button" disabled>이 5세트 기록 저장하기</button>
@@ -352,21 +418,16 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 <p class="note">무작위 번호 생성기이며 당첨을 예측하지 않습니다.<br>모든 번호 조합의 당첨 확률은 동일합니다.</p>
 
 <!-- 기기 저장 기록 영역 -->
-<section id="records-section" class="records-panel" aria-label="저장된 번호 기록">
+<div id="official-link-area"></div>
+<section id="records-section" class="records-panel" aria-label="당첨 내역 확인하기">
   <div class="records-header">
-    <h2>🗂️ 저장된 번호 기록</h2>
+    <h2>🔍 당첨 내역 확인하기</h2>
+    <button id="purchased-only" type="button" aria-pressed="false">구매 표시한 번호만 보기</button>
     <button id="clear-records" type="button" class="delete-btn" style="display:none">전체 기록 삭제</button>
   </div>
   <div class="record-top">
-    <label>당첨 확인 단계 <select id="record-filter" aria-describedby="record-filter-guide record-filter-detail"></select></label>
-    <label><input id="purchased-only" type="checkbox"> 구매한 번호만 보기</label>
-    <button id="export-records" type="button">백업 파일 내보내기</button>
-    <button id="import-records" type="button">백업 파일 가져오기</button>
-    <input id="backup-file" type="file" accept=".json,application/json" hidden>
     <span id="backup-status" role="status"></span>
   </div>
-  <p id="record-filter-guide">저장한 번호를 어느 회차와 비교하는지, 결과를 확인했는지 보여줘요.</p>
-  <p id="record-filter-detail"></p>
   <div id="record-save-notice" role="status"></div>
   <div id="records-list" class="records-list">
     <p class="description" style="font-size:13px;margin:0">아직 저장된 기록이 없습니다. 번호를 생성한 뒤 ‘이 5세트 기록 저장하기’를 눌러 보관할 수 있습니다.</p>
@@ -375,6 +436,27 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 </main>
 
 <script>
+{ const quips = ["당첨돼도 출근은 할 거임. 책상에 충전기 두고 왔음.","다음 여행은 ‘서울 출발, 어디든’으로 검색해서 사다리타기로 갈 예정.","부장님이 “회사 밖은 지옥이야” 하셨는데, 일단 한 달 살아 보고 올게요.","엄마한테 당첨 얘기는 안 했는데 부동산 매물 고르는 것 보고 들킴.","친구들 단톡방에 “아무 데나 가자”라고 보냄. 이미 내가 5성급호텔로 예약함.","집 보러 갈때 강남부터 볼 예정. 이제 수압 말고도 볼 게 생김.","당첨돼도 가계부는 쓸 거임. 이번 달 지출사항: 집 사기","월요일 아침에 알람 울리면 일단 끔. 늦잠이 아니라 일정대로임.","5등이면 커피, 4등이면 고기. 1등이면 단톡방은 안 나감. 한국을 나감.","사직서는 써 놨고요. 아직 출근하는 건 추첨이 안 끝나서요.","1등이면 퇴사 면담에서 잡아 주셨으면 좋겠어요. 할말 다 하고 거절하는 장면까지 준비했거든요.","메뉴판 오른쪽 안 보고 시킬 예정임.","당첨되면 아무한테도 티 안 낼 거임. 다만 제주도에서 찍던 프로필 사진이 갑자기 하와이가 될 예정.","토요일엔 인생 계획을 짜고, 월요일엔 일단 알람을 맞춥니다. 아직은요.","회사에서 “싫으면 나가” 하실 때 처음으로 의견이 일치할 예정임.","장바구니에 담아 둔 거 다 살 거야. ‘품절’만 나를 막을 수 있음.","집 살때 엄마가 “돈 아껴”라고 하면 “아껴서 옆집은 안 샀어.”","호텔 조식 시간에 맞춰 일어나긴 할 거야. 늦잠은 먹고 또 자면 되니까.","백화점에서 “한 바퀴 돌고 올게요” 하고 진짜 돌아올 예정임."]; const target = document.getElementById('hero-quip-text');
+const message = quips[Math.floor(Math.random()*quips.length)];
+if (typeof requestAnimationFrame !== 'function' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  target.textContent = message;
+} else {
+  const letters = Array.from(message);
+  const delay = Math.min(40, 2200 / letters.length);
+  const cursor = target.nextElementSibling;
+  target.textContent = '';
+  cursor.classList.add('is-typing');
+  let start;
+  function typeFrame(now) {
+    start ??= now;
+    const count = Math.min(letters.length, Math.floor((now-start)/delay)+1);
+    target.textContent = letters.slice(0,count).join('');
+    if (count < letters.length) requestAnimationFrame(typeFrame);
+    else cursor.classList.remove('is-typing');
+  }
+  requestAnimationFrame(typeFrame);
+} }
+
 'use strict';
 
 // ============================================================================
@@ -557,7 +639,6 @@ const PURCHASE_SLOTS = [
 // ============================================================================
 let currentNumbers = [];
 let bonusNumbers = [];
-let includeBonus = false;
 let currentMode = 'random'; // 'random' | 'personal'
 let currentPersonalMeta = null; // { selectedDate, selectedSlotLabel, ruleVersion }
 let verifiedLatestDraw = null; // 공식 확인된 최신 회차 데이터 (미확인 시 null)
@@ -567,7 +648,6 @@ const balls = document.getElementById('balls');
 const copyButton = document.getElementById('copy');
 const saveRecordButton = document.getElementById('save-record');
 const status = document.getElementById('status');
-const bonusButton = document.getElementById('bonus');
 const themeToggle = document.getElementById('theme-toggle');
 const modePill = document.getElementById('current-mode-pill');
 const personalModeDesc = document.getElementById('personal-mode-desc');
@@ -2423,6 +2503,7 @@ function generateDeterministicSetsFromSeed(canonicalSeed) {
 }
 
 function setModeUI(mode, personalMeta = null) {
+  setRecommendationTab(mode);
   currentMode = mode;
   currentPersonalMeta = personalMeta;
   if (mode === 'personal' && personalMeta) {
@@ -2478,7 +2559,6 @@ function generatePersonalSets(birthParams, selectedDate, selectedSlotCode, selec
 }
 
 function renderSets() {
-  balls.classList.toggle('with-bonus', includeBonus);
   balls.replaceChildren(...currentNumbers.map((numbers, index) => {
     const row = document.createElement('div');
     row.className = 'set';
@@ -2494,18 +2574,6 @@ function renderSets() {
       return ball;
     }));
     row.append(label, group);
-    if (includeBonus) {
-      const bonus = document.createElement('div');
-      bonus.className = 'bonus-group';
-      const caption = document.createElement('span');
-      caption.className = 'bonus-caption';
-      caption.textContent = '+ 보너스';
-      const ball = document.createElement('span');
-      ball.className = 'ball ' + color(bonusNumbers[index]);
-      ball.textContent = bonusNumbers[index];
-      bonus.append(caption, ball);
-      row.append(bonus);
-    }
     if (currentMode === 'random') {
       const lock = actionButton(lockedSets.has(index) ? '고정 해제' : '고정', () => {
         if (lockedSets.has(index)) lockedSets.delete(index); else lockedSets.add(index);
@@ -2519,7 +2587,7 @@ function renderSets() {
     }
     return row;
   }));
-  balls.append(makeEntryView(currentNumbers, currentNumbers.map((_, i) => i), currentPersonalMeta?.selectedDate));
+  document.getElementById('official-link-area').replaceChildren(makeEntryView(currentPersonalMeta?.selectedDate));
   const generate = document.getElementById('generate');
   generate.disabled = currentMode === 'random' && lockedSets.size === 5;
   generate.textContent = currentMode === 'random' && lockedSets.size ? '고정하지 않은 세트 다시 뽑기' : '로또 번호 5세트 추천받기 ↻';
@@ -2529,24 +2597,30 @@ function renderSets() {
   if (currentMode === 'personal' && currentPersonalMeta) {
     status.textContent = `선택한 날짜(${currentPersonalMeta.selectedDate}) 기준으로 개인화 번호 5세트가 준비됐어요!`;
   } else {
-    status.textContent = includeBonus ? '보너스번호를 포함한 5세트가 준비됐어요!' : '추천 번호 5세트가 준비됐어요!';
+    status.textContent = '추천 번호 5세트가 준비됐어요!';
   }
   if (generate.disabled) status.textContent = '모든 세트가 고정되어 있어요. 한 세트 이상 고정을 해제해 주세요.';
 }
 
+function setRecommendationTab(mode) {
+  document.getElementById('recommend-random').setAttribute('aria-pressed',String(mode === 'random'));
+  document.getElementById('recommend-personal').setAttribute('aria-pressed',String(mode === 'personal'));
+}
+document.getElementById('recommend-random').addEventListener('click', () => {
+  document.getElementById('saju-details').open = false;
+  generateSets();
+});
+document.getElementById('recommend-personal').addEventListener('click', () => {
+  setRecommendationTab('personal');
+  document.getElementById('saju-details').open = true;
+  document.getElementById('birth-year').focus();
+});
 document.getElementById('generate').addEventListener('click', generateSets);
 switchRandomBtn.addEventListener('click', generateSets);
 
-bonusButton.addEventListener('click', () => {
-  includeBonus = !includeBonus;
-  bonusButton.setAttribute('aria-pressed', String(includeBonus));
-  bonusButton.textContent = includeBonus ? '✓ 보너스번호 포함 중' : '보너스번호 포함';
-  if (currentNumbers.length === 0) generateSets();
-  else renderSets();
-});
 
 function formatNumbers() {
-  return currentNumbers.map((numbers, i) => String.fromCharCode(65 + i) + ': ' + numbers.join(', ') + (includeBonus ? ' + 보너스 ' + bonusNumbers[i] : '')).join('\n');
+  return currentNumbers.map((numbers, i) => String.fromCharCode(65 + i) + ': ' + numbers.join(', ')).join('\n');
 }
 
 copyButton.addEventListener('click', async () => {
@@ -2625,6 +2699,7 @@ async function loadLastDraw() {
       date: normalizeDrawDate(data.date),
       numbers: data.numbers,
       bonus: data.bonus_no,
+      prizes: drawPrizes(data),
       firstPrize: firstDiv.prize,
       winners: firstDiv.winners
     };
@@ -3170,37 +3245,62 @@ function saveRecordsToStorage(records) {
   }
 }
 
+const drawRequests = new Map();
+const drawIssues = new Map();
+const drawKey = (round,date) => round + ':' + date;
+const drawMessages = {
+  loading: '이 회차의 추첨 결과를 확인하고 있어요.',
+  missing: '이 회차의 결과를 아직 조회할 수 없어요. 결과가 제공되면 저장한 번호와 비교해요.',
+  error: '추첨 결과를 불러오지 못했어요. 잠시 후 다시 확인해 주세요.',
+  mismatch: '받은 결과의 회차 또는 날짜가 저장 기록과 달라요. 일치하는 결과를 받으면 비교해요.',
+  invalid: '받은 당첨 번호를 확인할 수 없어요. 올바른 결과를 받으면 비교해요.'
+};
+function drawPrizes(data) {
+  return Array.from({length:5}, (_,i) => {
+    const amount = data.divisions?.[i]?.prize;
+    return Number.isSafeInteger(amount) && amount > 0 ? amount : null;
+  });
+}
 async function fetchDrawResultIfNeeded(round, date) {
-  if (!round || isNaN(round)) return null;
-  if (validDraw(drawResultCache[round], round, date)) return drawResultCache[round];
-  try {
-    const res = await fetch(`https://smok95.github.io/lotto/results/${round}.json`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data || !Array.isArray(data.numbers)) return null;
-    const parsed = {
-      round: data.draw_no,
-      date: normalizeDrawDate(data.date),
-      numbers: data.numbers,
-      bonus: data.bonus_no
-    };
-    if (!validDraw(parsed, round, date)) return null;
-    drawResultCache[round] = parsed;
-    return parsed;
-  } catch {
-    return null;
-  }
+  if (!Number.isSafeInteger(round) || round < 1) return null;
+  const cached = validDraw(drawResultCache[round], round, date) ? drawResultCache[round] : null;
+  if (cached?.prizes?.every(Boolean)) return cached;
+  const key = drawKey(round,date);
+  if (drawRequests.has(key)) return drawRequests.get(key);
+  drawIssues.set(key,'loading');
+  const request = (async () => {
+    const fail = issue => { drawIssues.set(key,issue); return cached; };
+    try {
+      const res = await fetch('https://smok95.github.io/lotto/results/' + round + '.json');
+      if (!res.ok) return fail([404,410].includes(res.status) ? 'missing' : 'error');
+      let data;
+      try { data = await res.json(); } catch { return fail('invalid'); }
+      const parsed = {
+        round: data?.draw_no, date: normalizeDrawDate(data?.date),
+        numbers: data?.numbers, bonus: data?.bonus_no, prizes: drawPrizes(data || {})
+      };
+      if (parsed.round !== round || parsed.date !== date) return fail('mismatch');
+      if (!validDraw(parsed,round,date)) return fail('invalid');
+      if (cached && (parsed.bonus !== cached.bonus ||
+          !parsed.numbers.every(n => cached.numbers.includes(n)))) return fail('mismatch');
+      parsed.prizes = parsed.prizes.map((amount,i) => amount ?? cached?.prizes?.[i] ?? null);
+      drawResultCache[round] = parsed;
+      drawIssues.delete(key);
+      return parsed;
+    } catch { return fail('error'); }
+  })();
+  drawRequests.set(key,request);
+  try { return await request; } finally { drawRequests.delete(key); }
 }
 
 function evaluateSetMatch(setNumbers, draw) {
-  const hitCount = setNumbers.filter(n => draw.numbers.includes(n)).length;
-  const bonusHit = setNumbers.includes(draw.bonus);
-  if (hitCount === 6) return `6개 일치 (1등)`;
-  if (hitCount === 5 && bonusHit) return `5개 + 보너스 일치 (2등)`;
-  if (hitCount === 5) return `5개 일치 (3등)`;
-  if (hitCount === 4) return `4개 일치 (4등)`;
-  if (hitCount === 3) return `3개 일치 (5등)`;
-  return `${hitCount}개 일치 (미당첨)`;
+  const hits = setNumbers.filter(n => draw.numbers.includes(n)).length;
+  const bonus = hits === 5 && setNumbers.includes(draw.bonus);
+  const rank = hits === 6 ? 1 : bonus ? 2 : hits >= 3 ? 8-hits : null;
+  if (!rank) return hits + '개 일치 (미당첨)';
+  const prize = draw.prizes?.[rank-1];
+  return hits + '개' + (bonus ? ' + 보너스' : '') + ' 일치 · ' + rank + '등 당첨 · ' +
+    (prize ? prize.toLocaleString('ko-KR') + '원(해당 회차 기준)' : '당첨금 확인 대기');
 }
 
 function normalizeDrawDate(value) {
@@ -3265,23 +3365,7 @@ function actionButton(label, handler) {
   button.addEventListener('click', handler);
   return button;
 }
-function makeEntryView(sets, indices, date) {
-  const panel = document.createElement('details');
-  const summary = document.createElement('summary');
-  summary.textContent = '입력용 번호 보기';
-  panel.append(summary);
-  for (const i of indices) {
-    const label = document.createElement('label');
-    const toggle = document.createElement('input');
-    toggle.type = 'checkbox';
-    toggle.checked = true;
-    const row = document.createElement('p');
-    row.className = 'entry-numbers';
-    row.textContent = setName(i) + ': ' + sets[i].join('  ');
-    toggle.addEventListener('change', () => { row.hidden = !toggle.checked; });
-    label.append(toggle, document.createTextNode(setName(i) + '세트 선택'));
-    panel.append(label, row);
-  }
+function makeEntryView(date) {
   const guide = document.createElement('p');
   const now = getCurrentKST();
   guide.textContent = '번호는 동행복권에서 직접 선택해 주세요.' +
@@ -3294,7 +3378,7 @@ function makeEntryView(sets, indices, date) {
   link.textContent = '동행복권 공식 페이지 열기 ↗';
   link.className = 'official-lotto-link';
   const wrapper = document.createElement('div');
-  wrapper.append(panel, link, guide);
+  wrapper.append(link, guide);
   return wrapper;
 }
 function setPurchased(id, index, checked) {
@@ -3306,30 +3390,151 @@ function setPurchased(id, index, checked) {
 }
 const RECORD_STAGES = {
   all: ['모든 기록', '저장한 기록을 모두 봐요.'],
-  round: ['대상 회차 확인 중', '이 번호를 어느 회차와 비교할지 아직 확인하지 못했어요.'],
+  round: ['회차 미연결', '이 기록에는 아직 대상 회차가 연결되지 않았어요.'],
   upcoming: ['추첨 전', '비교할 회차가 정해졌고, 아직 추첨 전이에요.'],
-  results: ['추첨 결과 확인 중', '추첨은 지났지만 결과를 아직 불러오지 못했어요.'],
-  complete: ['당첨 번호와 비교 완료', '저장한 번호를 해당 회차의 당첨 번호와 비교했어요.']
+  results: ['추첨 결과 대기', ''],
+  complete: ['번호 비교 완료', '저장한 번호를 해당 회차의 당첨 번호와 비교했어요.']
 };
-const recordFilter = document.getElementById('record-filter');
-for (const [key, [label]] of Object.entries(RECORD_STAGES)) {
-  const option = document.createElement('option');
-  option.value = key;
-  option.textContent = label;
-  recordFilter.append(option);
-}
-recordFilter.value = 'all';
 let lastSavedId = null;
+let pastOpen = false;
+let newestSavedRound = null;
+const roundOpen = new Map();
+function recordBalls(nums, bonus) {
+  const row = document.createElement('div');
+  row.className = 'record-balls';
+  for (const n of [...nums,...(bonus ? [bonus] : [])]) {
+    if (bonus && row.children.length === nums.length) row.append(document.createTextNode('+'));
+    const ball = document.createElement('span');
+    ball.className = 'mini-ball ' + color(n);
+    ball.textContent = n;
+    row.append(ball);
+  }
+  return row;
+}
+function makeRecordResult(rec,i,draw,purchased) {
+        const line=document.createElement('div');
+        const rank = matchRank(rec.sets[i],draw);
+        const won = rank < 6;
+        line.className = 'record-result-line' + (won ? ' is-winning' : '');
+        const prefix = purchased ? '' : setName(i)+'세트 (추천 번호 대조): ';
+        const result = evaluateSetMatch(rec.sets[i],draw);
+        if (!won) line.append(document.createTextNode(prefix+result.replace(/ \(미당첨\)$/," · 미당첨")));
+        else {
+          const hits = result.split(' · ')[0];
+          const rankLabel = document.createElement('strong');
+          rankLabel.textContent = rank+'등 당첨';
+          line.append(document.createTextNode(prefix+hits+' · '),rankLabel,document.createTextNode(' · '));
+          const amount = draw.prizes?.[rank-1];
+          if (amount) {
+            const prizeLabel = document.createElement('strong');
+            prizeLabel.textContent = amount.toLocaleString('ko-KR')+'원';
+            line.append(prizeLabel,document.createTextNode(' (해당 회차 기준)'));
+          } else line.append(document.createTextNode('당첨금 확인 대기'));
+        }
+  return line;
+}
+function matchRank(nums, draw) {
+  const hits = nums.filter(n => draw.numbers.includes(n)).length;
+  return hits === 6 ? 1 : hits === 5 && nums.includes(draw.bonus) ? 2 : hits >= 3 ? 8-hits : 6;
+}
+function saveRecordImage(rec) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 640; canvas.height = 110 + 54 * rec.sets.length;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  ctx.fillStyle='#f3f6ff';ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#182033';ctx.font='bold 28px sans-serif';
+  ctx.fillText(rec.targetRound ? '제'+rec.targetRound+'회 · 저장 번호' : '저장 번호 · 회차 미연결',26,44);
+  ctx.font='16px sans-serif';ctx.fillText('추천 번호 기록 · 실제 복권이 아닙니다',26,74);
+  rec.sets.forEach((set,i)=>{
+    const y=115+i*54;
+    ctx.fillStyle='#182033';ctx.fillText(setName(i),28,y+5);
+    set.forEach((n,j)=>{
+      const x=84+j*62;
+      ctx.fillStyle=['#9a6800','#2674bb','#ba3848','#626e81','#268058'][Math.min(4,Math.floor((n-1)/10))];
+      ctx.beginPath();ctx.arc(x,y,21,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#fff';ctx.fillText(String(n),x-(n<10?5:9),y+6);
+    });
+    if(rec.purchased?.[i]) {ctx.fillStyle='#182033';ctx.fillText('구매함',475,y+5);}
+  });
+  const link=document.createElement('a');link.download='lotto-'+(rec.targetRound || 'record')+'.png';
+  link.href=canvas.toDataURL('image/png');link.click();
+}
+function ticketControls(rec) {
+  const box=document.createElement('div');
+  box.className='record-ticket-actions';
+  const key='lotto-ticket:'+rec.id;
+  const field=document.createElement('input');
+  field.type='file';field.accept='image/*';field.hidden=true;
+  const info=document.createElement('p');
+  const qrKey=key+':qr';
+  const qr=document.createElement('p');
+  const photo=document.createElement('img');
+  photo.alt='첨부한 복권 사진';photo.hidden=true;
+  const update=()=>{
+    const data=localStorage.getItem(key);
+    photo.hidden=!data;
+    if(data) photo.src=data; else photo.removeAttribute("src");
+    const savedQR=localStorage.getItem(qrKey);
+    qr.textContent=savedQR ? 'QR 기록: '+savedQR : '';
+  };
+  field.addEventListener('change',()=>{
+    const file=field.files[0];
+    if(!file)return;
+    if(!/^image\/(png|jpeg|webp|gif)$/.test(file.type)||file.size>1500000){
+      info.textContent='PNG, JPG, WEBP, GIF 사진을 1.5MB 이하로 선택해 주세요.';return;
+    }
+    const reader=new FileReader();
+    reader.onload=async ()=>{
+      try {
+        if(!getSavedRecords().some(r=>r.id===rec.id))return;
+        localStorage.setItem(key,reader.result); localStorage.removeItem(qrKey); update();
+        info.textContent='이 기기에 사진을 첨부했어요. 구매 여부는 자동으로 바뀌지 않아요.';
+        if (typeof BarcodeDetector !== 'undefined' && typeof createImageBitmap === 'function') {
+          try {
+            const bitmap=await createImageBitmap(file);
+            let codes;
+            try { codes=await new BarcodeDetector({formats:['qr_code']}).detect(bitmap); }
+            finally { bitmap.close(); }
+            const value=codes[0]?.rawValue;
+            if (value && value.length<=2048 && localStorage.getItem(key)===reader.result) {
+              localStorage.setItem(qrKey,value); update();
+            }
+          } catch { /* The attached image is still usable when QR detection is unavailable. */ }
+        }
+      } catch {info.textContent='저장 공간이 부족해 사진을 첨부하지 못했어요.';}
+    };
+    reader.onerror=()=>{info.textContent='사진을 읽지 못했어요.';};
+    reader.readAsDataURL(file);
+  });
+  if(typeof FileReader !== 'undefined')update();
+  box.append(actionButton('번호 이미지 저장',()=>saveRecordImage(rec)),
+    actionButton('복권 사진·QR 첨부',()=>field.click()),field,info,photo,qr);
+  return box;
+}
+let recordTimer;
+const drawDeadline = rec => Date.parse(rec.targetDrawDate + 'T20:35:00+09:00');
+const recordGroup = rec => !rec.targetRound ? 'round' : Date.now() < drawDeadline(rec) ? 'upcoming' : 'past';
+function scheduleRecordRefresh(records) {
+  if (typeof setTimeout !== 'function') return;
+  clearTimeout(recordTimer);
+  if (!records.length) return;
+  const now = Date.now();
+  const next = Math.min(60000,...records.map(drawDeadline).filter(t => t > now).map(t => t-now));
+  recordTimer = setTimeout(renderSavedRecords,next);
+}
+function formatRecordDate(date) {
+  return date && normalizeDrawDate(date) === date ? date.split('-').map(Number).join('. ') + '.' : '';
+}
 function recordState(rec, draw) {
   if (!rec.targetRound) return 'round';
-  if (draw) return 'complete';
-  return Date.now() < Date.parse(rec.targetDrawDate + 'T20:35:00+09:00') ? 'upcoming' : 'results';
+  if (recordGroup(rec) === 'upcoming') return 'upcoming';
+  return draw ? 'complete' : 'results';
 }
 function showAllRecords() {
   lastSavedId = null;
   document.getElementById('backup-status').textContent = '';
-  recordFilter.value = 'all';
-  document.getElementById('purchased-only').checked = false;
+  document.getElementById('purchased-only').setAttribute('aria-pressed','false');
   renderRecordList();
 }
 function cachedRecordDraw(rec) {
@@ -3373,7 +3578,11 @@ async function renderSavedRecords() {
         }
       }
     }
-    if (rec.targetRound) await fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate);
+    if (rec.targetRound && recordGroup(rec) === 'past') {
+      const request = fetchDrawResultIfNeeded(rec.targetRound, rec.targetDrawDate);
+      if (revision === recordsRenderRevision) renderRecordList();
+      await request;
+    }
     if (revision === recordsRenderRevision) renderRecordList();
   }));
   if (revision === recordsRenderRevision) renderRecordList();
@@ -3381,33 +3590,33 @@ async function renderSavedRecords() {
 function renderRecordList() {
   const listEl = document.getElementById('records-list');
   const records = getSavedRecords();
-  const filter = recordFilter.value || 'all';
-  const purchasedOnly = document.getElementById('purchased-only').checked;
-  document.getElementById('record-filter-detail').textContent = {
-    all: '저장한 기록을 모두 봐요.',
-    round: '대상 회차가 아직 정해지지 않은 기록만 보여줘요.',
-    upcoming: '대상 회차의 추첨을 기다리는 기록만 보여줘요.',
-    results: '추첨은 지났지만 결과를 불러오지 못한 기록만 보여줘요.',
-    complete: '당첨 번호와 비교를 마친 기록만 보여줘요.'
-  }[filter];
+  scheduleRecordRefresh(records);
+  const purchasedOnly = document.getElementById('purchased-only').getAttribute('aria-pressed') === 'true';
   document.getElementById('clear-records').style.display = records.length ? 'inline-block' : 'none';
   const notice = document.getElementById('record-save-notice');
   notice.replaceChildren();
   const saved = records.find(rec => rec.id === lastSavedId);
-  const hiddenSaved = saved && ((filter !== 'all' && filter !== recordState(saved, cachedRecordDraw(saved))) ||
-      !recordIndices(saved, purchasedOnly).length);
+  const hiddenSaved = saved && !recordIndices(saved, purchasedOnly).length;
   if (hiddenSaved) {
     notice.append(document.createTextNode('저장했어요. 현재 보기 조건에서는 숨겨져 있어요. '),
       actionButton('전체 기록 보기', showAllRecords));
   }
+  const previousPast = Array.from(listEl.children).find(node => node.id === 'past-records');
+  if (previousPast) pastOpen = previousPast.open;
+  for (const group of Array.from(listEl.children)) {
+    for (const section of Array.from(group.children)) {
+      if (section.roundKey) roundOpen.set(section.roundKey,section.open);
+    }
+  }
   listEl.replaceChildren();
   let visible = 0;
-  for (const rec of records) {
-    const draw = cachedRecordDraw(rec);
+  const groups = {upcoming:[], round:[], past:[]};
+  for (const rec of records.slice().sort((a,b) => (b.targetRound || 0) - (a.targetRound || 0))) {
+    const draw = recordGroup(rec) === 'past' ? cachedRecordDraw(rec) : null;
     const state = recordState(rec, draw);
     const [stage, description] = RECORD_STAGES[state];
     const indices = recordIndices(rec, purchasedOnly);
-    if ((filter !== 'all' && filter !== state) || !indices.length) continue;
+    if (!indices.length) continue;
     visible++;
     const card = document.createElement('div');
     card.className = 'record-card';
@@ -3417,15 +3626,30 @@ function renderRecordList() {
 
     const meta = document.createElement('div');
     meta.className = 'record-meta';
-    const roundText = rec.targetRound
-      ? `대상 회차: 제${rec.targetRound}회 (추첨일 ${rec.targetDrawDate})`
-      : '대상 회차·추첨일: 확인 대기';
-    const modeText = rec.mode === 'personal' ? '나의 날짜로 만든 번호' : '무작위 추천';
+    const modeText = rec.mode === 'personal' ? '사주 날짜 추천' : '무작위 추천';
     const dateSlotText = rec.selectedDate
       ? `선택 날짜: ${rec.selectedDate} (${rec.selectedSlot || '시간대 미지정'})`
-      : `생성 일자: ${rec.createdDate || '-'}`;
+      : `생성일자: ${formatRecordDate(rec.createdDate) || '-'}`;
 
-    meta.textContent = `[${modeText}] ${roundText} · ${stage}\n${description}\n${dateSlotText} · 보너스 옵션: ${rec.includeBonus ? '포함' : '미포함'}\n규칙 버전: ${rec.ruleVersion || '-'}`;
+    const modeBadge = document.createElement('strong');
+    modeBadge.className = 'record-mode-badge ' + (rec.mode === 'personal' ? 'is-personal' : 'is-random');
+    modeBadge.textContent = modeText;
+    const created = document.createElement('div');
+    created.textContent = '생성일: ' + (formatRecordDate(rec.createdDate) || '-');
+    meta.append(modeBadge, created);
+    const badge = document.createElement('strong');
+    badge.className = 'record-stage';
+    badge.textContent = stage;
+    const detail = document.createElement('div');
+    const dateText = rec.targetRound ? formatRecordDate(rec.targetDrawDate) : '';
+    const schedule = document.createElement('div');
+    schedule.className = 'record-schedule';
+    if (dateText) schedule.textContent = state === 'upcoming' ? '추첨 예정: '+dateText+' 오후 8:35 (KST)' : '추첨일: '+dateText;
+    const reason = state === 'results' ?
+      drawMessages[drawIssues.get(drawKey(rec.targetRound,rec.targetDrawDate))] || '결과를 확인하면 저장한 번호와 비교해요.' :
+      state === 'round' ? description : '';
+    detail.textContent = reason;
+
 
     const delBtn = document.createElement('button');
     delBtn.type = 'button';
@@ -3433,49 +3657,105 @@ function renderRecordList() {
     delBtn.textContent = '삭제';
     delBtn.addEventListener('click', () => {
       const updated = getSavedRecords().filter(r => r.id !== rec.id);
-      saveRecordsToStorage(updated);
-      renderSavedRecords();
+      if (saveRecordsToStorage(updated)) {
+        localStorage.removeItem('lotto-ticket:'+rec.id);
+        localStorage.removeItem('lotto-ticket:'+rec.id+':qr');
+        renderSavedRecords();
+      }
     });
 
-    top.append(meta, delBtn);
+    top.append(meta, badge, delBtn);
 
     const setsBox = document.createElement('div');
     setsBox.className = 'record-sets';
+    const purchaseGuide = document.createElement('p');
+    purchaseGuide.textContent = '구매';
+    purchaseGuide.className = 'record-purchase-heading';
+    setsBox.append(purchaseGuide);
     for (const i of indices) {
-      const label = document.createElement('label');
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.checked = rec.purchased?.[i] === true;
-      checkbox.addEventListener('change', () => {
-        if (!setPurchased(rec.id, i, checkbox.checked)) {
-          checkbox.checked = !checkbox.checked;
+      const checked = rec.purchased?.[i] === true;
+      const row = document.createElement('div');
+      row.className = 'record-purchase-row' + (checked && draw && matchRank(rec.sets[i],draw) < 6 ? ' is-winning-purchase' : '');
+      const numbers = document.createElement('div');
+      numbers.className = 'record-purchase-numbers';
+      numbers.append(document.createTextNode(setName(i) + '세트'),recordBalls(rec.sets[i]));
+      if (checked && draw) numbers.append(makeRecordResult(rec,i,draw,true));
+      const purchase = actionButton(checked ? '구매' : '미구매', () => {
+        if (!setPurchased(rec.id,i,!checked)) {
           document.getElementById('backup-status').textContent = '구매 표시를 저장하지 못했습니다.';
           return;
         }
         renderSavedRecords();
       });
-      const bonus = rec.includeBonus && rec.bonuses?.[i] ? ' + 보너스 ' + rec.bonuses[i] : '';
-      label.append(checkbox, document.createTextNode(' 구매함 · ' + setName(i) + ': ' + rec.sets[i].join(', ') + bonus));
-      const row = document.createElement('div');
-      row.append(label);
+      purchase.className = 'record-purchase-toggle';
+      purchase.setAttribute('aria-label',setName(i)+'세트 구매 표시');
+      purchase.setAttribute('aria-pressed',String(checked));
+      row.append(numbers,purchase);
       setsBox.append(row);
     }
-    const checkBox = document.createElement('div');
-    checkBox.className = 'record-check';
-    checkBox.textContent = !draw ? '당첨 대조 결과: ' + stage :
-      '제' + draw.round + '회 당첨 번호(' + draw.numbers.join(', ') + ' + 보너스 ' + draw.bonus + ') 대조: ' +
-      indices.map(i => setName(i) + '세트 (' + (rec.purchased?.[i] ? '구매 표시한 번호' : '추천 번호 대조') +
-        '): ' + evaluateSetMatch(rec.sets[i], draw)).join(' / ');
-    card.append(top, setsBox, checkBox);
-    listEl.appendChild(card);
+    card.append(top);
+    if (dateText) card.append(schedule);
+    if (rec.selectedDate) {
+      const selected = document.createElement('div');
+      selected.textContent = dateSlotText;
+      card.append(selected);
+    }
+    if (reason) card.append(detail);
+    card.append(setsBox);
+    card.append(ticketControls(rec));
+    card.dataset ? card.dataset.round = rec.targetRound || '' : card.round = rec.targetRound || '';
+    groups[recordGroup(rec)].push(card);
+  }
+  for (const [key,title] of Object.entries({upcoming:'현재·예정 회차', round:'회차 미연결', past:'지난 회차 기록'})) {
+    if (!groups[key].length) continue;
+    const group = document.createElement(key === 'past' ? 'details' : 'section');
+    group.className = 'record-group';
+    const heading = document.createElement(key === 'past' ? 'summary' : 'h3');
+    heading.textContent = title + (key === 'past' ? ' (' + groups[key].length + '건)' : '');
+    if (key === 'past') {
+      group.id = 'past-records';
+      group.open = pastOpen;
+      group.addEventListener('toggle', () => { if (group.parentNode === listEl) pastOpen = group.open; });
+    }
+    group.append(heading);
+    const rounds = new Map();
+    for (const card of groups[key]) {
+      const round = card.dataset?.round || card.round || '';
+      if (!rounds.has(round)) rounds.set(round,[]);
+      rounds.get(round).push(card);
+    }
+    for (const [round,cards] of rounds) {
+      if (!round) { group.append(...cards); continue; }
+      const section = document.createElement('details');
+      section.className='record-round';
+      section.roundKey=String(round);
+      section.open=roundOpen.get(String(round)) ?? (newestSavedRound ? Number(round)===newestSavedRound : key==='upcoming');
+      const label=document.createElement('summary');
+      label.textContent='제'+round+'회 ('+cards.length+'건)';
+      const recordsForRound = records.filter(rec => String(rec.targetRound) === String(round));
+      const dates = new Set(recordsForRound.map(rec => rec.targetDrawDate));
+      const ref = recordsForRound[0];
+      const draw = key === 'past' && dates.size === 1 ? cachedRecordDraw(ref) : null;
+      const info = document.createElement('span');
+      info.className = 'record-round-info';
+      if (draw) info.append(document.createTextNode('당첨 번호'),recordBalls(draw.numbers,draw.bonus));
+      else if (key === 'upcoming' && dates.size === 1) {
+        const [year,month,day] = ref.targetDrawDate.split('-').map(Number);
+        info.textContent = year+'. '+month+'. '+day+'. 오후 8:35 추첨 예정 (KST)';
+      } else info.textContent = dates.size > 1 ? '저장 기록의 추첨일이 서로 달라요.' : '추첨 결과 대기';
+      label.append(info);
+      section.append(label,...cards);
+      group.append(section);
+    }
+    listEl.appendChild(group);
   }
   if (!visible) {
     const empty = document.createElement('p');
     empty.textContent = records.length
-      ? '선택한 조건에 해당하는 기록이 없습니다. ' + RECORD_STAGES[filter][0] +
-        (purchasedOnly ? ' · 구매한 번호만 보기' : ' · 구매 여부 전체')
+      ? '선택한 조건에 해당하는 기록이 없습니다.' +
+        (purchasedOnly ? ' · 구매 표시한 번호만 보기' : ' · 구매 여부 전체')
       : '아직 저장된 기록이 없습니다.';
-    if ((filter !== 'all' || purchasedOnly) && !hiddenSaved) empty.append(actionButton('전체 기록 보기', showAllRecords));
+    if (purchasedOnly && !hiddenSaved) empty.append(actionButton('전체 기록 보기', showAllRecords));
     listEl.appendChild(empty);
   }
 }
@@ -3523,40 +3803,10 @@ function mergeBackup(existing, incoming) {
   });
   return {records: [...existing, ...added], added: added.length, skipped: incoming.length - added.length};
 }
-document.getElementById('export-records').addEventListener('click', () => {
-  const url = URL.createObjectURL(new Blob([JSON.stringify({
-    version: BACKUP_VERSION, records: getSavedRecords().map(backupRecord)
-  }, null, 2)], {type:'application/json'}));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'lotto-records.json';
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
-const backupFile = document.getElementById('backup-file');
-document.getElementById('import-records').addEventListener('click', () => backupFile.click());
-backupFile.addEventListener('change', async () => {
-  const file = backupFile.files[0];
-  backupFile.value = '';
-  if (!file) return;
-  const message = document.getElementById('backup-status');
-  try {
-    const incoming = parseBackup(await file.text());
-    const preview = mergeBackup(getSavedRecords(), incoming);
-    const summary = '추가 ' + preview.added + '건 · 중복 건너뜀 ' + preview.skipped + '건';
-    message.textContent = summary;
-    if (!preview.added || !window.confirm(summary + '. 기존 기록에 합칠까요?')) return;
-    const merged = mergeBackup(getSavedRecords(), incoming);
-    if (!saveRecordsToStorage(merged.records)) throw new Error('기기 저장 공간에 기록을 저장하지 못했습니다.');
-    message.textContent = merged.added + '건을 복원했습니다.';
-    renderSavedRecords();
-  } catch (error) {
-    message.textContent = '가져오기 실패: ' + error.message;
-  }
-});
-
-for (const id of ['record-filter', 'purchased-only']) {
-  document.getElementById(id).addEventListener('change', () => {
+for (const id of ['purchased-only']) {
+  document.getElementById(id).addEventListener('click', () => {
+    const button = document.getElementById(id);
+    button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed') !== 'true'));
     lastSavedId = null;
     document.getElementById('backup-status').textContent = '';
     renderRecordList();
@@ -3586,9 +3836,8 @@ saveRecordButton.addEventListener('click', () => {
     selectedSlot: (currentMode === 'personal' && currentPersonalMeta) ? currentPersonalMeta.selectedSlotLabel : null,
     createdDate: todayStr,
     createdTime: currentMode === 'random' ? createdTime : null,
+    purchased: currentNumbers.map(() => false),
     sets: currentNumbers.map(s => [...s]),
-    bonuses: [...bonusNumbers],
-    includeBonus,
     mode: currentMode,
     ruleVersion: (currentMode === 'personal' && currentPersonalMeta)
       ? currentPersonalMeta.ruleVersion
@@ -3600,6 +3849,16 @@ saveRecordButton.addEventListener('click', () => {
   const ok = saveRecordsToStorage(records);
   if (ok) {
     lastSavedId = newRecord.id;
+    const nextRound = newRecord.targetRound;
+    if (nextRound && nextRound > (newestSavedRound || 0)) {
+      newestSavedRound = nextRound;
+      for (const key of roundOpen.keys()) roundOpen.set(key, Number(key) === nextRound);
+      for (const group of Array.from(document.getElementById('records-list').children)) {
+        for (const section of Array.from(group.children)) {
+          if (section.roundKey) section.open = Number(section.roundKey) === nextRound;
+        }
+      }
+    }
     status.textContent = '현재 5세트를 기기 기록에 저장했습니다. (출생 정보는 기록에 포함되지 않습니다)';
     renderSavedRecords();
   } else {
@@ -3610,7 +3869,14 @@ saveRecordButton.addEventListener('click', () => {
 });
 
 document.getElementById('clear-records').addEventListener('click', () => {
-  try { localStorage.removeItem(STORAGE_RECORDS_KEY); } catch {}
+  try {
+    const records = getSavedRecords();
+    localStorage.removeItem(STORAGE_RECORDS_KEY);
+    for (const rec of records) {
+      localStorage.removeItem('lotto-ticket:'+rec.id);
+      localStorage.removeItem('lotto-ticket:'+rec.id+':qr');
+    }
+  } catch {}
   renderSavedRecords();
   status.textContent = '저장된 모든 기록을 삭제했습니다.';
 });

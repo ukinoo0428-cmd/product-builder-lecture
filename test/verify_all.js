@@ -481,7 +481,7 @@ runCheck(
 runCheck(
   '8. 개인화 번호 시드·중복 방지·보너스 독립성',
   '내부 일관성 테스트',
-  '양력·음력 동일 출생 정보 시 동일 시드·동일 번호 생성, 세트별 스트림·보너스 별도 스트림 및 보너스 토글 시 본번호 불변 확인',
+  '양력·음력 동일 출생 정보 시 동일 시드·동일 번호 생성, 세트별 스트림·보너스 별도 스트림 및 복사 시 추천 보너스 제외 확인',
   () => {
     // 양력 1990-05-15 == 음력 1990-04-21 (평달)
     const lunarConv = sandbox.solarToLunar(1990, 5, 15);
@@ -534,18 +534,12 @@ runCheck(
     });
     assert.strictEqual(setKeys.size, 5, '5세트 간 동일 조합 중복 없음');
 
-    // 보너스 버튼 토글 시 본번호 5세트가 바뀌지 않는지 확인
+    // 복사에는 본번호만 들어가는지 확인
     sandbox.generatePersonalSets(
       { solarYear: 1990, solarMonth: 5, solarDay: 15, timeKnown: true, hour: 14, minute: 30, cityCode: 'SEOUL', gender: 'M' },
       '2026-11-07', 'O', '11:00 ~ 13:00 (오시)'
     );
-    const beforeToggleCopy = sandbox.formatNumbers();
-    elements['bonus'].dispatchEvent({ type: 'click' }); // 보너스 ON
-    const withBonusCopy = sandbox.formatNumbers();
-    elements['bonus'].dispatchEvent({ type: 'click' }); // 보너스 OFF
-    const afterToggleCopy = sandbox.formatNumbers();
-    assert.strictEqual(beforeToggleCopy, afterToggleCopy, '보너스 옵션 토글 전후 본번호 5세트가 완전히 동일해야 함');
-    assert.ok(withBonusCopy.includes('+ 보너스'));
+    assert.doesNotMatch(sandbox.formatNumbers(), /보너스/);
 
     return `시드 정규화(${seedFromSolarInput}) 및 양력=음력 동일 번호·보너스 스트림 분리 검증 완료`;
   }
@@ -602,7 +596,7 @@ runCheck(
 runCheck(
   '10. 기존 로또 기능 회귀 테스트',
   '내부 일관성 테스트',
-  '무작위 번호 5세트 생성, 보너스 토글, 복사 포맷, 다크모드 전환, 지난회차 표시 동작 확인',
+  '무작위 번호 5세트 생성, 복사 포맷, 다크모드 전환, 지난회차 표시 동작 확인',
   () => {
     elements['generate'].dispatchEvent({ type: 'click' });
     const copyText = sandbox.formatNumbers();
@@ -629,7 +623,7 @@ runCheck(
     assert.ok(elements['last-draw-round'].textContent.includes('제1145회'));
     assert.ok(elements['last-draw-prize'].textContent.includes('2,500,000,000원'));
 
-    return '무작위 5세트·보너스 토글·복사·다크모드·지난회차 표시 정상 작동';
+    return '무작위 5세트·복사·다크모드·지난회차 표시 정상 작동';
   }
 );
 
