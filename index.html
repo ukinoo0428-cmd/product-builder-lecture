@@ -2584,7 +2584,7 @@ async function loadLastDraw() {
     const firstDiv = Array.isArray(data.divisions) && data.divisions[0] ? data.divisions[0] : {};
     const parsed = {
       round: data.draw_no,
-      date: data.date,
+      date: normalizeDrawDate(data.date),
       numbers: data.numbers,
       bonus: data.bonus_no,
       firstPrize: firstDiv.prize,
@@ -3142,7 +3142,7 @@ async function fetchDrawResultIfNeeded(round, date) {
     if (!data || !Array.isArray(data.numbers)) return null;
     const parsed = {
       round: data.draw_no,
-      date: data.date,
+      date: normalizeDrawDate(data.date),
       numbers: data.numbers,
       bonus: data.bonus_no
     };
@@ -3163,6 +3163,14 @@ function evaluateSetMatch(setNumbers, draw) {
   if (hitCount === 4) return `4개 일치 (4등)`;
   if (hitCount === 3) return `3개 일치 (5등)`;
   return `${hitCount}개 일치 (미당첨)`;
+}
+
+function normalizeDrawDate(value) {
+  if (typeof value !== 'string' ||
+      !/^\d{4}-\d{2}-\d{2}(?:T00:00:00(?:\.0+)?Z)?$/.test(value)) return null;
+  const date = value.slice(0, 10);
+  const ms = Date.parse(date + 'T00:00:00Z');
+  return Number.isFinite(ms) && new Date(ms).toISOString().slice(0, 10) === date ? date : null;
 }
 
 function validDraw(draw, round, date) {

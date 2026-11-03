@@ -138,9 +138,14 @@ vm.runInContext(scriptMatch[1], sandbox);
 (async () => {
   sandbox.Date = class extends Date { static now() { return Date.parse('2026-12-06T01:00:00Z'); } };
   vm.runInContext("verifiedLatestDraw = {round:1248,date:'2026-10-31',numbers:[1,2,3,4,5,6],bonus:7}", sandbox);
+  sandbox.fetch = async () => ({ok:true,json:async()=>({draw_no:1248,date:'2026-10-31T00:00:00Z',numbers:[16,18,27,36,38,42],bonus_no:22,divisions:[{prize:1933658450,winners:15}]})});
+  await sandbox.loadLastDraw();
+  assert.match(elements['last-draw-round'].textContent,/1248/);
+  assert.match(elements['last-draw-prize'].textContent,/1,933,658,450/);
+  assert.equal(sandbox.normalizeDrawDate('2026-02-30T00:00:00Z'),null);
   const base = {id:'test',targetRound:null,targetDrawDate:null,selectedDate:'2026-12-05',selectedSlot:'15:00 ~ 17:00 (신시)',createdDate:'2026-11-03',sets:[[1,2,3,4,5,6]],bonuses:[],mode:'personal'};
   sandbox.saveRecordsToStorage([base]);
-  const result = {draw_no:1253,date:'2026-12-05',numbers:[1,2,3,4,5,6],bonus_no:7};
+  const result = {draw_no:1253,date:'2026-12-05T00:00:00Z',numbers:[1,2,3,4,5,6],bonus_no:7};
   const rendered = () => elements['records-list'].children[0].children[2].textContent;
   for (const data of [null, 'offline', {...result,draw_no:1254}, {...result,date:'2026-12-12'}, {...result,numbers:[1,1,2,3,4,5]}, result]) {
     sandbox.fetch = async url => {
