@@ -3489,6 +3489,7 @@ function ticketControls(rec) {
 
 const drawDeadline = rec => Date.parse(rec.targetDrawDate + 'T20:35:00+09:00');
 const recordGroup = rec => !rec.targetRound ? 'round' : Date.now() < drawDeadline(rec) ? 'upcoming' : 'past';
+let recordTimer;
 function scheduleRecordRefresh(records) {
   if (typeof setTimeout !== 'function') return;
   clearTimeout(recordTimer);

@@ -87,6 +87,8 @@ function makeElem(id = '', tag = 'div') {
 const elements = {};
 const storageMap = new Map();
 const sandbox = {
+  setTimeout: () => 1,
+  clearTimeout: () => {},
   console,
   Date,
   Math,
