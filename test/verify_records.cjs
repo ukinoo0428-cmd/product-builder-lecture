@@ -255,5 +255,6 @@ vm.runInContext(scriptMatch[1], sandbox);
   assert.equal(sandbox.getSavedRecords().length,4);
   assert.equal(sandbox.getSavedRecords().find(r=>r.id===old.id).purchased[0],true);
   assert.match(elements['record-filter-detail'].textContent,/저장한 기록을 모두 봐요/);
+  assert.notEqual(sandbox.recordPurchaseDay('2026-11-03','16:34(현재) ~ 17:00 (신시 잔여 구매 가능 구간)',null),null);
   console.log('Saved records, filters, backup, locks, entry view and period checks passed');
 })().catch(e=>{console.error(e);process.exitCode=1});

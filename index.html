@@ -3226,7 +3226,7 @@ function recordPurchaseDay(date, label, time) {
   if (!Number.isFinite(day)) return null;
   const dow = new Date(day).getUTCDay();
   const close = dow === 6 ? 1200 : 1440;
-  const slot = /^(\d{2}):(\d{2})\s*~\s*(\d{2}):(\d{2})(?:\s|$)/.exec(label || '');
+  const slot = /^(\d{2}):(\d{2})(?:\(현재\))?\s*~\s*(\d{2}):(\d{2})(?:\s|$)/.exec(label || '');
   if (slot) {
     const [, h,m,eh,em] = slot.map(Number);
     const start=h*60+m,end=eh*60+em;
@@ -3326,6 +3326,8 @@ function recordState(rec, draw) {
   return Date.now() < Date.parse(rec.targetDrawDate + 'T20:35:00+09:00') ? 'upcoming' : 'results';
 }
 function showAllRecords() {
+  lastSavedId = null;
+  document.getElementById('backup-status').textContent = '';
   recordFilter.value = 'all';
   document.getElementById('purchased-only').checked = false;
   renderRecordList();
@@ -3343,7 +3345,20 @@ async function renderSavedRecords() {
   renderRecordList();
   await Promise.all(getSavedRecords().map(async rec => {
     if (!rec.targetRound) {
-      const candidate = recordDrawCandidate(rec);
+      // Restore the currently selling round for legacy records with a valid purchase window.
+      const date = rec.selectedDate || rec.createdDate;
+      const day = recordPurchaseDay(date, rec.selectedSlot, rec.selectedDate ? null : rec.createdTime);
+      const upcoming = day != null ? getConfirmedTargetDrawForDate(date) : null;
+      if (upcoming && Date.now() < Date.parse(upcoming.drawDate + 'T20:35:00+09:00')) {
+        const latest = getSavedRecords();
+        const stored = latest.find(item => item.id === rec.id);
+        if (stored && !stored.targetRound) {
+          stored.targetRound = upcoming.round;
+          stored.targetDrawDate = upcoming.drawDate;
+          if (saveRecordsToStorage(latest)) Object.assign(rec, stored);
+        }
+      }
+      const candidate = rec.targetRound ? null : recordDrawCandidate(rec);
       if (candidate) {
         const draw = await fetchDrawResultIfNeeded(candidate.round, candidate.date);
         if (revision !== recordsRenderRevision) return;
@@ -3368,13 +3383,20 @@ function renderRecordList() {
   const records = getSavedRecords();
   const filter = recordFilter.value || 'all';
   const purchasedOnly = document.getElementById('purchased-only').checked;
-  document.getElementById('record-filter-detail').textContent = RECORD_STAGES[filter][1];
+  document.getElementById('record-filter-detail').textContent = {
+    all: '저장한 기록을 모두 봐요.',
+    round: '대상 회차가 아직 정해지지 않은 기록만 보여줘요.',
+    upcoming: '대상 회차의 추첨을 기다리는 기록만 보여줘요.',
+    results: '추첨은 지났지만 결과를 불러오지 못한 기록만 보여줘요.',
+    complete: '당첨 번호와 비교를 마친 기록만 보여줘요.'
+  }[filter];
   document.getElementById('clear-records').style.display = records.length ? 'inline-block' : 'none';
   const notice = document.getElementById('record-save-notice');
   notice.replaceChildren();
   const saved = records.find(rec => rec.id === lastSavedId);
-  if (saved && ((filter !== 'all' && filter !== recordState(saved, cachedRecordDraw(saved))) ||
-      !recordIndices(saved, purchasedOnly).length)) {
+  const hiddenSaved = saved && ((filter !== 'all' && filter !== recordState(saved, cachedRecordDraw(saved))) ||
+      !recordIndices(saved, purchasedOnly).length);
+  if (hiddenSaved) {
     notice.append(document.createTextNode('저장했어요. 현재 보기 조건에서는 숨겨져 있어요. '),
       actionButton('전체 기록 보기', showAllRecords));
   }
@@ -3453,7 +3475,7 @@ function renderRecordList() {
       ? '선택한 조건에 해당하는 기록이 없습니다. ' + RECORD_STAGES[filter][0] +
         (purchasedOnly ? ' · 구매한 번호만 보기' : ' · 구매 여부 전체')
       : '아직 저장된 기록이 없습니다.';
-    if (filter !== 'all' || purchasedOnly) empty.append(actionButton('전체 기록 보기', showAllRecords));
+    if ((filter !== 'all' || purchasedOnly) && !hiddenSaved) empty.append(actionButton('전체 기록 보기', showAllRecords));
     listEl.appendChild(empty);
   }
 }
@@ -3534,7 +3556,11 @@ backupFile.addEventListener('change', async () => {
 });
 
 for (const id of ['record-filter', 'purchased-only']) {
-  document.getElementById(id).addEventListener('change', renderRecordList);
+  document.getElementById(id).addEventListener('change', () => {
+    lastSavedId = null;
+    document.getElementById('backup-status').textContent = '';
+    renderRecordList();
+  });
 }
 
 for (const id of ['range-start', 'range-end']) {
