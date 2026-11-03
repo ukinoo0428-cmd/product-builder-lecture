@@ -3824,12 +3824,14 @@ saveRecordButton.addEventListener('click', () => {
   if (ok) {
     lastSavedId = newRecord.id;
     const nextRound = newRecord.targetRound;
-    if (nextRound && nextRound > (newestSavedRound || 0)) {
-      newestSavedRound = nextRound;
-      for (const key of roundOpen.keys()) roundOpen.set(key, Number(key) === nextRound);
+    if (nextRound) {
+      const advances = nextRound > (newestSavedRound || 0);
+      if (advances) newestSavedRound = nextRound;
+      roundOpen.set(String(nextRound), true);
+      if (advances) for (const key of roundOpen.keys()) roundOpen.set(key, Number(key) === nextRound);
       for (const group of Array.from(document.getElementById('records-list').children)) {
         for (const section of Array.from(group.children)) {
-          if (section.roundKey) section.open = Number(section.roundKey) === nextRound;
+          if (section.roundKey && (advances || Number(section.roundKey) === nextRound)) section.open = Number(section.roundKey) === nextRound;
         }
       }
     }
