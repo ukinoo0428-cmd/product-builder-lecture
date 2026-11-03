@@ -240,14 +240,15 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
         <div class="inline-options">
           <input id="birth-time" class="input-field" type="time" style="max-width:180px" aria-describedby="birth-time-hint">
           <label><input type="checkbox" id="time-unknown"> 시간 모름</label>
+          <label id="time-unknown-non-midnight-wrap" style="display:none"><input type="checkbox" id="time-unknown-non-midnight"> 자정·야자시 경계(00:00~01:35 · 23:00~24:00) 출생 아님</label>
         </div>
-        <p id="birth-time-hint" class="field-hint">💡 출생 시각은 출생 당시 법정 시각(역사적 표준시·서머타임 <code>Asia/Seoul</code> 반영)으로 해석해 UTC 출생 순간과 지방평균태양시를 분리 계산합니다. ‘시간 모름’ 선택 시 정오를 실제 출생 시각으로 확정하지 않고 당일 전체 범위를 검토하며, 시주와 구매 시간대 후보를 제외합니다.</p>
+        <p id="birth-time-hint" class="field-hint">💡 출생 시각은 출생 당시 법정 시각(역사적 표준시·서머타임 <code>Asia/Seoul</code> 반영)으로 해석해 UTC 출생 순간과 지방평균태양시를 분리 계산합니다. ‘시간 모름’ 선택 시 정오를 실제 출생 시각으로 확정하지 않고 당일 전체 범위(절입 전후 및 경도 보정에 따른 자정 직후 전날 일주 가능성)를 함께 검토하며, 시주와 구매 시간대 후보를 제외합니다.</p>
       </div>
 
       <div class="form-row">
         <label class="form-label" for="birth-city">출생 도시 (대한민국 내 출생지 지방평균태양시 경도 보정)</label>
         <select id="birth-city" class="input-field">
-          <option value="">출생 도시 선택 (출생 시간 입력 시 대한민국 내 도시 선택 필수)</option>
+          <option value="">출생 도시 선택 (출생 시간 입력 시 필수 · 시간 모름 시 선택 또는 전국 범위 검토)</option>
           <option value="SEOUL">서울특별시 (동경 126.9780° · 현대 KST 대비 표시 약 -32분)</option>
           <option value="INCHEON">인천광역시 (동경 126.7052° · 현대 KST 대비 표시 약 -33분)</option>
           <option value="SUWON">수원·경기 (동경 127.0286° · 현대 KST 대비 표시 약 -32분)</option>
@@ -296,29 +297,29 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
     <div id="saju-result" class="saju-result" aria-live="polite">
       <div id="pillars-summary" class="pillars-box"></div>
       <div id="candidates-container" class="candidates-wrap"></div>
-      <p class="saju-disclaimer">전통 명리학을 활용한 오락용 풀이입니다. 대운·세운을 포함한 결과도 실제 횡재나 로또 당첨 확률을 예측하지 않습니다.</p>
+      <p class="saju-disclaimer">전통 명리학을 활용한 개인화 풀이입니다. 날짜와 시간 후보는 실제 횡재나 로또 당첨 확률을 예측하지 않습니다.</p>
 
       <details class="criteria-box">
         <summary>계산 기준 보기 (만세력·대운·세운 명리 해석 기준 및 지원 범위)</summary>
         <div class="criteria-content">
-          <p><strong>적용 규칙 버전:</strong> 명리 날짜 해석 <code>LOTTO-SAJU-RULE-v2.0</code> · 개인화 번호 생성 <code>LOTTO-NUM-GEN-v1.1</code></p>
+          <p><strong>적용 규칙 버전:</strong> 계산 프로필 <code>LOTTO-CALC-v2.1</code> · 개인화 번호 생성 <code>LOTTO-NUM-GEN-v1.2</code> · 해석 설명문 <code>LOTTO-SAJU-INTERP-v2.1</code> (설명문 버전은 번호 생성 시드에서 제외)</p>
           <ul>
             <li><strong>1. 시간 계산의 기본 구조 (출생 순간 UTC와 일주·시주 보정 시각의 분리):</strong>
-              출생 입력은 해당 출생지·출생 당시의 대한민국 법정 시각으로 해석하며, 역사적 표준시 변경(1908~1911년 <code>UTC+08:30</code>, 1912~1954년 <code>UTC+09:00</code>, 1954~1961년 <code>UTC+08:30</code>, 1961년 8월 10일 이후 <code>UTC+09:00</code>)과 서머타임(1948~1951년, 1955~1960년, 1987~1988년)을 반영한 <code>IANA tzdb 2026e / ICU 78.3 (Asia/Seoul)</code> 전환 테이블로 출생 순간을 <strong>UTC</strong>로 변환합니다. 출생 연주·월주의 절입 전후 판정과 대운 기산 간격은 모두 <strong>출생 순간(UTC)과 절입 순간(UTC)을 동일한 UTC 기준으로 직접 비교</strong>하며, 경도 보정한 시계 값을 KST 절입 시각과 직접 비교하지 않습니다. 대한제국 근대 법정 표준시 시행(양력 1908년 4월 1일) 이전 기간과 해외 지역은 당시 법정 시각·역사적 시간대를 일관되게 확정할 수 없어 지원 범위를 제한합니다.</li>
-            <li><strong>2. 음양력 변환과 지원 범위 (KASI 대조 검증 및 지원 범위 구분):</strong>
-              음양력·윤달 변환은 <code>.NET System.Globalization.KoreanLunisolarCalendar</code> 기반 비트 패킹 테이블(<code>KR_LUNAR_1900_2050</code>, 취득·검증일 <code>2026-11-03</code>)을 사용하며, 한국천문연구원(KASI) 음양력변환계산 표준 사례 및 한국표준시(KST) 합삭 천문 계산과 전수 대조 검증을 완료한 <strong>KASI 기반 한국 음력 데이터</strong>입니다(중국 <code>UTC+8</code> 등 타 지역 음력과 혼용하지 않음). KASI 역서 전체 범위(양력 1391년 2월 5일 ~ 2050년 12월 31일)와 구분하여, 본 사이트는 역사적 표준시 확정이 가능한 <strong>양력 1908년 4월 1일 ~ 2050년 12월 31일</strong>, <strong>음력 1908년 3월 1일(평달) ~ 2050년 11월 18일(평달)</strong> 입력만 지원합니다. 음력 입력 시 해당 연도의 윤달 존재 여부와 대소월(29일/30일), 변환된 양력 날짜의 지원 범위 포함 여부를 모두 검증하며 범위 밖 입력은 추정값으로 처리하지 않습니다.</li>
-            <li><strong>3. 절입 계산 (12절 미반올림 반개구간 판정 및 VSOP87D 명세):</strong>
-              출생 연주와 대상 날짜의 세운은 <strong>입춘(태양 황경 315°)</strong>, 월주와 월운은 월 경계인 <strong>12절(소한·입춘·경칩·청명·입하·망종·소서·입추·백로·한로·입동·대설)</strong>의 절입 순간에 전환합니다. 내부 판정은 반올림하지 않은 UTC 순간(밀리초 단위)을 사용하고 화면 표시만 분 단위(<code>분 단위 표시</code>)로 처리하며, <strong>반개구간 <code>[절입 순간, 다음 절입 순간)</code> 규칙</strong>을 적용해 절입과 정확히 같은 순간의 출생 및 조회도 새로운 연주·월주로 일관되게 처리합니다. 천문 계산은 Bretagnon &amp; Francou(1988) <strong>VSOP87D</strong> 지구 구면 좌표 급수 중 Jean Meeus(<em>Astronomical Algorithms</em> 2nd ed., Ch. 25) 축약 72개 주기항(<code>L0</code> 39항·<code>L1</code> 20항·<code>L2</code> 8항·<code>L3</code> 3항·<code>L4</code> 2항, <code>L5</code> 및 황위 <code>B</code> 생략)으로 지심 황경을 구한 뒤, FK5 좌표계 보정(<code>-0.09033"</code>)·IAU 1980 경도 장동(<code>Δψ</code>, 4개 주요항)·연주 광행차(<code>-20.4898"/R</code>)를 적용해 태양의 지심 겉보기 황경을 산출합니다. 시간척도는 <code>UTC → JDE(TT)</code> 변환 시 NASA Espenak &amp; Meeus(2006) 구간별 다항식 <code>ΔT</code>를 사용하며, 뉴턴-할선 수치 탐색 오차는 <code>10⁻¹¹도(1ms 미만)</code>이고 한국천문연구원(KASI) 역서와 대조한 절입 시각 편차는 최대 약 <code>±24초</code>(화면의 분 단위 표시 기준 최대 <code>±1분</code> 차이 가능)입니다.</li>
+              출생 입력은 해당 출생지·출생 당시의 대한민국 법정 시각으로 해석하며, 역사적 표준시 변경(1908~1911년 <code>UTC+08:30</code>, 1912~1954년 <code>UTC+09:00</code>, 1954~1961년 <code>UTC+08:30</code>, 1961년 8월 10일 이후 <code>UTC+09:00</code>)과 서머타임(1948~1951년, 1955~1960년, 1987~1988년)을 반영한 <code>IANA tzdb 2026e / ICU 78.3 (Asia/Seoul)</code> 전환 테이블로 출생 순간을 <strong>UTC</strong>로 변환합니다(서머타임 결손 시각 <code>Gap</code>은 IANA <code>later</code>, 중복 시각 <code>Fold</code>는 IANA <code>earlier</code> 규칙을 기본 적용하고 대안 시각과 비교). 출생 연주·월주의 절입 전후 판정과 대운 기산 간격은 모두 <strong>출생 순간(UTC)과 절입 순간(UTC)을 동일한 UTC 기준으로 직접 비교</strong>하며, 경도 보정한 시계 값을 KST 절입 시각과 직접 비교하지 않습니다. 대한제국 근대 법정 표준시 시행(양력 1908년 4월 1일) 이전 기간과 해외 지역은 당시 법정 시각·역사적 시간대를 일관되게 확정할 수 없어 지원 범위를 제한합니다.</li>
+            <li><strong>2. 음양력 변환 데이터 출처·라이선스 및 지원 범위 구분:</strong>
+              음양력·윤달 변환은 <code>.NET Runtime (dotnet/runtime, MIT License) System.Globalization.KoreanLunisolarCalendar</code>의 1900~2050년 비트 패킹 테이블(<code>KR_LUNAR_1900_2050</code>, 151년 1,868개월)을 사용하며, 로컬 <code>.NET Framework 4.8.9221.0 KoreanLunisolarCalendar</code> 런타임과 1900~2050년 전 구간 일치(불일치 0건) 및 한국천문연구원(KASI) 공개 음양력 표준 사례 대조를 확인한 한국 음력 데이터입니다(중국 <code>UTC+8</code> 등 타 지역 음력과 혼용하지 않음). 다음 세 범위를 명확히 구분합니다: ① <strong>KASI 웹페이지 전체 지원 범위</strong>(양력 <code>1391-02-05 ~ 2050-12-31</code>), ② <strong><code>.NET KoreanLunisolarCalendar</code> 내장 테이블 범위</strong>(양력 <code>1900-01-31[음력 1900-01-01] ~ 2050-12-31[음력 2050-11-18]</code>, <code>.NET</code> 런타임 속성 <code>MinSupportedDateTime</code>은 <code>1918-02-11</code>), ③ <strong>본 사이트 입력 지원 및 검증 범위</strong>(근대 법정 표준시 확정이 가능한 <strong>양력 <code>1908-04-01 ~ 2050-12-31</code> · 음력 <code>1908-03-01(평달) ~ 2050-11-18(평달)</code></strong>). 윤달 및 윤달 이후 평달의 월 번호를 정규화하여 해당 연도의 윤달 존재 여부와 대소월(29일/30일)을 검증하며, 범위 밖 입력은 추정값으로 처리하지 않습니다.</li>
+            <li><strong>3. 절입 계산, 시간척도(<code>UTC · UT1 · TT</code>) 및 수치 탐색 정밀도와 천문 정확도 구분:</strong>
+              출생 연주와 대상 날짜의 세운은 <strong>입춘(태양 황경 315°)</strong>, 월주와 월운은 월 경계인 <strong>12절(소한·입춘·경칩·청명·입하·망종·소서·입추·백로·한로·입동·대설)</strong>의 절입 순간에 전환합니다(24절기 중 중기는 월 경계에서 제외). 내부 판정은 반올림하지 않은 UTC 순간을 사용하고 화면 표시만 분 단위(<code>분 단위 표시</code>)로 처리하며, <strong>반개구간 <code>[절입 순간, 다음 절입 순간)</code> 규칙</strong>을 적용합니다. 천문 계산은 Bretagnon &amp; Francou(1988) <strong>VSOP87D</strong> 지구 구면 좌표 급수 중 Jean Meeus(<em>Astronomical Algorithms</em> 2nd ed., Ch. 25) 축약 72개 주기항(<code>L0</code> 39항·<code>L1</code> 20항·<code>L2</code> 8항·<code>L3</code> 3항·<code>L4</code> 2항, <code>L5</code> 및 황위 <code>B</code> 생략)에 FK5 보정(<code>-0.09033"</code>)·IAU 1980 경도 장동(<code>Δψ</code>, 4개 주요항)·연주 광행차(<code>-20.4898"/R</code>)를 적용해 태양의 지심 겉보기 황경을 구합니다. 시간척도는 <code>ΔT = TT − UT1</code> 정의에 따라 입력된 <code>UTC</code>를 윤초 범위(<code>|UT1 − UTC| ≤ 0.9초</code>) 내에서 <code>UTC ≈ UT1</code>로 근사해 NASA Espenak &amp; Meeus(2006) 구간별 다항식 <code>ΔT</code>를 <code>JDE(TT) ≈ JD_UTC + ΔT / 86400</code>으로 <strong>1회만 가산</strong>합니다(<code>ΔT</code> 중복 적용 없음). 뉴턴-할선 반복의 <strong>수치 탐색 수렴 허용치</strong>는 목표 황경 대비 <code>10⁻¹¹도 이하</code>이나, 이는 축약 VSOP87D 모델 및 <code>ΔT</code> 다항식 근사의 <strong>실제 천문 계산 정확도</strong>와는 다릅니다. 또한 <strong>한국천문연구원(KASI) 공개 절기 시각 자료 자체가 분 단위(1분 해상도)</strong>로 발표되므로 초 단위나 밀리초 단위 정확도를 주장하지 않으며, KASI 분 단위 절입 시각과 비교할 때 반올림 경계 부근에서 최대 <code>±1분</code> 표시 차이가 날 수 있습니다.</li>
             <li><strong>4. 경도 보정과 날짜 경계 (지방평균태양시 및 본 사이트 채택 자시 규칙):</strong>
-              출생 일주·시주는 출생 당시 법정 시각을 역사적 시간대에 따라 UTC 순간으로 변환한 뒤, 출생지 실제 경도(국토지리정보원·특별시/광역시/도청 소재지 WGS84 좌표)를 적용해 <strong>지방평균태양시(<code>LMST = UTC + 경도 × 4분</code>)</strong>를 산출합니다. 현대 한국(KST, 동경 135°) 출생의 경우 KST 대비 보정량은 <code>(출생지 경도 − 135°) × 4분</code>이며(내부 계산은 소수점 정밀 경도 사용, 화면 표시용 보정량만 정수 분으로 반올림), 균시차를 적용하지 않으므로 ‘진태양시’라는 명칭을 사용하지 않습니다. 기본 일주 날짜 경계는 <strong>지방평균태양시 보정 후 자정 <code>00:00</code></strong>(기준일: 양력 2000-01-01 = 무오일, 60갑자 인덱스 54, 음수 나머지 <code>((54 + diffDays) % 60 + 60) % 60</code> 처리)이며, 시지는 보정 후 시각에 따라 배정하고 자시(子時)를 다음처럼 정의합니다: <strong>① <code>23:00~00:00</code>은 해당 보정 날짜의 일간으로 시간 천간 산출, ② <code>00:00~01:00</code>은 자정 이후 새 날짜의 일간으로 시간 천간 산출</strong>. 위 규칙은 본 사이트가 채택한 야자시 처리 방식이며 학파 공통 규칙이 아니므로, <code>23:00</code>에 일주를 바꾸는 대안 기준이나 경도 보정 미적용 기준과 결과가 달라지는 경우 일주·시주를 모두 재계산해 비교 안내합니다.</li>
+              출생 일주·시주는 출생 순간(UTC)에 출생지 실제 경도(국토지리정보원·특별시/광역시/도청 소재지 WGS84 좌표)를 적용해 <strong>지방평균태양시(<code>LMST = UTC + 경도 × 4분</code>)</strong>를 산출합니다. 현대 한국(KST, 동경 135°) 출생의 경우 KST 대비 보정량은 <code>(출생지 경도 − 135°) × 4분</code>이며(내부 계산은 소수점 정밀 경도 사용, 화면 표시용 보정량만 정수 분으로 반올림), 균시차를 적용하지 않으므로 ‘진태양시’라는 명칭을 사용하지 않습니다. 기본 일주 날짜 경계는 <strong>지방평균태양시 보정 후 자정 <code>00:00</code></strong>(기준일: 양력 2000-01-01 = 무오일, 60갑자 인덱스 54, 음수 나머지 <code>((54 + diffDays) % 60 + 60) % 60</code> 처리)이며, 자시(子時)를 다음처럼 정의합니다: <strong>① <code>23:00~00:00</code>은 해당 보정 날짜의 일간으로 시간 천간 산출, ② <code>00:00~01:00</code>은 자정 이후 새 날짜의 일간으로 시간 천간 산출</strong>. 이는 본 사이트가 채택한 기준이며 학파 공통 규칙이 아니므로, <code>23:00</code>에 일주를 바꾸는 대안 기준이나 경도 보정 미적용(법정 시계) 기준과 일주·시주를 함께 비교합니다.</li>
             <li><strong>5. 대운 순역행과 시작 시점 (‘전통 단위 분해 후 달력 가산’ 고정):</strong>
-              절입 기준으로 계산한 출생 연주 천간의 음양에 따라 <strong>양년생 남성·음년생 여성은 순행, 음년생 남성·양년생 여성은 역행</strong>하며, 첫 대운은 월주에서 순행·역행으로 한 칸 이동한 간지입니다. 기산 간격은 순행 시 <code>출생 순간(UTC) → 다음 12절 절입 순간(UTC)</code>, 역행 시 <code>이전 12절 절입 순간(UTC) → 출생 순간(UTC)</code>의 차이로 계산하며(절입과 출생이 정확히 같으면 기산 간격 <code>0</code> 처리), 소수 연도에 365.2425일을 곱하는 방식과 섞지 않고 다음 <strong>‘전통 단위 분해 후 달력 가산’</strong> 방식으로만 산출합니다: ① 기산 간격을 <code>3일</code> 단위로 분해해 가산 연수 계산(<code>3일 → 1년</code>), ② 남은 간격을 <code>6시간</code> 단위로 분해해 가산 개월 수 계산(<code>1일 → 4개월</code>, <code>6시간 → 1개월</code>), ③ 남은 간격은 <code>출생 간격 1초 → 가산 기간 120초</code> 비율로 환산(<code>2시간 → 10일</code>), ④ 출생지 법정 시각 달력에 연·월을 함께 가산(월말 날짜가 없으면 해당 월 마지막 날로 제한, 서머타임 결손 시각은 IANA <code>later</code>·중복 시각은 <code>earlier</code> 규칙 적용)한 뒤 남은 기간을 경과시간으로 가산해 <strong>채택한 환산법에 따른 대운 시작 시점</strong>을 구합니다. 후속 대운(2~10대운)은 매 단계 누적 가산하지 않고 첫 시작 시점으로부터 달력 기준 10년씩 산출해 월말·윤년 오차 누적을 방지하며, 대운 구간은 반개구간 <code>[시작 시점, 다음 대운 시작 시점)</code>으로 판정하고 첫 대운 시작 전은 임의 대운 배정 없이 <strong>‘대운 시작 전’</strong>으로 표시합니다.</li>
+              절입 기준으로 계산한 출생 연주 천간의 음양에 따라 <strong>양년생 남성·음년생 여성은 순행, 음년생 남성·양년생 여성은 역행</strong>하며, 첫 대운은 월주에서 순행·역행으로 한 칸 이동한 간지입니다. 기산 간격은 순행 시 <code>출생 순간(UTC) → 다음 12절 절입 순간(UTC)</code>, 역행 시 <code>이전 12절 절입 순간(UTC) → 출생 순간(UTC)</code>의 차이로 계산하며(절입과 출생이 같으면 <code>0</code> 처리), 다음 <strong>‘전통 단위 분해 후 달력 가산’</strong> 방식으로만 산출합니다: ① <code>3일 → 1년</code> 분해, ② 남은 간격 <code>6시간 → 1개월(1일 → 4개월)</code> 분해, ③ 남은 간격 <code>1초 → 120초(2시간 → 10일)</code> 환산, ④ 출생지 법정 시각 달력에 연·월을 함께 가산(월말 클램핑 및 서머타임 결손 <code>later</code>·중복 <code>earlier</code> 적용)한 뒤 남은 경과시간을 더해 <strong>채택한 환산법에 따른 대운 시작 시점</strong>을 구합니다. 후속 대운(2~10대운)은 첫 시작 시점으로부터 달력 기준 10년씩 산출해 누적 오차를 방지하며, 반개구간 <code>[시작 시점, 다음 대운 시작 시점)</code>으로 판정하고 첫 대운 시작 전은 <strong>‘대운 시작 전’</strong>으로 표시합니다.</li>
             <li><strong>6. 출생 시간 모름·성별 미입력 및 불확실성 결과 제한:</strong>
-              성별 미입력 시에는 대운을 제외하고 <strong>‘대운 미반영 간이 풀이’</strong>로 표시합니다. 출생 시간 모름 선택 시에는 시주와 구매 시간 후보를 제외하며, 정오(12:00)를 실제 출생 시각처럼 확정하지 않고 당일 법정 시각 전체 범위(<code>00:00:00 ~ 23:59:59</code>)를 검사합니다. 가능한 출생 시각에 따라 원국(절입일 당일 출생)이나 적용 대운(약 4개월 대운 전환 가능 구간)이 달라지면 불확실성을 표시하며, <strong>그 불확실성이 날짜 후보 선정 결과를 바꾸는 경우에는 단일 후보를 임의로 확정하지 않고 결과 제한 안내를 표시</strong>합니다.</li>
-            <li><strong>7. 대한민국 내 구매 기준(KST)과 시간 후보 전환 제외:</strong>
-              현재 버전은 <strong>대한민국 내 구매만 지원</strong>하며 한국표준시(<code>KST, UTC+9</code>)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음). 대상 날짜의 일진은 KST 자정(<code>00:00</code>)에 전환하고 시진은 KST 기준으로 배정하며, 이는 출생 원국의 지방평균태양시 적용과 구분되는 제품 기준입니다. <strong>12절 절입이나 대운 전환이 후보 시간대(2시간 시진) 내부에 걸리는 경우 2시간 전체에 하나의 운이 적용되는 것처럼 표시하지 않도록 해당 시간대를 후보에서 제외</strong>하고 안내하며, 이미 지난 시간과 동행복권 공식 판매 마감 시간(매일 24:00~06:00 미판매, 토요일 20:00 마감)은 제외합니다.</li>
-            <li><strong>8. 개인화 번호 생성 시드 구성(<code>LOTTO-NUM-GEN-v1.1</code>):</strong>
-              날짜 후보 선정(명리 해석)과 번호 5세트 생성(SHA-256 결정론적 피셔-예이츠 추출)은 분리되어 있으며, 정규화된 입력값(<code>양력 환산 생년월일</code>, <code>양/음력·윤달 구분</code>, <code>출생 시각 또는 UNKNOWN</code>, <code>출생 도시 코드</code>, <code>성별 M/F/NONE</code>, <code>선택 날짜</code>, <code>선택 시간대 코드</code>, <code>규칙 버전</code>)만 시드에 포함해 같은 입력이면 항상 동일한 5세트를 생성합니다.</li>
+              성별 미입력 시에는 대운을 제외하고 <strong>‘대운 미반영 간이 풀이’</strong>로 표시합니다. 출생 시간 모름 선택 시에는 시주와 구매 시간 후보를 제외하며, 정오(12:00)를 실제 출생 시각처럼 확정하지 않고 당일 법정 시각 전체 범위(<code>00:00:00 ~ 23:59:59</code>)에 대해 <strong>① 당일 12절 절입 전후, ② 경도 보정에 따른 자정 직후(예: 현대 KST 기준 <code>00:00~00:34</code>경) 전날 일주(<code>prevDayPillar</code>) 변경 가능성, ③ 대운 전환 가능 구간(약 4개월 폭)</strong>을 모두 검토합니다. 출생 시간 미상이나 계산 방식 차이(경도 보정 전후 일주 차이, 보정 후 <code>00:00</code> vs <code>23:00</code> 자시 일주 전환 기준 차이, 서머타임 중복·결손 시각, 절입 <code>±1분</code> 경계)로 후보 날짜가 달라지는 경우 <strong>단일 후보를 임의로 확정하지 않고 불확실성 및 시나리오별 후보 차이를 안내</strong>합니다(단, 사용자가 자정·야자시 경계 출생이 아님을 직접 체크한 경우 자정 일주 변동을 제외한 일반 시간대 범위를 적용).</li>
+            <li><strong>7. 명리 날짜·시간 후보 선정 규칙(<code>LOTTO-CALC-v2.1</code>)과 설명문 생성:</strong>
+              10천간·12지지 및 12지지 <strong>지장간(여기·중기·본기 비율)</strong>의 오행·십성 매핑을 고정하고, 원국 천간(연간 <code>1.0</code>, 월간 <code>1.2</code>, 시간 <code>1.0</code>)과 지지 지장간(연지 <code>1.0</code>, <strong>월지[월령] <code>2.0</code></strong>, 일지 <code>1.5</code>, 시지 <code>1.0</code>) 가중치를 합산해 생조(<code>비겁+인성</code>) 대 설기·소모(<code>식상+재성+관성</code>) 비중 및 득령·통근 여부를 계산합니다(조후·합화·특수격은 판정하지 않으며 억부 참고 지표로만 활용). 후보 제외 규칙(<code>RULE-EXCL-*</code>: 원국 일지·월지 육충, 재성·식상생재 부재, 핵심 영역 2개 미만, 설기 과다+운 충 복합 시 제외), 유리 규칙(<code>RULE-FAV-*</code>: 일진 편재·정재, 식상생재, 억부 균형, 원국·대운 지지합, 대운·세운·월운 호응, KST 시진 조화), 상충·주의 규칙(<code>RULE-CAUT-*</code>: 합의 양면성, 설기 부담, 대운·세운·월운 충)을 명시적 규칙 ID로 평가합니다. 동률 시에는 <code>후보 등급(날짜 후보 &gt; 보조 후보) → 규칙 가중치 합산 → 충족 영역 수 → 유리 시간 후보 가중치 → 빠른 날짜</code> 순으로 최대 2개 후보를 선정하며, 기준 충족일이 없으면 억지 후보 없이 <strong>‘뚜렷한 후보 없음’</strong>으로 처리합니다. 카드 설명문은 실제로 발동한 규칙 ID(<code>triggeredRuleIds</code>)에서만 생성하며 화면에는 점수나 확률처럼 보이는 숫자를 노출하지 않습니다.</li>
+            <li><strong>8. 대한민국 내 구매 기준(KST), 판매 시간 구분 및 개인화 번호 생성 시드·스트림(<code>LOTTO-NUM-GEN-v1.2</code>):</strong>
+              구매 시간 후보는 대한민국 내 구매 기준(<code>KST, UTC+9</code>)으로 배정하며, 2시간 시진 내부에 12절 절입이나 대운 전환이 걸리는 시간대는 후보에서 제외합니다. 또한 <strong>동행복권 공식 판매 시간(매일 06:00~24:00 KST, 토요일 20:00 마감, 일요일 06:00 재개)과 개별 복권 판매점의 실제 영업시간은 다를 수 있음</strong>을 구분하여 안내합니다. 개인화 번호 생성 시드는 <code>calc=LOTTO-CALC-v2.1|gen=LOTTO-NUM-GEN-v1.2|solar=YYYY-MM-DD|time=HH:MM또는UNKNOWN|city=도시코드또는NONE|gender=M/F/NONE|date=YYYY-MM-DD|slot=시간대코드또는NONE</code> 형식(UTF-8)으로 고정하며, <strong>원래 입력한 양력·음력 구분, 윤달 여부, 해석 설명문 버전, 파생 간지는 시드에서 제외</strong>해 동일한 출생 정보를 양력·음력 어느 쪽으로 입력해도 같은 번호가 생성되고 문구 수정만으로 번호가 바뀌지 않습니다. 본번호 5세트는 세트 인덱스(<code>set=0..4</code>) 및 중복 세트 재시도(<code>retry=0,1,...</code>)별로 분리된 <code>SHA-256</code> 스트림(<code>|stream=main|set=k|retry=r|ctr=c</code>)에서 기각 샘플링(<code>2³² − (2³² mod max)</code>)과 Fisher–Yates 비복원 추출로 생성하며, 보너스번호는 별도 스트림(<code>|stream=bonus|set=k|ctr=c</code>)을 사용해 보너스 옵션 토글 시에도 본번호 5세트가 절대 바뀌지 않습니다. 출생 정보나 시드는 URL·네트워크·복사 문구·저장 기록에 포함하지 않으며, 단순 해시를 개인정보 익명화로 설명하지 않습니다.</li>
           </ul>
         </div>
       </details>
@@ -361,15 +362,17 @@ body,.card,#bonus,#theme-toggle,.info-panel,.today-badge,.saju-panel,.candidate-
 'use strict';
 
 // ============================================================================
-// 상수 및 버전 정의
+// 상수 및 버전 정의 (계산 프로필 버전 · 번호 생성 버전 · 해석 설명문 버전 분리)
 // ============================================================================
-const SAJU_RULE_VERSION = 'LOTTO-SAJU-RULE-v2.0';
-const NUM_GEN_VERSION = 'LOTTO-NUM-GEN-v1.1';
+const CALC_PROFILE_VERSION = 'LOTTO-CALC-v2.1';
+const NUM_GEN_VERSION = 'LOTTO-NUM-GEN-v1.2';
+const SAJU_INTERP_VERSION = 'LOTTO-SAJU-INTERP-v2.1';
+const SAJU_RULE_VERSION = CALC_PROFILE_VERSION;
 const RANDOM_GEN_VERSION = 'RANDOM-v1.0';
 const STORAGE_RECORDS_KEY = 'lotto-saved-records-v1';
 const STORAGE_BIRTH_KEY = 'lotto-saved-birth-v1';
 
-// 1900~2050 한국천문연구원(KASI) / 한국표준시(UTC+9) 기준 음양력 비트 패킹 테이블
+// 1900~2050 .NET Runtime (dotnet/runtime, MIT License) System.Globalization.KoreanLunisolarCalendar 기반 음양력 비트 패킹 테이블
 const KR_LUNAR_1900_2050 = [4003538,6424402,4984485,3716682,6030923,4459163,3183958,5637482,4197209,2774866,5244754,3857189,6294309,4721227,3322523,5769901,4457834,2902889,5376937,4127570,6557074,4984101,3586637,6031702,4588213,3052973,5637844,4197801,2907538,5246610,3853606,6161703,4721239,3322550,5769946,4458196,3042985,5375817,3995283,6425235,4982059,3459675,5900653,4590442,3316564,5639076,4197193,2775699,5245589,3732779,6161709,4721325,3454314,5770674,4459940,3046729,5508426,4004501,6425238,4982102,3590837,5901013,4589266,3182245,5639845,4197962,2780310,5114523,3863894,6161770,4721497,3454802,5900114,4327205,2922059,5376587,4002475,6292141,4851051,3591017,6032809,4590994,3185445,5639461,4282957,6556246,5112502,3724717,6293204,4722089,3456402,5901970,4459814,2910806,5245527,4002486,6425434,4982484,3583689,6031177,4589203,3052839,5506347,4065883,2774362,5112682,3734357,6294436,4852553,3324563,5769877,4326701,2910813,5245613,4011434,6424018,4984229,3587402,6032714,4590229,3183917,5506390,4065973,2774442,5244626,3722917,6164133,4853322,3452054,5639323,4326746,2910933,5376873,4028242,6424402,4983589,3593803,5900875,4457643,3056987,5506413,4066153,2775890,5246354,3865893,6163749,4721229,3323053,5767862,4195765,2911657];
 
 // VSOP87D 태양 황경 급수 계수
@@ -407,9 +410,51 @@ const L4_TERMS = [[114, 3.142, 0], [8, 4.13, 6283.08]];
 
 const STEMS = ['갑(甲)', '을(乙)', '병(丙)', '정(丁)', '무(戊)', '기(己)', '경(庚)', '신(辛)', '임(壬)', '계(癸)'];
 const STEMS_KO = ['갑목(甲木)', '을목(乙木)', '병화(丙火)', '정화(丁火)', '무토(戊土)', '기토(己土)', '경금(庚金)', '신금(辛金)', '임수(壬水)', '계수(癸水)'];
+const ELEMENTS_KO = ['목(木)', '화(火)', '토(土)', '금(金)', '수(水)'];
 const BRANCHES = ['자(子)', '축(丑)', '인(寅)', '묘(卯)', '진(辰)', '사(巳)', '오(午)', '미(未)', '신(申)', '유(酉)', '술(戌)', '해(亥)'];
 const BRANCH_MAIN_STEM = [9, 5, 0, 1, 4, 2, 3, 5, 6, 7, 4, 8];
+// 12지지 지장간(支藏干: 여기·중기·본기 천간 인덱스 및 가중치 비율 합계 1.0)
+const BRANCH_HIDDEN_STEMS = [
+  [{ stem: 8, role: '여기', ratio: 0.30 }, { stem: 9, role: '본기', ratio: 0.70 }],                                         // 자(子): 임·계
+  [{ stem: 9, role: '여기', ratio: 0.30 }, { stem: 7, role: '중기', ratio: 0.10 }, { stem: 5, role: '본기', ratio: 0.60 }], // 축(丑): 계·신·기
+  [{ stem: 4, role: '여기', ratio: 0.20 }, { stem: 2, role: '중기', ratio: 0.20 }, { stem: 0, role: '본기', ratio: 0.60 }], // 인(寅): 무·병·갑
+  [{ stem: 0, role: '여기', ratio: 0.30 }, { stem: 1, role: '본기', ratio: 0.70 }],                                         // 묘(卯): 갑·을
+  [{ stem: 1, role: '여기', ratio: 0.30 }, { stem: 9, role: '중기', ratio: 0.10 }, { stem: 4, role: '본기', ratio: 0.60 }], // 진(辰): 을·계·무
+  [{ stem: 4, role: '여기', ratio: 0.20 }, { stem: 6, role: '중기', ratio: 0.20 }, { stem: 2, role: '본기', ratio: 0.60 }], // 사(巳): 무·경·병
+  [{ stem: 2, role: '여기', ratio: 0.30 }, { stem: 5, role: '중기', ratio: 0.20 }, { stem: 3, role: '본기', ratio: 0.50 }], // 오(午): 병·기·정
+  [{ stem: 3, role: '여기', ratio: 0.30 }, { stem: 1, role: '중기', ratio: 0.10 }, { stem: 5, role: '본기', ratio: 0.60 }], // 미(未): 정·을·기
+  [{ stem: 4, role: '여기', ratio: 0.20 }, { stem: 8, role: '중기', ratio: 0.20 }, { stem: 6, role: '본기', ratio: 0.60 }], // 신(申): 무·임·경
+  [{ stem: 6, role: '여기', ratio: 0.30 }, { stem: 7, role: '본기', ratio: 0.70 }],                                         // 유(酉): 경·신
+  [{ stem: 7, role: '여기', ratio: 0.30 }, { stem: 3, role: '중기', ratio: 0.10 }, { stem: 4, role: '본기', ratio: 0.60 }], // 술(戌): 신·정·무
+  [{ stem: 4, role: '여기', ratio: 0.20 }, { stem: 0, role: '중기', ratio: 0.20 }, { stem: 8, role: '본기', ratio: 0.60 }]  // 해(亥): 무·갑·임
+];
 const WEEKDAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
+
+// 명리 후보 선정 명시적 규칙 테이블 (LOTTO-CALC-v2.1)
+const SAJU_RULES_TABLE = {
+  'RULE-EXCL-PAST-OR-CLOSED':        { type: 'EXCL', weight: 0,   desc: '이미 지난 날짜 또는 동행복권 공식 판매 마감 이후 제외' },
+  'RULE-EXCL-DAY-CHUNG-NATAL-DAY':   { type: 'EXCL', weight: 0,   desc: '일진 지지가 출생 원국 일지와 정면 육충일 때 후보 제외 (1순위 절대 제외)' },
+  'RULE-EXCL-DAY-CHUNG-NATAL-MONTH': { type: 'EXCL', weight: 0,   desc: '일진 지지가 출생 원국 월지(월령)와 정면 육충일 때 후보 제외 (1순위 절대 제외)' },
+  'RULE-EXCL-NO-WEALTH-NOR-SIKSANG': { type: 'EXCL', weight: 0,   desc: '일진에 재성 활성 및 식상생재 흐름이 모두 없을 때 후보 제외' },
+  'RULE-EXCL-SEVERE-DRAIN-CLASH':    { type: 'EXCL', weight: 0,   desc: '설기·소모 우세 상태에서 일진 생조·지지합 보완 없이 운(대운·세운·월운) 충까지 겹치면 제외 (2순위 상충 우선 제외)' },
+  'RULE-EXCL-INSUFFICIENT-FACTORS':  { type: 'EXCL', weight: 0,   desc: '핵심 4대 영역(재성·식상생재·억부균형·지지조화) 중 2개 미만 충족 시 제외' },
+  'RULE-FAV-ILJIN-PYEONJAE':         { type: 'FAV',  weight: 24,  desc: '일진 천간 또는 지지 본기에 편재(유동적 재물 상징) 활성' },
+  'RULE-FAV-ILJIN-JEONGJAE':         { type: 'FAV',  weight: 20,  desc: '일진 천간 또는 지지 본기에 정재(안정적 결실 상징) 활성' },
+  'RULE-FAV-SIKSANG-TO-WEALTH':      { type: 'FAV',  weight: 14,  desc: '일진 식상이 원국·운의 재성과 연결되어 재성 흐름 유도' },
+  'RULE-FAV-SIKSANG-SAENGJAE':       { type: 'FAV',  weight: 22,  desc: '원국·대운·세운·월운과 일진 사이에 식상생재(활동→결실) 구조 성립' },
+  'RULE-FAV-BALANCE-STRONG-DRAIN':   { type: 'FAV',  weight: 20,  desc: '생조 우세(신강 경향) 구조에서 일진 식상·재성이 기운을 원활히 유통(설기 균형)' },
+  'RULE-FAV-BALANCE-WEAK-SUPPORT':   { type: 'FAV',  weight: 20,  desc: '설기·소모 우세(신약 경향) 구조에서 인성·비겁 생조 기운이 뒷받침되어 소모 완충' },
+  'RULE-FAV-NATAL-DAY-YUKHAP':       { type: 'FAV',  weight: 18,  desc: '일진 지지가 원국 일지와 육합을 이루고 대운 충이 없음' },
+  'RULE-FAV-NATAL-SAMHAP':           { type: 'FAV',  weight: 14,  desc: '일진 지지가 원국 일지·월지와 삼합 반합을 이루고 대운 충이 없음' },
+  'RULE-FAV-DAEUN-HARMONY':          { type: 'FAV',  weight: 10,  desc: '적용 대운 지지와 일진 지지가 합(육합·삼합)으로 호응' },
+  'RULE-FAV-DAEUN-SYNERGY':          { type: 'FAV',  weight: 10,  desc: '적용 대운의 억부 보완 방향과 일진 식상·재성 흐름이 상호 조화' },
+  'RULE-FAV-SEUN-WOLUN-BRIDGE':      { type: 'FAV',  weight: 6,   desc: '세운·월운의 식상·재성이 일진의 재성·식상과 교차 호응' },
+  'RULE-FAV-SLOT-SYNERGY':           { type: 'FAV',  weight: 4,   desc: '해당 날짜 내 충이 없고 조화로운 KST 구매 시간대(시진) 후보 존재' },
+  'RULE-CAUT-HAP-DUALITY':           { type: 'CAUT', weight: 0,   desc: '천간합·지지합 성립 시 합화(合化) 단정 불가 및 합거(묶임) 양면성 안내' },
+  'RULE-CAUT-WEAK-WEALTH-BURDEN':    { type: 'CAUT', weight: -6,  desc: '설기·소모 우세 상태에서 일진 직접 생조 없이 재성이 강할 때 기운 소모 주의' },
+  'RULE-CAUT-DAEUN-CHUNG':           { type: 'CAUT', weight: -12, desc: '적용 대운 지지와 일진 지지의 육충에 따른 환경 변동성 주의 및 지지조화 배제' },
+  'RULE-CAUT-SEUN-WOLUN-CHUNG':      { type: 'CAUT', weight: -8,  desc: '세운 또는 월운 지지와 일진 지지의 부분 육충 주의' }
+};
 
 // 1. 역사적 시간대 및 서머타임 (IANA tzdb 2026e / ICU 78.3 Asia/Seoul 전환 테이블)
 // 대한제국 표준시 최초 시행(양력 1908-04-01, 음력 1908-03-01)부터 현대 KST까지 모든 법정 표준시·서머타임 이력 포함
@@ -606,9 +651,9 @@ function updatePeriodHint() {
   const confirmed = getConfirmedTargetDrawForDate(period.saturdayStr);
   const hintEl = document.getElementById('range-period-hint');
   if (confirmed) {
-    hintEl.textContent = `동행복권 공식 판매 시간(매일 06:00~24:00, 토요일 20:00 마감) 기준 제${confirmed.round}회(추첨일 ${confirmed.drawDate}) 남은 구매 가능 기간입니다.`;
+    hintEl.textContent = `동행복권 공식 판매 시간(매일 06:00~24:00 KST, 토요일 20:00 마감, 일요일 06:00 재개) 기준 제${confirmed.round}회(추첨일 ${confirmed.drawDate}) 남은 구매 가능 기간입니다. (※ 개별 복권 판매점의 실제 영업시간은 매장마다 다를 수 있습니다)`;
   } else {
-    hintEl.textContent = `동행복권 공식 판매 시간(매일 06:00~24:00, 토요일 20:00 마감) 기준 이번 주 남은 구매 가능 기간(${period.startStr} ~ ${period.endStr})입니다.`;
+    hintEl.textContent = `동행복권 공식 판매 시간(매일 06:00~24:00 KST, 토요일 20:00 마감, 일요일 06:00 재개) 기준 이번 주 남은 구매 가능 기간(${period.startStr} ~ ${period.endStr})입니다. (※ 개별 복권 판매점의 실제 영업시간은 매장마다 다를 수 있습니다)`;
   }
 }
 
@@ -1016,11 +1061,14 @@ function formatPillar(p) {
   return STEMS[p.stem] + BRANCHES[p.branch];
 }
 
-function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour = 0, minute = 0, cityCode = 'SEOUL' }) {
-  const city = CITIES[cityCode] || CITIES.SEOUL;
+function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, timeUnknownNonMidnight = false, hour = 0, minute = 0, cityCode = 'SEOUL' }) {
+  const hasExplicitCity = Boolean(cityCode && CITIES[cityCode]);
+  const city = hasExplicitCity ? CITIES[cityCode] : CITIES.SEOUL;
 
   if (!timeKnown) {
     // 출생 시간 모름: 정오를 실제 출생 시각처럼 확정하지 않고 당일 법정 시각 [00:00:00, 23:59:59] 전체 범위를 검사
+    // 1) 당일 12절 절입 전후 가능성 확인
+    // 2) 경도 보정(지방평균태양시 LMST)에 따른 자정 직후(또는 구 표준시 동부 지역 자정 직전) 일주 변경 가능성 확인
     const startConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, 0, 0, 0);
     const endConv = localToUtcAsiaSeoul(solarYear, solarMonth, solarDay, 23, 59, 59);
     const stateStart = evaluateSolarTermStateAtUtc(startConv.utcMs, solarYear);
@@ -1030,6 +1078,31 @@ function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour =
     const nextDate = new Date(Date.UTC(solarYear, solarMonth - 1, solarDay) + 86400000);
     const prevDayPillar = getDayGanjiFromSolarYMD(prevDate.getUTCFullYear(), prevDate.getUTCMonth() + 1, prevDate.getUTCDate());
     const nextDayPillar = getDayGanjiFromSolarYMD(nextDate.getUTCFullYear(), nextDate.getUTCMonth() + 1, nextDate.getUTCDate());
+
+    // 당일 법정 시각 00:00:00 및 23:59:59에서의 지방평균태양시(LMST) 날짜 계산
+    const minKoreaLon = hasExplicitCity ? city.lon : 126.5312; // 제주
+    const maxKoreaLon = hasExplicitCity ? city.lon : 129.3435; // 포항
+    const lmstStartMinDate = new Date(Math.round(startConv.utcMs + minKoreaLon * 240000));
+    const lmstEndMaxDate = new Date(Math.round(endConv.utcMs + maxKoreaLon * 240000));
+    const lmstStartPillar = getDayGanjiFromSolarYMD(lmstStartMinDate.getUTCFullYear(), lmstStartMinDate.getUTCMonth() + 1, lmstStartMinDate.getUTCDate());
+    const lmstEndPillar = getDayGanjiFromSolarYMD(lmstEndMaxDate.getUTCFullYear(), lmstEndMaxDate.getUTCMonth() + 1, lmstEndMaxDate.getUTCDate());
+
+    // 법정 시각 자정(00:00) 대비 지방평균태양시 자정(00:00) 전환 시각 산출
+    const stdMeridianLon = startConv.period.offsetMin / 4; // UTC+9 -> 135°, UTC+8:30 -> 127.5°, UTC+10 -> 150°
+    const shiftMinAtRefCity = Math.ceil(Math.abs(stdMeridianLon - minKoreaLon) * 4);
+    const shiftHH = String(Math.floor(shiftMinAtRefCity / 60)).padStart(2, '0');
+    const shiftMM = String(shiftMinAtRefCity % 60).padStart(2, '0');
+    const cityScopeDesc = hasExplicitCity ? `${city.name}(동경 ${city.lon}°)` : '대한민국 내 도시(동경 126.53°~129.34°)';
+
+    let altLmstDayPillar = null;
+    let lmstTransitionWindowLabel = '';
+    if (lmstStartPillar.idx60 !== dayPillar.idx60) {
+      altLmstDayPillar = lmstStartPillar;
+      lmstTransitionWindowLabel = `00:00 ~ ${shiftHH}:${shiftMM}경(${cityScopeDesc} 지방평균태양시 자정 이전 구간)`;
+    } else if (lmstEndPillar.idx60 !== dayPillar.idx60) {
+      altLmstDayPillar = lmstEndPillar;
+      lmstTransitionWindowLabel = `23:52 ~ 23:59경(${cityScopeDesc} 지방평균태양시 자정 이후 구간)`;
+    }
 
     const termTransitionOnBirthDay = (stateStart.activeTerm.utcMs !== stateEnd.activeTerm.utcMs);
     const transitionTerm = termTransitionOnBirthDay ? stateEnd.activeTerm : null;
@@ -1041,19 +1114,27 @@ function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour =
       termBoundaryNote = `출생일(${solarYear}-${String(solarMonth).padStart(2,'0')}-${String(solarDay).padStart(2,'0')}) 당일 법정 시각 약 ${localTermTimeStr}(KST 분 단위 표시 ${transitionTerm.kstDisplayStr})에 ‘${transitionTerm.name}’ 절입이 있어, 출생 시각이 절입 이전이면 연주 ${stateStart.yearPillar.ganji}·월주 ${stateStart.monthPillar.ganji}, 절입 순간 이후이면 연주 ${stateEnd.yearPillar.ganji}·월주 ${stateEnd.monthPillar.ganji}로 달라집니다.`;
     }
 
-    const boundaryNote = `‘시간 모름’ 선택으로 시주(時柱)를 제외하고 당일 달력 날짜 기준 일주(${formatPillar(dayPillar)})를 적용했습니다. 만약 실제 출생 시각이 자정 직후(지방평균태양시 보정 시 전날 23시대가 되는 구간)였다면 전날 일주(${formatPillar(prevDayPillar)})가, 밤 11시(23:00) 일주 전환 대안 기준의 23시 이후 출생이었다면 다음 날 일주(${formatPillar(nextDayPillar)})가 적용될 수 있습니다.`;
+    const boundaryNote = timeUnknownNonMidnight
+      ? `‘시간 모름(자정·야자시 경계 출생 아님 확인)’ 선택으로 시주(時柱)를 제외하고, 경도 보정 후에도 당일 날짜가 유지되는 일반 시간대 기준 일주(${formatPillar(dayPillar)})를 적용했습니다.`
+      : `‘시간 모름’ 선택으로 당일 법정 시각 전체(00:00~23:59)를 검토했습니다. ${lmstTransitionWindowLabel}에 출생했다면 경도 보정에 따라 일주가 ‘${altLmstDayPillar ? formatPillar(altLmstDayPillar) : formatPillar(prevDayPillar)}’로 바뀌고, 그 이후 시간대 출생이면 당일 일주 ‘${formatPillar(dayPillar)}’가 적용됩니다(23:00 일주 전환 대안 기준의 심야 출생 시에는 익일 일주 ‘${formatPillar(nextDayPillar)}’ 가능).`;
 
     return {
       timeKnown: false,
+      timeUnknownNonMidnight: Boolean(timeUnknownNonMidnight),
       birthUtcMs: null,
       dayRangeUtc: { startUtcMs: startConv.utcMs, endUtcMs: endConv.utcMs },
       yearPillar: stateEnd.yearPillar,
       monthPillar: stateEnd.monthPillar,
       altBeforeTerm: termTransitionOnBirthDay ? { yearPillar: stateStart.yearPillar, monthPillar: stateStart.monthPillar, term: transitionTerm } : null,
       dayPillar,
+      prevDayPillar,
+      nextDayPillar,
+      altLmstDayPillar: timeUnknownNonMidnight ? null : altLmstDayPillar,
+      lmstTransitionWindowLabel,
       hourPillar: null,
       dayMaster: dayPillar.stem,
       city,
+      hasExplicitCity,
       termTransitionOnBirthDay,
       termBoundaryNote,
       boundaryNote
@@ -1071,8 +1152,34 @@ function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour =
   const diffMinPrev = Math.abs(birthUtcMs - termState.activeTerm.utcMs) / 60000;
   const diffMinNext = Math.abs(termState.nextTerm.utcMs - birthUtcMs) / 60000;
   let termBoundaryNote = null;
+  let altTermProximityPillars = null;
   if (termState.isExactTermBoundary) {
-    termBoundaryNote = `출생 순간이 ‘${termState.activeTerm.name}’ 절입 순간과 일치하여 반개구간([절입 순간, 다음 절입 순간)) 규칙에 따라 새로운 연주(${termState.yearPillar.ganji})·월주(${termState.monthPillar.ganji})를 적용했습니다.`;
+    termBoundaryNote = `출생 순간이 ‘${termState.activeTerm.name}’ 절입 순간과 일치하여 반개구간([절입 순간, 다음 절입 순간)) 규칙에 따라 새로운 연주(${termState.yearPillar.ganji})·월주(${termState.monthPillar.ganji})를 적용했습니다. (KASI 공개 절기 시각이 분 단위이므로 ±1분 경계에 따른 이전 월주 비교 대상입니다)`;
+    const beforeInstantState = evaluateSolarTermStateAtUtc(birthUtcMs - 120000, solarYear);
+    altTermProximityPillars = {
+      label: `‘${termState.activeTerm.name}’ 절입 직전 기준(KASI 분 단위 해상도 ±1분 경계 대안)`,
+      yearPillar: beforeInstantState.yearPillar,
+      monthPillar: beforeInstantState.monthPillar,
+      birthUtcMs: birthUtcMs - 120000
+    };
+  } else if (diffMinPrev <= 1.0) {
+    const beforeInstantState = evaluateSolarTermStateAtUtc(termState.activeTerm.utcMs - 60000, solarYear);
+    termBoundaryNote = `출생 순간이 ‘${termState.activeTerm.name}’ 절입(KST 분 단위 표시 ${termState.activeTerm.kstDisplayStr}) 직후 약 ${diffMinPrev.toFixed(1)}분 시점으로, 분 단위 절기표 해상도(±1분) 경계 내에 있습니다.`;
+    altTermProximityPillars = {
+      label: `‘${termState.activeTerm.name}’ 절입 이전 기준(분 단위 절기표 ±1분 경계 대안)`,
+      yearPillar: beforeInstantState.yearPillar,
+      monthPillar: beforeInstantState.monthPillar,
+      birthUtcMs: termState.activeTerm.utcMs - 60000
+    };
+  } else if (diffMinNext <= 1.0) {
+    const afterInstantState = evaluateSolarTermStateAtUtc(termState.nextTerm.utcMs + 60000, solarYear);
+    termBoundaryNote = `출생 순간이 ‘${termState.nextTerm.name}’ 절입(KST 분 단위 표시 ${termState.nextTerm.kstDisplayStr}) 직전 약 ${diffMinNext.toFixed(1)}분 시점으로, 분 단위 절기표 해상도(±1분) 경계 내에 있습니다.`;
+    altTermProximityPillars = {
+      label: `‘${termState.nextTerm.name}’ 절입 이후 기준(분 단위 절기표 ±1분 경계 대안)`,
+      yearPillar: afterInstantState.yearPillar,
+      monthPillar: afterInstantState.monthPillar,
+      birthUtcMs: termState.nextTerm.utcMs + 60000
+    };
   } else if (diffMinPrev <= 120) {
     termBoundaryNote = `출생 순간이 ‘${termState.activeTerm.name}’ 절입(KST 분 단위 표시 ${termState.activeTerm.kstDisplayStr}) 직후 약 ${Math.round(diffMinPrev)}분 시점입니다.`;
   } else if (diffMinNext <= 120) {
@@ -1092,9 +1199,6 @@ function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour =
   const correctedHM = `${String(cHour).padStart(2,'0')}:${String(cMin).padStart(2,'0')}`;
 
   // 기본 기준: 지방평균태양시 보정 후 자정(00:00)에 일주 전환
-  // 자시 명시적 정의 (이 사이트가 채택한 야자시 처리 방식이며 학파 공통 규칙이 아님):
-  // - 23:00~00:00 (cHour === 23): 해당 보정 날짜(cYear-cMonth-cDay)의 일간으로 시간 천간 산출
-  // - 00:00~01:00 (cHour === 0): 자정 이후 새 보정 날짜(cYear-cMonth-cDay)의 일간으로 시간 천간 산출
   const dayPillar = getDayGanjiFromSolarYMD(cYear, cMonth, cDay);
   const hourBranch = Math.floor(((cHour + 1) % 24) / 2);
   const hourPillar = getHourGanji(dayPillar.stem, hourBranch);
@@ -1120,6 +1224,7 @@ function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour =
   if (rawDayPillar.idx60 !== dayPillar.idx60 || rawHourPillar.stem !== hourPillar.stem || rawHourPillar.branch !== hourPillar.branch) {
     boundaryNotes.push(`입력된 법정 시각(${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}, ${tzConv.period.label})과 출생지(${city.name}, 동경 ${city.lon}°) 지방평균태양시 보정 후 시각(${correctedHM}) 사이에 날짜 또는 시진 경계 차이가 있습니다. 경도 보정 미적용(법정 시계 기준) 시에는 일주 ‘${formatPillar(rawDayPillar)}’·시주 ‘${formatPillar(rawHourPillar)}’로 계산됩니다.`);
   }
+  let altDstPillars = null;
   if (tzConv.alternateUtcMs !== null) {
     const altTermState = evaluateSolarTermStateAtUtc(tzConv.alternateUtcMs, solarYear);
     const altLmstMs = Math.round(tzConv.alternateUtcMs + city.lon * 240000);
@@ -1127,6 +1232,14 @@ function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour =
     const altDayPillar = getDayGanjiFromSolarYMD(altLmstDate.getUTCFullYear(), altLmstDate.getUTCMonth() + 1, altLmstDate.getUTCDate());
     const altHourBranch = Math.floor(((altLmstDate.getUTCHours() + 1) % 24) / 2);
     const altHourPillar = getHourGanji(altDayPillar.stem, altHourBranch);
+    altDstPillars = {
+      label: `서머타임·표준시 전환 대안 시각(${tzConv.alternatePeriod ? tzConv.alternatePeriod.label : '대안 오프셋'}) 기준`,
+      yearPillar: altTermState.yearPillar,
+      monthPillar: altTermState.monthPillar,
+      dayPillar: altDayPillar,
+      hourPillar: altHourPillar,
+      birthUtcMs: tzConv.alternateUtcMs
+    };
     boundaryNotes.push(`${tzConv.note} 대안 시각 적용 시 원국은 연주 ${altTermState.yearPillar.ganji}·월주 ${altTermState.monthPillar.ganji}·일주 ${formatPillar(altDayPillar)}·시주 ${formatPillar(altHourPillar)}입니다.`);
   } else if (tzConv.note) {
     boundaryNotes.push(tzConv.note);
@@ -1143,9 +1256,13 @@ function computeFourPillars({ solarYear, solarMonth, solarDay, timeKnown, hour =
     monthPillar: termState.monthPillar,
     dayPillar,
     hourPillar,
-    alt23Pillars: (cHour === 23) ? { dayPillar: alt23DayPillar, hourPillar: alt23HourPillar } : null,
+    alt23Pillars: (cHour === 23) ? { label: '23:00 일주 전환(정자시) 대안 기준', dayPillar: alt23DayPillar, hourPillar: alt23HourPillar } : null,
+    altRawLegalPillars: (rawDayPillar.idx60 !== dayPillar.idx60) ? { label: '경도 보정 미적용(법정 시계 00:00 자정) 대안 기준', dayPillar: rawDayPillar, hourPillar: rawHourPillar } : null,
+    altDstPillars,
+    altTermProximityPillars,
     dayMaster: dayPillar.stem,
     city,
+    hasExplicitCity,
     correctedTimeStr,
     correctedHM,
     legalToLmstDiffMin: Number(legalToLmstDiffMin.toFixed(2)),
@@ -1468,27 +1585,80 @@ function getActiveDaeunAtUtc(daeunProfile, targetStartUtcMs, targetEndUtcMs = ta
   };
 }
 
+// 원국 분석 (지장간 여기·중기·본기 비율, 월령 가중치 2.0, 일지 가중치 1.5, 득령 및 통근 여부 반영 억부 참고 지표)
 function analyzeNatalChart(saju, timeKnown) {
   const dm = saju.dayMaster;
-  const stems = [saju.yearPillar.stem, saju.monthPillar.stem];
-  const branches = [saju.yearPillar.branch, saju.monthPillar.branch, saju.dayPillar.branch];
+  const stemPositions = [
+    { stem: saju.yearPillar.stem, weight: 1.0, label: '연간' },
+    { stem: saju.monthPillar.stem, weight: 1.2, label: '월간' }
+  ];
+  const branchPositions = [
+    { branch: saju.yearPillar.branch, weight: 1.0, label: '연지' },
+    { branch: saju.monthPillar.branch, weight: 2.0, label: '월지(월령)' },
+    { branch: saju.dayPillar.branch, weight: 1.5, label: '일지' }
+  ];
   if (timeKnown && saju.hourPillar) {
-    stems.push(saju.hourPillar.stem);
-    branches.push(saju.hourPillar.branch);
+    stemPositions.push({ stem: saju.hourPillar.stem, weight: 1.0, label: '시간' });
+    branchPositions.push({ branch: saju.hourPillar.branch, weight: 1.0, label: '시지' });
   }
+
   const groupCounts = { 비겁: 1, 식상: 0, 재성: 0, 관성: 0, 인성: 0 };
-  for (const s of stems) groupCounts[getTenGod(dm, s).group]++;
-  for (const b of branches) groupCounts[getTenGod(dm, BRANCH_MAIN_STEM[b]).group]++;
+  const groupWeights = { 비겁: 0, 식상: 0, 재성: 0, 관성: 0, 인성: 0 };
+
+  for (const sp of stemPositions) {
+    const tg = getTenGod(dm, sp.stem);
+    groupCounts[tg.group]++;
+    groupWeights[tg.group] += sp.weight;
+  }
+
+  let rootWeight = 0;
+  for (const bp of branchPositions) {
+    const mainTg = getTenGod(dm, BRANCH_MAIN_STEM[bp.branch]);
+    groupCounts[mainTg.group]++;
+    const hiddenList = BRANCH_HIDDEN_STEMS[bp.branch] || [{ stem: BRANCH_MAIN_STEM[bp.branch], role: '본기', ratio: 1.0 }];
+    for (const h of hiddenList) {
+      const hTg = getTenGod(dm, h.stem);
+      const w = bp.weight * h.ratio;
+      groupWeights[hTg.group] += w;
+      if (hTg.group === '비겁' || hTg.group === '인성') {
+        rootWeight += w;
+      }
+    }
+  }
+
+  const monthMainGod = getTenGod(dm, BRANCH_MAIN_STEM[saju.monthPillar.branch]);
+  const isDeukRyeong = (monthMainGod.group === '비겁' || monthMainGod.group === '인성');
+  const hasRoot = (rootWeight >= 1.0);
+
+  const supportWeight = Number((groupWeights.비겁 + groupWeights.인성).toFixed(2));
+  const drainWeight = Number((groupWeights.식상 + groupWeights.재성 + groupWeights.관성).toFixed(2));
+  const totalWeight = supportWeight + drainWeight;
+  const supportRatio = totalWeight > 0 ? Number((supportWeight / totalWeight).toFixed(3)) : 0.5;
   const supportCount = groupCounts.비겁 + groupCounts.인성;
   const drainCount = groupCounts.식상 + groupCounts.재성 + groupCounts.관성;
+  const isSupportStrong = supportWeight >= drainWeight;
+
   return {
     dm,
     groupCounts,
+    groupWeights: {
+      비겁: Number(groupWeights.비겁.toFixed(2)),
+      식상: Number(groupWeights.식상.toFixed(2)),
+      재성: Number(groupWeights.재성.toFixed(2)),
+      관성: Number(groupWeights.관성.toFixed(2)),
+      인성: Number(groupWeights.인성.toFixed(2))
+    },
+    isDeukRyeong,
+    hasRoot,
+    rootWeight: Number(rootWeight.toFixed(2)),
+    supportWeight,
+    drainWeight,
+    supportRatio,
     supportCount,
     drainCount,
-    isSupportStrong: supportCount >= drainCount,
-    hasNatalSikSang: groupCounts.식상 > 0,
-    hasNatalWealth: groupCounts.재성 > 0
+    isSupportStrong,
+    hasNatalSikSang: groupWeights.식상 >= 0.3 || groupCounts.식상 > 0,
+    hasNatalWealth: groupWeights.재성 >= 0.3 || groupCounts.재성 > 0
   };
 }
 
@@ -1496,15 +1666,98 @@ function birthParamsTimeLabel(saju, timeKnown) {
   return timeKnown && saju.hourPillar ? formatPillar(saju.hourPillar) : '시간 모름(제외)';
 }
 
+// 발동한 규칙 ID(triggeredRuleIds)에서만 후보 설명문·유리 요소·주의 요소를 결정론적으로 생성 (점수·확률 숫자 비노출)
+function buildExplanationFromRuleIds(triggeredRuleIds, ctx) {
+  const {
+    dmKo, saju, iljin, iljinStemGod, iljinBranchGod,
+    seun, wolun, activeDaeun, daeunProfile, daeunState,
+    effectiveStrong, hasIljinSupport, hasDaeunSupport, hasStemHapWithDM, validSlots
+  } = ctx;
+
+  const pros = [];
+  const cautions = [];
+
+  for (const ruleId of triggeredRuleIds) {
+    if (ruleId === 'RULE-FAV-ILJIN-PYEONJAE' || ruleId === 'RULE-FAV-ILJIN-JEONGJAE') {
+      const wealthPart = `${iljinStemGod.group === '재성' ? `천간 ${iljinStemGod.code}` : ''}${iljinStemGod.group === '재성' && iljinBranchGod.group === '재성' ? '·' : ''}${iljinBranchGod.group === '재성' ? `지지 ${iljinBranchGod.code}` : ''}`;
+      pros.push(`[${ruleId}] 일진(${iljin.ganji})에 일간(${dmKo}) 기준 ${wealthPart} 기운이 들어와 재성(결실·목표 지향성 상징)이 활성화됩니다.`);
+    } else if (ruleId === 'RULE-FAV-SIKSANG-TO-WEALTH') {
+      pros.push(`[${ruleId}] 일진(${iljin.ganji})의 식상 기운이 원국·운에 자리한 재성 기운과 이어져 활동이 결실 방향으로 흐릅니다.`);
+    } else if (ruleId === 'RULE-FAV-SIKSANG-SAENGJAE') {
+      pros.push(`[${ruleId}] 원국·운(대운·세운·월운)과 일진 사이에 식상(${iljinStemGod.group === '식상' ? iljinStemGod.code : '식상'})과 재성이 연결되는 ‘식상생재(활동이 결실로 이어지는 상징 흐름)’ 구조가 형성됩니다.`);
+    } else if (ruleId === 'RULE-FAV-BALANCE-STRONG-DRAIN') {
+      pros.push(`[${ruleId}] 원국${activeDaeun ? '과 적용 대운' : ''}에서 일간을 돕는 생조 기운이 충분하여, 일진의 식상·재성 기운을 무리 없이 유통(설기 균형)할 수 있는 구조입니다.`);
+    } else if (ruleId === 'RULE-FAV-BALANCE-WEAK-SUPPORT') {
+      pros.push(`[${ruleId}] 일간을 생조(인성·비겁)하는 보완 기운이 ${hasIljinSupport ? '일진' : (hasDaeunSupport ? '적용 대운' : '세운·월운')}에서 뒷받침되어 재성 추구로 인한 기운 소모를 완충해 줍니다.`);
+    } else if (ruleId === 'RULE-FAV-NATAL-DAY-YUKHAP') {
+      pros.push(`[${ruleId}] 일진 지지(${BRANCHES[iljin.branch]})가 원국 일지(${BRANCHES[saju.dayPillar.branch]})와 육합 관계를 이루어 원국과의 정면 충돌(육충) 없이 유정하게 연결됩니다.`);
+    } else if (ruleId === 'RULE-FAV-NATAL-SAMHAP') {
+      pros.push(`[${ruleId}] 일진 지지(${BRANCHES[iljin.branch]})가 원국 지지와 삼합 반합 관계를 이루어 원국과의 정면 충돌(육충) 없이 조화롭게 연결됩니다.`);
+    } else if (ruleId === 'RULE-FAV-DAEUN-HARMONY' && activeDaeun) {
+      pros.push(`[${ruleId}] 적용 대운(${activeDaeun.ganji})의 지지와 일진 지지가 합(조화)을 이루어 대운의 흐름과 당일 일진이 부드럽게 맞물립니다.`);
+    } else if (ruleId === 'RULE-FAV-DAEUN-SYNERGY' && activeDaeun) {
+      pros.push(`[${ruleId}] 적용 대운(${activeDaeun.ganji})의 억부 보완 방향과 당일 일진(${iljin.ganji})의 식상·재성 흐름이 서로 호응합니다.`);
+    } else if (ruleId === 'RULE-FAV-SEUN-WOLUN-BRIDGE') {
+      pros.push(`[${ruleId}] 세운(${seun.ganji})·월운(${wolun.ganji})의 식상·재성 흐름이 당일 일진과 교차 호응하여 흐름을 뒷받침합니다.`);
+    } else if (ruleId === 'RULE-FAV-SLOT-SYNERGY' && validSlots.length > 0) {
+      pros.push(`[${ruleId}] 대한민국 내 구매 시간 후보 시진(${validSlots.map(s => `${s.label} ${s.ganji}`).join(', ')})이 원국·일진과 충(沖)하지 않고 조화·보완 기운을 더합니다.`);
+    } else if (ruleId === 'RULE-CAUT-HAP-DUALITY') {
+      cautions.push(`[${ruleId}] 합(合)의 양면성 안내: 일진에 합(${hasStemHapWithDM ? '천간합·' : ''}지지합)이 형성되어 조화·완충 작용을 기대할 수 있으나, 합이 곧바로 다른 오행으로 완전히 변하는 ‘합화(合化) 성립’을 뜻하지는 않으며 경우에 따라 기운이 묶이는(합거) 제약으로 작용할 수도 있습니다.`);
+    } else if (ruleId === 'RULE-CAUT-WEAK-WEALTH-BURDEN') {
+      cautions.push(`[${ruleId}] 기운 소모 주의: 원국 기준 설기·소모 기운이 다소 많은 편이므로, 일진의 강한 재성 기운이 일간에 부담(재다신약 경향)을 줄 수 있어 무리한 기대보다는 가벼운 오락으로 즐기는 것이 좋습니다.`);
+    } else if (ruleId === 'RULE-CAUT-DAEUN-CHUNG' && activeDaeun) {
+      cautions.push(`[${ruleId}] 대운·일진 충 주의: 원국 일지·월지와는 충돌하지 않으나 적용 대운(${activeDaeun.ganji}) 지지와 일진 지지가 충(沖) 관계여서 환경적 변동성이 함께 따를 수 있습니다.`);
+    } else if (ruleId === 'RULE-CAUT-SEUN-WOLUN-CHUNG') {
+      cautions.push(`[${ruleId}] 세운·월운과의 부분 충돌: 원국 일지·월지와는 충이 없으나, ${isYukChung(iljin.branch, seun.branch) ? `세운(${seun.ganji})` : `월운(${wolun.ganji})`} 지지와는 충 관계가 있어 외부 흐름의 작은 변동을 감안해야 합니다.`);
+    }
+  }
+
+  if (cautions.length === 0) {
+    cautions.push(`특이 충·극 없음: 원국 및 주요 운과 정면 충돌은 없으나, 명리학의 재성·식상생재는 상징적 조화를 뜻할 뿐 실제 금전적 횡재나 당첨 확률을 바꾸지 않습니다.`);
+  }
+
+  const summaryParts = [];
+  if (activeDaeun) {
+    summaryParts.push(`${activeDaeun.order}대운(${activeDaeun.ganji})과 ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
+  } else if (daeunProfile.enabled && daeunState.isPreDaeun) {
+    summaryParts.push(`대운 시작 전(첫 대운 시작 이전 구간) ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
+  } else {
+    summaryParts.push(`${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서(대운 미반영 간이 풀이),`);
+  }
+
+  if (triggeredRuleIds.includes('RULE-FAV-ILJIN-PYEONJAE')) {
+    summaryParts.push(`일진(${iljin.ganji})에 일간 ${dmKo} 기준 편재(유동적 재물 상징) 기운이 들어오고`);
+  } else if (triggeredRuleIds.includes('RULE-FAV-ILJIN-JEONGJAE')) {
+    summaryParts.push(`일진(${iljin.ganji})에 일간 ${dmKo} 기준 정재(안정적 결실 상징) 기운이 들어오고`);
+  } else {
+    summaryParts.push(`일진(${iljin.ganji})에 식상(활동·표현 기운)이 들어와 재성 흐름을 이어주며`);
+  }
+
+  const hasHarmonyRule = triggeredRuleIds.includes('RULE-FAV-NATAL-DAY-YUKHAP') || triggeredRuleIds.includes('RULE-FAV-NATAL-SAMHAP') || triggeredRuleIds.includes('RULE-FAV-DAEUN-HARMONY');
+  if (triggeredRuleIds.includes('RULE-FAV-SIKSANG-SAENGJAE') && hasHarmonyRule) {
+    summaryParts.push(`식상생재 흐름과 지지 합(조화)이 함께 갖춰져 태어난 날의 지지와 충(부딪힘) 없이 조화를 이루는 날입니다.`);
+  } else if (hasHarmonyRule) {
+    summaryParts.push(`원국·대운 지지와 합(조화)을 이루어 충(부딪힘) 없이 안정적인 균형을 이루는 날입니다.`);
+  } else if (triggeredRuleIds.includes('RULE-FAV-BALANCE-STRONG-DRAIN')) {
+    summaryParts.push(`원국과 운의 에너지를 식상과 재성 방향으로 무리 없이 순환시켜 주는 날입니다.`);
+  } else if (triggeredRuleIds.includes('RULE-FAV-BALANCE-WEAK-SUPPORT')) {
+    summaryParts.push(`일간을 돕는 인성·비겁 기운이 함께 뒷받침되어 기운의 소모를 덜어주는 날입니다.`);
+  } else {
+    summaryParts.push(`식상과 재성의 흐름이 연결되면서 원국과 충돌하지 않는 날입니다.`);
+  }
+
+  return { reason: summaryParts.join(' '), pros, cautions };
+}
+
 // ============================================================================
-// 6 & 7. 대상 날짜·시간 후보 평가 (대한민국 KST 기준, 시간대 내부 절입·대운 전환 제외, 시간 미상 불확실성 결과 제한)
+// 6 & 7. 대상 날짜·시간 후보 평가 (대한민국 KST 기준, 시간대 내부 절입·대운 전환 제외, 시간 미상·계산 방식 불확실성 결과 제한)
 // ============================================================================
 function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched, y, m, d, timeKnown, nowUtcMs) {
   const dateObj = new Date(Date.UTC(y, m - 1, d));
   const dow = dateObj.getUTCDay();
   const dateStr = toDateInputString(y, m, d);
 
-  // 대한민국 내 동행복권 공식 판매 시간: 매일 06:00~24:00 KST, 토요일은 06:00~20:00 KST 마감
+  // 대한민국 내 동행복권 공식 판매 시간: 매일 06:00~24:00 KST, 토요일은 06:00~20:00 KST 마감 (RULE-EXCL-PAST-OR-CLOSED)
   const salesOpenUtcMs  = Date.UTC(y, m - 1, d, 6, 0, 0) - 9 * 3600000;
   const salesCloseUtcMs = Date.UTC(y, m - 1, d, dow === 6 ? 20 : 24, 0, 0) - 9 * 3600000;
   const effectiveStartUtcMs = Math.max(salesOpenUtcMs, nowUtcMs);
@@ -1513,7 +1766,7 @@ function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched,
   // 대상 날짜의 일진은 KST(UTC+9) 자정(00:00) 기준 전환
   const iljin = getDayGanjiFromSolarYMD(y, m, d);
 
-  // 원국 일지 또는 월지와 정면 육충이면 제외
+  // 1순위 절대 제외 규칙: 원국 일지 또는 월지와 정면 육충이면 제외 (RULE-EXCL-DAY-CHUNG-NATAL-DAY / RULE-EXCL-DAY-CHUNG-NATAL-MONTH)
   if (isYukChung(iljin.branch, saju.dayPillar.branch)) return null;
   if (isYukChung(iljin.branch, saju.monthPillar.branch)) return null;
 
@@ -1572,7 +1825,7 @@ function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched,
   const fSikSangSaengJae = (hasIljinWealth && anySikSang) || (hasIljinSikSang && anyWealth);
 
   const effectiveStrong = activeDaeun
-    ? (natal.supportCount + (hasDaeunSupport ? 1.5 : 0) >= natal.drainCount + ((hasDaeunWealth || hasDaeunSikSang) ? 1.5 : 0))
+    ? (natal.supportWeight + (hasDaeunSupport ? 1.5 : 0) >= natal.drainWeight + ((hasDaeunWealth || hasDaeunSikSang) ? 1.5 : 0))
     : natal.isSupportStrong;
   const fBalance = effectiveStrong
     ? (hasIljinWealth || hasIljinSikSang)
@@ -1580,10 +1833,20 @@ function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched,
 
   const hasDayYukHap = isYukHap(iljin.branch, saju.dayPillar.branch);
   const hasDaySamHap = isSamHap(iljin.branch, saju.dayPillar.branch) || isSamHap(iljin.branch, saju.monthPillar.branch);
-  const hasDaeunHap = activeDaeun && (isYukHap(iljin.branch, activeDaeun.branch) || isSamHap(iljin.branch, activeDaeun.branch));
-  const hasDaeunChung = activeDaeun && isYukChung(iljin.branch, activeDaeun.branch);
+  const hasDaeunHap = Boolean(activeDaeun && (isYukHap(iljin.branch, activeDaeun.branch) || isSamHap(iljin.branch, activeDaeun.branch)));
+  const hasDaeunChung = Boolean(activeDaeun && isYukChung(iljin.branch, activeDaeun.branch));
+  const hasSeunWolunChung = isYukChung(iljin.branch, seun.branch) || isYukChung(iljin.branch, wolun.branch);
   const hasStemHapWithDM = isCheonGanHap(iljin.stem, dm);
   const fHarmony = (hasDayYukHap || hasDaySamHap || hasDaeunHap) && !hasDaeunChung;
+
+  // 재성·식상생재 부재 시 제외 (RULE-EXCL-NO-WEALTH-NOR-SIKSANG)
+  if (!fWealth && !fSikSangSaengJae) return null;
+
+  // 2순위 상충 우선 제외 규칙 (RULE-EXCL-SEVERE-DRAIN-CLASH):
+  // 설기·소모 우세(!effectiveStrong)이면서 일진 생조·원국 지지합 완충 없이 운(대운·세운·월운) 충까지 겹치는 경우 제외
+  if (!effectiveStrong && !hasIljinSupport && !hasDayYukHap && !hasDaySamHap && (hasDaeunChung || hasSeunWolunChung)) {
+    return null;
+  }
 
   const factors = [];
   if (fWealth) factors.push('wealth');
@@ -1591,27 +1854,8 @@ function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched,
   if (fBalance) factors.push('balance');
   if (fHarmony) factors.push('harmony');
 
-  if (!fWealth && !fSikSangSaengJae) return null;
+  // 핵심 4대 영역 중 2개 미만 충족 시 제외 (RULE-EXCL-INSUFFICIENT-FACTORS)
   if (factors.length < 2) return null;
-
-  let score = 0;
-  if (hasIljinPyeonJae) score += 24;
-  else if (hasIljinJeongJae) score += 20;
-  else if (fWealth) score += 14;
-
-  if (fSikSangSaengJae) score += 22;
-  if (fBalance) score += 20;
-  if (hasDayYukHap) score += 18;
-  else if (hasDaySamHap) score += 14;
-
-  if (activeDaeun) {
-    if (hasDaeunHap) score += 10;
-    if (effectiveStrong && (hasDaeunWealth || hasDaeunSikSang) && (hasIljinWealth || hasIljinSikSang)) score += 8;
-    if (!effectiveStrong && hasDaeunSupport && (hasIljinWealth || hasIljinSikSang)) score += 10;
-    if (hasDaeunChung) score -= 12;
-  }
-  if (hasSeunWolunWealth && hasIljinSikSang) score += 6;
-  if (hasSeunWolunSikSang && hasIljinWealth) score += 6;
 
   // 구매 시간 후보 평가 (Section 7):
   // - 대한민국 내 구매(KST, UTC+9) 기준 시진 배정
@@ -1672,75 +1916,92 @@ function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched,
         });
       }
     }
-    validSlots.sort((a, b) => b.slotScore - a.slotScore);
+    validSlots.sort((a, b) => b.slotScore - a.slotScore || a.startHour - b.startHour);
     validSlots = validSlots.slice(0, 2);
   }
 
-  const pros = [];
-  const cautions = [];
+  // 발동 규칙 ID(triggeredRuleIds) 기록 및 내부 가중치 산출 (점수는 내부 등급/정렬에만 사용하며 UI에는 노출하지 않음)
+  const triggeredRuleIds = [];
+  let score = 0;
 
-  if (hasIljinPyeonJae || hasIljinJeongJae) {
-    pros.push(`일진(${iljin.ganji})에 일간(${dmKo}) 기준 ${iljinStemGod.group === '재성' ? `천간 ${iljinStemGod.code}` : ''}${iljinStemGod.group === '재성' && iljinBranchGod.group === '재성' ? '·' : ''}${iljinBranchGod.group === '재성' ? `지지 ${iljinBranchGod.code}` : ''} 기운이 들어와 재성(결실·목표 지향성 상징)이 활성화됩니다.`);
+  if (hasIljinPyeonJae) {
+    triggeredRuleIds.push('RULE-FAV-ILJIN-PYEONJAE');
+    score += SAJU_RULES_TABLE['RULE-FAV-ILJIN-PYEONJAE'].weight;
+  } else if (hasIljinJeongJae) {
+    triggeredRuleIds.push('RULE-FAV-ILJIN-JEONGJAE');
+    score += SAJU_RULES_TABLE['RULE-FAV-ILJIN-JEONGJAE'].weight;
+  } else if (fWealth) {
+    triggeredRuleIds.push('RULE-FAV-SIKSANG-TO-WEALTH');
+    score += SAJU_RULES_TABLE['RULE-FAV-SIKSANG-TO-WEALTH'].weight;
   }
+
   if (fSikSangSaengJae) {
-    pros.push(`원국·운(대운·세운·월운)과 일진 사이에 식상(${iljinStemGod.group === '식상' ? iljinStemGod.code : '식상'})과 재성이 연결되는 ‘식상생재(활동이 결실로 이어지는 상징 흐름)’ 구조가 형성됩니다.`);
-  }
-  if (fBalance) {
-    pros.push(effectiveStrong
-      ? `원국${activeDaeun ? '과 적용 대운' : ''}에서 일간을 돕는 기운이 충분하여, 일진의 식상·재성 기운을 무리 없이 소화할 수 있는 균형 구조입니다.`
-      : `일간을 생조(인성·비겁)하는 보완 기운이 ${hasIljinSupport ? '일진' : (hasDaeunSupport ? '적용 대운' : '세운·월운')}에서 뒷받침되어 재성 추구로 인한 기운 소모를 완충해 줍니다.`);
-  }
-  if (hasDayYukHap || hasDaySamHap) {
-    pros.push(`일진 지지(${BRANCHES[iljin.branch]})가 원국 ${hasDayYukHap ? `일지(${BRANCHES[saju.dayPillar.branch]})와 육합` : '지지와 삼합'} 관계를 이루어 원국과의 정면 충돌(육충) 없이 유정하게 연결됩니다.`);
-  }
-  if (activeDaeun && hasDaeunHap) {
-    pros.push(`적용 대운(${activeDaeun.ganji})의 지지와 일진 지지가 합(조화)을 이루어 대운의 흐름과 당일 일진이 부드럽게 맞물립니다.`);
-  }
-  if (validSlots.length > 0) {
-    pros.push(`대한민국 내 구매 시간 후보 시진(${validSlots.map(s => `${s.label} ${s.ganji}`).join(', ')})이 원국·일진과 충(沖)하지 않고 조화·보완 기운을 더합니다.`);
+    triggeredRuleIds.push('RULE-FAV-SIKSANG-SAENGJAE');
+    score += SAJU_RULES_TABLE['RULE-FAV-SIKSANG-SAENGJAE'].weight;
   }
 
+  if (fBalance) {
+    if (effectiveStrong) {
+      triggeredRuleIds.push('RULE-FAV-BALANCE-STRONG-DRAIN');
+      score += SAJU_RULES_TABLE['RULE-FAV-BALANCE-STRONG-DRAIN'].weight;
+    } else {
+      triggeredRuleIds.push('RULE-FAV-BALANCE-WEAK-SUPPORT');
+      score += SAJU_RULES_TABLE['RULE-FAV-BALANCE-WEAK-SUPPORT'].weight;
+    }
+  }
+
+  if (hasDayYukHap && !hasDaeunChung) {
+    triggeredRuleIds.push('RULE-FAV-NATAL-DAY-YUKHAP');
+    score += SAJU_RULES_TABLE['RULE-FAV-NATAL-DAY-YUKHAP'].weight;
+  } else if (hasDaySamHap && !hasDaeunChung) {
+    triggeredRuleIds.push('RULE-FAV-NATAL-SAMHAP');
+    score += SAJU_RULES_TABLE['RULE-FAV-NATAL-SAMHAP'].weight;
+  }
+
+  if (activeDaeun) {
+    if (hasDaeunHap && !hasDaeunChung) {
+      triggeredRuleIds.push('RULE-FAV-DAEUN-HARMONY');
+      score += SAJU_RULES_TABLE['RULE-FAV-DAEUN-HARMONY'].weight;
+    }
+    if ((effectiveStrong && (hasDaeunWealth || hasDaeunSikSang) && (hasIljinWealth || hasIljinSikSang)) ||
+        (!effectiveStrong && hasDaeunSupport && (hasIljinWealth || hasIljinSikSang))) {
+      triggeredRuleIds.push('RULE-FAV-DAEUN-SYNERGY');
+      score += SAJU_RULES_TABLE['RULE-FAV-DAEUN-SYNERGY'].weight;
+    }
+  }
+
+  if ((hasSeunWolunWealth && hasIljinSikSang) || (hasSeunWolunSikSang && hasIljinWealth)) {
+    triggeredRuleIds.push('RULE-FAV-SEUN-WOLUN-BRIDGE');
+    score += SAJU_RULES_TABLE['RULE-FAV-SEUN-WOLUN-BRIDGE'].weight;
+  }
+
+  if (validSlots.length > 0) {
+    triggeredRuleIds.push('RULE-FAV-SLOT-SYNERGY');
+    score += SAJU_RULES_TABLE['RULE-FAV-SLOT-SYNERGY'].weight;
+  }
+
+  // 상충·주의 규칙(CAUT) 판정 및 우선순위 반영
   if (hasDayYukHap || hasDaySamHap || hasDaeunHap || hasStemHapWithDM) {
-    cautions.push(`합(合)의 양면성 안내: 일진에 합(${hasStemHapWithDM ? '천간합·' : ''}지지합)이 형성되어 조화·완충 작용을 기대할 수 있으나, 합이 곧바로 다른 오행으로 완전히 변하는 ‘합화(合化) 성립’을 뜻하지는 않으며 경우에 따라 기운이 묶이는(합거) 제약으로 작용할 수도 있습니다.`);
+    triggeredRuleIds.push('RULE-CAUT-HAP-DUALITY');
   }
   if (!effectiveStrong && hasIljinWealth && !hasIljinSupport) {
-    cautions.push(`기운 소모 주의: 원국 기준 설기·소모 기운이 다소 많은 편이므로, 일진의 강한 재성 기운이 일간에 부담(재다신약 경향)을 줄 수 있어 무리한 기대보다는 가벼운 오락으로 즐기는 것이 좋습니다.`);
+    triggeredRuleIds.push('RULE-CAUT-WEAK-WEALTH-BURDEN');
+    score += SAJU_RULES_TABLE['RULE-CAUT-WEAK-WEALTH-BURDEN'].weight;
   }
   if (activeDaeun && hasDaeunChung) {
-    cautions.push(`대운·일진 충 주의: 원국과는 충돌하지 않으나 적용 대운(${activeDaeun.ganji}) 지지와 일진 지지가 충(沖) 관계여서 환경적 변동성이 함께 따를 수 있습니다.`);
+    triggeredRuleIds.push('RULE-CAUT-DAEUN-CHUNG');
+    score += SAJU_RULES_TABLE['RULE-CAUT-DAEUN-CHUNG'].weight;
   }
-  if (isYukChung(iljin.branch, seun.branch) || isYukChung(iljin.branch, wolun.branch)) {
-    cautions.push(`세운·월운과의 부분 충돌: 원국 일지·월지와는 충이 없으나, ${isYukChung(iljin.branch, seun.branch) ? `세운(${seun.ganji})` : `월운(${wolun.ganji})`} 지지와는 충 관계가 있어 외부 흐름의 작은 변동을 감안해야 합니다.`);
-  }
-  if (cautions.length === 0) {
-    cautions.push(`특이 충·극 없음: 원국 및 주요 운과 정면 충돌은 없으나, 명리학의 재성·식상생재는 상징적 조화를 뜻할 뿐 실제 금전적 횡재나 당첨을 보장하지 않습니다.`);
+  if (hasSeunWolunChung) {
+    triggeredRuleIds.push('RULE-CAUT-SEUN-WOLUN-CHUNG');
+    score += SAJU_RULES_TABLE['RULE-CAUT-SEUN-WOLUN-CHUNG'].weight;
   }
 
-  const summaryParts = [];
-  if (activeDaeun) {
-    summaryParts.push(`${activeDaeun.order}대운(${activeDaeun.ganji})과 ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
-  } else if (daeunProfile.enabled && daeunState.isPreDaeun) {
-    summaryParts.push(`대운 시작 전(첫 대운 시작 이전 구간) ${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서,`);
-  } else {
-    summaryParts.push(`${seun.ganji} 세운·${wolun.ganji} 월운 흐름 속에서(대운 미반영 간이 풀이),`);
-  }
-  if (hasIljinPyeonJae || hasIljinJeongJae) {
-    const wType = hasIljinPyeonJae ? '편재(유동적 재물 상징)' : '정재(안정적 결실 상징)';
-    summaryParts.push(`일진(${iljin.ganji})에 일간 ${dmKo} 기준 ${wType} 기운이 들어오고`);
-  } else {
-    summaryParts.push(`일진(${iljin.ganji})에 식상(활동·표현 기운)이 들어와 재성 흐름을 이어주며`);
-  }
-  if (fSikSangSaengJae && fHarmony) {
-    summaryParts.push(`식상생재 흐름과 지지 합(조화)이 함께 갖춰져 태어난 날의 지지와 충(부딪힘) 없이 조화를 이루는 날입니다.`);
-  } else if (fHarmony) {
-    summaryParts.push(`원국·대운 지지와 합(조화)을 이루어 충(부딪힘) 없이 안정적인 균형을 이루는 날입니다.`);
-  } else if (fBalance) {
-    summaryParts.push(effectiveStrong
-      ? `원국과 운의 에너지를 식상과 재성 방향으로 무리 없이 순환시켜 주는 날입니다.`
-      : `일간을 돕는 인성·비겁 기운이 함께 뒷받침되어 기운의 소모를 덜어주는 날입니다.`);
-  } else {
-    summaryParts.push(`식상과 재성의 흐름이 연결되면서 원국과 충돌하지 않는 날입니다.`);
-  }
+  const { reason, pros, cautions } = buildExplanationFromRuleIds(triggeredRuleIds, {
+    dmKo, saju, iljin, iljinStemGod, iljinBranchGod,
+    seun, wolun, activeDaeun, daeunProfile, daeunState,
+    effectiveStrong, hasIljinSupport, hasDaeunSupport, hasStemHapWithDM, validSlots
+  });
 
   const uncertainties = [];
   if (saju.boundaryNote) uncertainties.push(saju.boundaryNote);
@@ -1773,6 +2034,8 @@ function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched,
   }
 
   const tier = (factors.length >= 3 && score >= 68) ? '날짜 후보' : '보조 후보';
+  const maxSlotScore = validSlots.length > 0 ? validSlots[0].slotScore : 0;
+
   return {
     dateStr,
     year: y,
@@ -1782,20 +2045,23 @@ function evaluateSingleScenarioDate(saju, natal, daeunProfile, singleDaeunSched,
     dayPillarStr: iljin.ganji,
     tier,
     score,
+    factorCount: factors.length,
+    maxSlotScore,
+    triggeredRuleIds,
     daeunModeLabel: daeunProfile.enabled ? '대운 반영 풀이' : '대운 미반영 간이 풀이',
     activeDaeunOrder: activeDaeun ? activeDaeun.order : null,
     activeDaeunGanji: activeDaeun ? activeDaeun.ganji : (daeunState.isPreDaeun ? '대운 시작 전' : null),
-    reason: summaryParts.join(' '),
+    reason,
     slots: validSlots,
     excludedSlotNotes,
     detail: {
       natalSummary: `연주 ${formatPillar(saju.yearPillar)} · 월주 ${formatPillar(saju.monthPillar)} · 일주 ${formatPillar(saju.dayPillar)} · 시주 ${birthParamsTimeLabel(saju, timeKnown)} (일간: ${dmKo})`,
-      natalStrengthNote: `간이 억부 분포(생조[인성·비겁] ${natal.supportCount} : 설기·소모[식상·재성·관성] ${natal.drainCount} → ${natal.isSupportStrong ? '생조 우세/신강 경향' : '소모 우세/신약 경향'}) — ※ 신강·신약과 용신은 억부·조후·격국 등 학파마다 판정 기준이 다르므로, 본 사이트는 원국 오행·십성 비중을 단순 비교한 억부 참고 지표만 보조적으로 활용하며 절대적 판정이 아닙니다.`,
+      natalStrengthNote: `월령(${natal.isDeukRyeong ? '득령' : '실령'}) · 지장간 통근(${natal.hasRoot ? '통근 확보' : '통근 미약'}) 반영 억부 참고 지표: ${natal.isSupportStrong ? '생조(인성·비겁) 우세 / 신강 참고 경향' : '설기·소모(식상·재성·관성) 우세 / 신약 참고 경향'} — ※ 신강·신약과 용신은 억부·조후·격국 등 학파마다 판정 기준이 다르므로, 본 사이트는 월령(2.0배)과 지장간(여기·중기·본기 비율)을 가중 합산한 억부 참고 지표만 보조적으로 활용하며 절대적 판정이 아닙니다.`,
       daeunSummary: daeunSummaryText,
       seunWolunIljinSummary: `세운 ${seun.ganji}[${seunStemGod.code}·${seunBranchGod.code}, 입춘 ${evalTermState.ipchunKstDisplay} KST 분 단위 표시 기준] · 월운 ${wolun.ganji}[${wolunStemGod.code}·${wolunBranchGod.code}, 12절 ‘${evalTermState.activeTerm.name}’ ${evalTermState.activeTerm.kstDisplayStr} KST 분 단위 표시 기준] · 일진 ${iljin.ganji}[${iljinStemGod.code}·${iljinBranchGod.code}, 대한민국 KST 00:00 자정 기준]`,
       pros,
       cautions,
-      ruleVersionText: `해석 규칙 ${SAJU_RULE_VERSION} · 번호 생성 규칙 ${NUM_GEN_VERSION} (Asia/Seoul IANA tzdb 2026e 역사적 시간대 UTC 변환 · .NET KoreanLunisolarCalendar KASI 대조 검증 음양력 · VSOP87D 12절 미반올림 반개구간 판정 및 분 단위 표시 · 출생 원국 지방평균태양시 및 본 사이트 채택 자시 규칙 · 전통 단위 분해 후 달력 가산 대운 · 대한민국 내 구매 KST 기준)`,
+      ruleVersionText: `계산 프로필 ${CALC_PROFILE_VERSION} · 번호 생성 ${NUM_GEN_VERSION} · 설명문 ${SAJU_INTERP_VERSION} / 발동 규칙 ID: ${triggeredRuleIds.join(', ')}`,
       uncertainties
     }
   };
@@ -1829,19 +2095,116 @@ function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) 
       );
       if (cand) list.push(cand);
     }
-    list.sort((a, b) => b.score - a.score || a.dateStr.localeCompare(b.dateStr));
+    // 동률 처리 규칙 (RULE-TIE-BREAKER):
+    // 1) 후보 등급('날짜 후보' > '보조 후보')
+    // 2) 규칙 가중치 합산값 내림차순
+    // 3) 충족 핵심 영역 수(factorCount) 내림차순
+    // 4) 유리 시간 후보 가중치(maxSlotScore) 내림차순
+    // 5) 빠른 구매 가능 날짜(dateStr) 오름차순
+    list.sort((a, b) => {
+      const tierA = a.tier === '날짜 후보' ? 1 : 0;
+      const tierB = b.tier === '날짜 후보' ? 1 : 0;
+      if (tierB !== tierA) return tierB - tierA;
+      if (b.score !== a.score) return b.score - a.score;
+      if (b.factorCount !== a.factorCount) return b.factorCount - a.factorCount;
+      if (b.maxSlotScore !== a.maxSlotScore) return b.maxSlotScore - a.maxSlotScore;
+      return a.dateStr.localeCompare(b.dateStr);
+    });
     return list.slice(0, 2);
   }
 
+  function formatCandListSummary(cands) {
+    if (!cands || cands.length === 0) return '조건 충족 후보 없음';
+    return cands.map(c => `${c.dateStr}(일진 ${c.dayPillarStr}, ${c.tier})`).join(', ');
+  }
+
+  function sigOf(cands) {
+    return cands.map(c => `${c.dateStr}:${c.tier}`).join('|');
+  }
+
   if (timeKnown) {
+    const primarySched = daeunProfile.enabled ? daeunProfile : null;
+    const primaryCands = runScenario(saju, primarySched);
+    const sigPrimary = sigOf(primaryCands);
+
+    // 출생 시간이 입력된 경우에도 계산 방식 차이(보정 후 00:00 vs 23:00 자시 전환, 경도 보정 적용 vs 미적용 법정 시계, 서머타임 중복·결손 시각, 절입 ±1분 경계)로 후보 날짜가 달라지는지 검증
+    const methodVariants = [];
+    if (saju.alt23Pillars) {
+      methodVariants.push({
+        label: saju.alt23Pillars.label,
+        sajuVar: { ...saju, dayPillar: saju.alt23Pillars.dayPillar, hourPillar: saju.alt23Pillars.hourPillar, dayMaster: saju.alt23Pillars.dayPillar.stem },
+        schedVar: primarySched
+      });
+    }
+    if (saju.altRawLegalPillars) {
+      methodVariants.push({
+        label: saju.altRawLegalPillars.label,
+        sajuVar: { ...saju, dayPillar: saju.altRawLegalPillars.dayPillar, hourPillar: saju.altRawLegalPillars.hourPillar, dayMaster: saju.altRawLegalPillars.dayPillar.stem },
+        schedVar: primarySched
+      });
+    }
+    if (saju.altDstPillars) {
+      const altDstSched = daeunProfile.enabled
+        ? computeSingleDaeunScheduleFromInstant(saju.altDstPillars.birthUtcMs, utcToLocalAsiaSeoul(saju.altDstPillars.birthUtcMs), daeunProfile.gender)
+        : null;
+      methodVariants.push({
+        label: saju.altDstPillars.label,
+        sajuVar: {
+          ...saju,
+          yearPillar: saju.altDstPillars.yearPillar,
+          monthPillar: saju.altDstPillars.monthPillar,
+          dayPillar: saju.altDstPillars.dayPillar,
+          hourPillar: saju.altDstPillars.hourPillar,
+          dayMaster: saju.altDstPillars.dayPillar.stem
+        },
+        schedVar: altDstSched
+      });
+    }
+    if (saju.altTermProximityPillars) {
+      const altTermSched = daeunProfile.enabled
+        ? computeSingleDaeunScheduleFromInstant(saju.altTermProximityPillars.birthUtcMs, utcToLocalAsiaSeoul(saju.altTermProximityPillars.birthUtcMs), daeunProfile.gender)
+        : null;
+      methodVariants.push({
+        label: saju.altTermProximityPillars.label,
+        sajuVar: {
+          ...saju,
+          yearPillar: saju.altTermProximityPillars.yearPillar,
+          monthPillar: saju.altTermProximityPillars.monthPillar
+        },
+        schedVar: altTermSched
+      });
+    }
+
+    const differingVariants = [];
+    for (const v of methodVariants) {
+      const vCands = runScenario(v.sajuVar, v.schedVar);
+      if (sigOf(vCands) !== sigPrimary) {
+        differingVariants.push({ label: v.label, cands: vCands, summary: formatCandListSummary(vCands) });
+      }
+    }
+
+    if (differingVariants.length > 0) {
+      const primaryDesc = formatCandListSummary(primaryCands);
+      const diffText = differingVariants.map(d => `${d.label}: [${d.summary}]`).join(' / ');
+      return {
+        restrictedByUncertainty: true,
+        restrictionReason: `입력하신 출생 시각이 명리 계산 방식 경계(자시 일주 전환 기준·경도 보정 자정 경계·서머타임 전환·절입 ±1분 경계)에 해당하여, 본 사이트 기본 기준 후보[${primaryDesc}]와 대안 계산 기준 후보(${diffText})가 서로 달라집니다. 본 사이트 규칙(출생 시간이나 계산 방식 차이로 후보 날짜가 달라지면 단일 후보를 임의로 확정하지 않음)에 따라 단일 후보를 임의 확정하지 않고 각 기준별 후보 비교와 불확실성을 함께 안내합니다.`,
+        candsPrimary: primaryCands,
+        differingVariants,
+        candidates: []
+      };
+    }
+
     return {
       restrictedByUncertainty: false,
       restrictionReason: null,
-      candidates: runScenario(saju, daeunProfile.enabled ? daeunProfile : null)
+      candidates: primaryCands
     };
   }
 
-  // 출생 시간 모름(Section 6): 당일 00:00:00 출생 가정(Early)과 23:59:59 출생 가정(Late)을 모두 실행해 후보 선정 결과가 달라지는지 검증
+  // 출생 시간 모름(Section 6):
+  // 1) 당일 절입 전후 원국 및 이른/늦은 시각 대운 시나리오
+  // 2) 경도 보정(지방평균태양시)에 따른 자정 직후(00:00~00:34 등) 전날 일주(altLmstDayPillar) 가능성 시나리오
   const sajuEarly = saju.altBeforeTerm
     ? { ...saju, yearPillar: saju.altBeforeTerm.yearPillar, monthPillar: saju.altBeforeTerm.monthPillar }
     : saju;
@@ -1852,20 +2215,43 @@ function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) 
   const candsEarly = runScenario(sajuEarly, schedEarly);
   const candsLate  = runScenario(sajuLate, schedLate);
 
-  const sigEarly = candsEarly.map(c => `${c.dateStr}:${c.tier}`).join('|');
-  const sigLate  = candsLate.map(c => `${c.dateStr}:${c.tier}`).join('|');
+  // 경도 보정 일주 변경 시나리오 (사용자가 '자정·야자시 경계 출생 아님'을 확인하지 않은 기본 시간 모름 상태일 때 검사)
+  let candsLmstAlt = null;
+  if (saju.altLmstDayPillar) {
+    const sajuLmstAlt = {
+      ...sajuEarly,
+      dayPillar: saju.altLmstDayPillar,
+      dayMaster: saju.altLmstDayPillar.stem
+    };
+    candsLmstAlt = runScenario(sajuLmstAlt, schedEarly);
+  }
 
-  if (sigEarly !== sigLate) {
-    const earlyDesc = candsEarly.length > 0 ? candsEarly.map(c => `${c.dateStr}(일진 ${c.dayPillarStr}, ${c.tier})`).join(', ') : '조건 충족 후보 없음';
-    const lateDesc  = candsLate.length > 0 ? candsLate.map(c => `${c.dateStr}(일진 ${c.dayPillarStr}, ${c.tier})`).join(', ') : '조건 충족 후보 없음';
-    const causeDesc = saju.termTransitionOnBirthDay
-      ? `출생일 당일 ‘${saju.altBeforeTerm.term.name}’ 절입(${saju.altBeforeTerm.term.kstDisplayStr} KST 분 단위 표시) 전후에 따라 원국(연주·월주)${daeunProfile.enabled ? ' 및 적용 대운' : ''}이 달라져`
-      : `출생 시간 미상에 따른 채택 환산법 대운 시작 가능 구간(약 4개월 폭) 내부에 조회 기간이 걸려 실제 출생 시각에 따라 적용 대운이 달라져`;
+  const sigEarly = sigOf(candsEarly);
+  const sigLate  = sigOf(candsLate);
+  const sigLmstAlt = candsLmstAlt !== null ? sigOf(candsLmstAlt) : sigLate;
+
+  if (sigEarly !== sigLate || sigLmstAlt !== sigLate) {
+    const earlyDesc = formatCandListSummary(candsEarly);
+    const lateDesc  = formatCandListSummary(candsLate);
+    const causes = [];
+    if (sigEarly !== sigLate) {
+      if (saju.termTransitionOnBirthDay) {
+        causes.push(`출생일 당일 ‘${saju.altBeforeTerm.term.name}’ 절입(${saju.altBeforeTerm.term.kstDisplayStr} KST 분 단위 표시) 전후에 따라 원국(연주·월주)${daeunProfile.enabled ? ' 및 대운' : ''}이 달라짐(절입 전 기준: [${earlyDesc}] vs 절입 후 기준: [${lateDesc}])`);
+      } else {
+        causes.push(`출생 시간 미상에 따른 대운 시작 가능 구간(약 4개월 폭) 내부에 조회 기간이 걸려 실제 출생 시각에 따라 적용 대운이 달라짐(이른 시각 기준: [${earlyDesc}] vs 늦은 시각 기준: [${lateDesc}])`);
+      }
+    }
+    if (sigLmstAlt !== sigLate && saju.altLmstDayPillar) {
+      const lmstAltDesc = formatCandListSummary(candsLmstAlt);
+      causes.push(`출생일 법정 시각 ${saju.lmstTransitionWindowLabel} 출생 시 지방평균태양시 경도 보정에 따라 일주가 전날 일주(${saju.altLmstDayPillar.ganji}, 후보: [${lmstAltDesc}])로 바뀌어 당일 주간 일주(${saju.dayPillar.ganji}, 후보: [${lateDesc}])와 후보 날짜가 달라짐`);
+    }
+
     return {
       restrictedByUncertainty: true,
-      restrictionReason: `‘출생 시간 모름’ 상태에서 ${causeDesc}, 당일 이른 시각(00:00경) 출생 기준 후보[${earlyDesc}]와 늦은 시각(23:59경) 출생 기준 후보[${lateDesc}]의 선정 결과가 서로 달라집니다. 본 사이트 규칙(불확실성이 후보 선정 결과를 바꾸면 단일 후보를 확정하지 않음)에 따라 임의로 단일 후보를 확정하지 않고 결과를 제한합니다. 정확한 출생 시간을 입력하시거나 대운 전환 구간 이후의 기간을 조회해 주세요.`,
+      restrictionReason: `‘출생 시간 모름’ 상태에서 당일 범위를 검토한 결과, ${causes.join(' 또한 ')}이 확인되었습니다. 본 사이트 규칙(출생 시간이나 계산 방식 차이로 후보 날짜가 달라지면 단일 후보를 임의로 확정하지 않음)에 따라 단일 후보를 임의 확정하지 않고 불확실성을 안내합니다. 정확한 출생 시간을 입력하시거나, 자정·야자시 경계(00:00~01:35 · 23:00~24:00) 출생이 아님을 아시는 경우 ‘자정·야자시 경계 출생 아님’ 옵션을 선택해 다시 확인해 주세요.`,
       candsEarly,
       candsLate,
+      candsLmstAlt,
       candidates: []
     };
   }
@@ -1878,7 +2264,7 @@ function findCandidatesInRange(saju, daeunProfile, timeKnown, startStr, endStr) 
 }
 
 // ============================================================================
-// 번호 생성기 (1. 무작위 추천 / 2. 나의 날짜로 만든 결정론적 번호)
+// 번호 생성기 (1. 무작위 추천 / 2. 나의 날짜로 만든 결정론적 번호 - LOTTO-NUM-GEN-v1.2)
 // ============================================================================
 // 나머지 연산 편향을 피하는 균등 난수 생성.
 function randomInt(max) {
@@ -1901,7 +2287,7 @@ function color(number) {
   return number <= 10 ? 'yellow' : number <= 20 ? 'blue' : number <= 30 ? 'red' : number <= 40 ? 'gray' : 'green';
 }
 
-// 순수 JS SHA-256 (file://, https://, 모든 기기·시점에서 동일한 바이트 출력 보장)
+// 순수 JS SHA-256 (UTF-8 인코딩 입력에 대해 모든 기기·시점에서 동일한 32비트 빅엔디언 워드 배열 반환)
 function sha256Words(asciiStr) {
   const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
   const K = [
@@ -1948,53 +2334,67 @@ function sha256Words(asciiStr) {
   return H.map(w => w >>> 0);
 }
 
-// 정규화된 개인화 번호 시드 (파생값인 대운·세운 간지는 중복 삽입하지 않고 정규화 입력값과 규칙 버전만 포함)
-function normalizePersonalSeed({ solarYear, solarMonth, solarDay, calType, isLeapMonth, timeKnown, hour, minute, cityCode, gender, selectedDate, selectedSlotCode }) {
+// 정규화된 개인화 번호 시드 (LOTTO-NUM-GEN-v1.2):
+// - 양력·음력 동일 출생 정보 시 동일한 번호가 생성되도록 원래의 양력/음력 구분(calType) 및 윤달 여부(isLeapMonth) 제외
+// - 문구 수정만으로 번호가 바뀌지 않도록 해석 설명문 버전(SAJU_INTERP_VERSION) 및 파생 간지 값 제외
+// - 고정 필드 순서·형식·빈 값 토큰(UNKNOWN / NONE)·UTF-8 직렬화
+function normalizePersonalSeed({ solarYear, solarMonth, solarDay, timeKnown, hour, minute, cityCode, gender, selectedDate, selectedSlotCode }) {
   const yStr = String(solarYear).padStart(4, '0');
   const mStr = String(solarMonth).padStart(2, '0');
   const dStr = String(solarDay).padStart(2, '0');
-  const calStr = calType === 'lunar' ? (isLeapMonth ? 'lunar-leap' : 'lunar-normal') : 'solar';
   const timeStr = timeKnown ? `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}` : 'UNKNOWN';
-  const cityStr = cityCode || 'NONE';
+  const cityStr = (cityCode && CITIES[cityCode]) ? cityCode : 'NONE';
   const genderStr = (gender === 'M' || gender === 'F') ? gender : 'NONE';
-  const slotStr = selectedSlotCode || 'ANY';
-  return `v=${NUM_GEN_VERSION}|solar=${yStr}-${mStr}-${dStr}|cal=${calStr}|time=${timeStr}|city=${cityStr}|gender=${genderStr}|date=${selectedDate}|slot=${slotStr}`;
+  const slotStr = (selectedSlotCode && selectedSlotCode !== 'ANY') ? selectedSlotCode : 'NONE';
+  return `calc=${CALC_PROFILE_VERSION}|gen=${NUM_GEN_VERSION}|solar=${yStr}-${mStr}-${dStr}|time=${timeStr}|city=${cityStr}|gender=${genderStr}|date=${selectedDate}|slot=${slotStr}`;
 }
 
-function generateDeterministicSetsFromSeed(canonicalSeed) {
+function createDeterministicStream(domainPrefix) {
   let counter = 0;
   let poolWords = [];
   function nextUint32() {
     if (poolWords.length === 0) {
-      poolWords = sha256Words(canonicalSeed + '|ctr=' + (counter++));
+      poolWords = sha256Words(`${domainPrefix}|ctr=${counter++}`);
     }
     return poolWords.shift();
   }
-  function randIntDet(max) {
+  function randInt(max) {
     const range = 4294967296;
     const limit = range - (range % max);
     let val;
     do { val = nextUint32(); } while (val >= limit);
     return val % max;
   }
+  return { nextUint32, randInt };
+}
+
+// 세트별 독립 스트림(|stream=main|set=k|retry=r|ctr=c) 및 보너스번호 전용 스트림(|stream=bonus|set=k|ctr=c) 분리 추출
+function generateDeterministicSetsFromSeed(canonicalSeed) {
   const sets = [];
   const seen = new Set();
-  while (sets.length < 5) {
-    const pool = Array.from({ length: 45 }, (_, i) => i + 1);
-    for (let i = 0; i < 6; i++) {
-      const j = i + randIntDet(45 - i);
-      [pool[i], pool[j]] = [pool[j], pool[i]];
-    }
-    const picked = pool.slice(0, 6).sort((a, b) => a - b);
-    const key = picked.join(',');
-    if (!seen.has(key)) {
-      seen.add(key);
-      sets.push(picked);
+  for (let setIdx = 0; setIdx < 5; setIdx++) {
+    let attempt = 0;
+    while (true) {
+      const rng = createDeterministicStream(`${canonicalSeed}|stream=main|set=${setIdx}|retry=${attempt}`);
+      const pool = Array.from({ length: 45 }, (_, i) => i + 1);
+      for (let i = 0; i < 6; i++) {
+        const j = i + rng.randInt(45 - i);
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      const picked = pool.slice(0, 6).sort((a, b) => a - b);
+      const key = picked.join(',');
+      if (!seen.has(key)) {
+        seen.add(key);
+        sets.push(picked);
+        break;
+      }
+      attempt++;
     }
   }
-  const bonuses = sets.map(numbers => {
+  const bonuses = sets.map((numbers, setIdx) => {
+    const bonusRng = createDeterministicStream(`${canonicalSeed}|stream=bonus|set=${setIdx}`);
     const remaining = Array.from({ length: 45 }, (_, i) => i + 1).filter(n => !numbers.includes(n));
-    return remaining[randIntDet(remaining.length)];
+    return remaining[bonusRng.randInt(remaining.length)];
   });
   return { sets, bonuses };
 }
@@ -2040,9 +2440,9 @@ function generatePersonalSets(birthParams, selectedDate, selectedSlotCode, selec
   bonusNumbers = bonuses;
   setModeUI('personal', {
     selectedDate,
-    selectedSlotCode: selectedSlotCode || '',
+    selectedSlotCode: selectedSlotCode || 'NONE',
     selectedSlotLabel: selectedSlotLabel || '시간대 미지정',
-    ruleVersion: `${SAJU_RULE_VERSION} / ${NUM_GEN_VERSION}`
+    ruleVersion: `${CALC_PROFILE_VERSION} / ${NUM_GEN_VERSION}`
   });
   renderSets();
   balls.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2213,6 +2613,8 @@ const genderMaleRadio = document.getElementById('gender-male');
 const genderFemaleRadio = document.getElementById('gender-female');
 const timeInput = document.getElementById('birth-time');
 const timeUnknownCheckbox = document.getElementById('time-unknown');
+const timeUnknownNonMidnightWrap = document.getElementById('time-unknown-non-midnight-wrap');
+const timeUnknownNonMidnightCheckbox = document.getElementById('time-unknown-non-midnight');
 const rememberBirthCheckbox = document.getElementById('remember-birth');
 const clearSavedBirthBtn = document.getElementById('clear-saved-birth');
 const sajuErrorEl = document.getElementById('saju-error');
@@ -2243,10 +2645,17 @@ function syncCalendarTypeUI() {
 calSolarRadio.addEventListener('change', syncCalendarTypeUI);
 calLunarRadio.addEventListener('change', syncCalendarTypeUI);
 
-timeUnknownCheckbox.addEventListener('change', () => {
+function syncTimeUnknownUI() {
   timeInput.disabled = timeUnknownCheckbox.checked;
-  if (timeUnknownCheckbox.checked) timeInput.value = '';
-});
+  if (timeUnknownCheckbox.checked) {
+    timeInput.value = '';
+    if (timeUnknownNonMidnightWrap) timeUnknownNonMidnightWrap.style.display = 'inline-flex';
+  } else {
+    if (timeUnknownNonMidnightWrap) timeUnknownNonMidnightWrap.style.display = 'none';
+    if (timeUnknownNonMidnightCheckbox) timeUnknownNonMidnightCheckbox.checked = false;
+  }
+}
+timeUnknownCheckbox.addEventListener('change', syncTimeUnknownUI);
 
 function showSajuError(msg) {
   if (!msg) {
@@ -2282,7 +2691,10 @@ function loadSavedBirthInfoIfOptedIn() {
     syncCalendarTypeUI();
     setSelectedGender(saved.gender || 'NONE');
     timeUnknownCheckbox.checked = Boolean(saved.timeKnown === false);
-    timeInput.disabled = timeUnknownCheckbox.checked;
+    if (timeUnknownNonMidnightCheckbox) {
+      timeUnknownNonMidnightCheckbox.checked = Boolean(saved.timeKnown === false && saved.timeUnknownNonMidnight);
+    }
+    syncTimeUnknownUI();
     timeInput.value = saved.timeKnown ? (saved.timeStr || '') : '';
     document.getElementById('birth-city').value = saved.cityCode || '';
     rememberBirthCheckbox.checked = true;
@@ -2306,7 +2718,8 @@ clearSavedBirthBtn.addEventListener('click', () => {
   syncCalendarTypeUI();
   setSelectedGender('NONE');
   timeUnknownCheckbox.checked = false;
-  timeInput.disabled = false;
+  if (timeUnknownNonMidnightCheckbox) timeUnknownNonMidnightCheckbox.checked = false;
+  syncTimeUnknownUI();
   timeInput.value = '';
   document.getElementById('birth-city').value = '';
   rememberBirthCheckbox.checked = false;
@@ -2325,6 +2738,7 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
   const isLeapMonth = calLunarRadio.checked && isLeapMonthCheckbox.checked;
   const gender = getSelectedGender();
   const timeKnown = !timeUnknownCheckbox.checked;
+  const timeUnknownNonMidnight = Boolean(!timeKnown && timeUnknownNonMidnightCheckbox && timeUnknownNonMidnightCheckbox.checked);
   const timeVal = timeInput.value.trim();
   const cityCode = document.getElementById('birth-city').value;
   const rangeStart = document.getElementById('range-start').value;
@@ -2423,6 +2837,7 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
         isLeapMonth,
         gender,
         timeKnown,
+        timeUnknownNonMidnight,
         timeStr: timeKnown ? timeVal : '',
         cityCode
       }));
@@ -2433,7 +2848,7 @@ document.getElementById('saju-form').addEventListener('submit', (e) => {
     }
   } catch {}
 
-  const birthParams = { solarYear, solarMonth, solarDay, calType, isLeapMonth, gender, timeKnown, hour, minute, cityCode };
+  const birthParams = { solarYear, solarMonth, solarDay, calType, isLeapMonth, gender, timeKnown, timeUnknownNonMidnight, hour, minute, cityCode };
   const saju = computeFourPillars(birthParams);
   const daeunProfile = computeDaeunProfile({
     solarYear,
@@ -2457,16 +2872,21 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
   const topLine = document.createElement('div');
   const cityInfo = birthParams.timeKnown
     ? `출생 당시 법정 시각(${saju.tzPeriod.label}) → UTC 변환 후 ${saju.city.name}(동경 ${saju.city.lon}°, 현대 KST 대비 표시 ${saju.displayKstOffsetMin}분) 지방평균태양시 ${saju.correctedHM} 적용`
-    : '출생 시간 모름 선택 (정오 미확정 · 당일 00:00~23:59 전체 범위 검토 · 시주 및 구매 시간 후보 제외)';
+    : (birthParams.timeUnknownNonMidnight
+        ? '출생 시간 모름(자정·야자시 경계 출생 아님 확인 · 당일 주간 일주 적용 · 시주 및 구매 시간 후보 제외)'
+        : '출생 시간 모름 선택 (정오 미확정 · 당일 00:00~23:59 절입 및 경도 보정 일주 변경 가능성 전체 검토 · 시주 및 구매 시간 후보 제외)');
   const genderInfo = birthParams.gender === 'M' ? '남성 (대운 반영)' : (birthParams.gender === 'F' ? '여성 (대운 반영)' : '성별 미입력 (대운 미반영 간이 풀이)');
   topLine.innerHTML = `<strong>만세력 원국 및 대운 요약</strong> · <span>${convertedDesc}</span> · <span>${genderInfo}</span><br><span style="font-size:12px;color:#717b91">${cityInfo}</span>`;
   pillarsSummaryEl.appendChild(topLine);
 
   const grid = document.createElement('div');
   grid.className = 'pillars-grid';
+  const dayValStr = saju.altLmstDayPillar
+    ? `${saju.altLmstDayPillar.ganji} / ${formatPillar(saju.dayPillar)}`
+    : formatPillar(saju.dayPillar);
   const items = [
     { title: '시주(時柱)', val: birthParams.timeKnown ? formatPillar(saju.hourPillar) : '시간 모름(제외)' },
-    { title: '일주(日柱 · 본원)', val: formatPillar(saju.dayPillar) },
+    { title: '일주(日柱 · 본원)', val: dayValStr },
     { title: '월주(月柱 · 12절)', val: saju.altBeforeTerm ? `${saju.altBeforeTerm.monthPillar.ganji} / ${formatPillar(saju.monthPillar)}` : formatPillar(saju.monthPillar) },
     { title: '연주(年柱 · 입춘)', val: (saju.altBeforeTerm && saju.altBeforeTerm.yearPillar.ganji !== formatPillar(saju.yearPillar)) ? `${saju.altBeforeTerm.yearPillar.ganji} / ${formatPillar(saju.yearPillar)}` : formatPillar(saju.yearPillar) }
   ];
@@ -2540,7 +2960,7 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
     const restrictBox = document.createElement('div');
     restrictBox.className = 'boundary-alert';
     restrictBox.style.padding = '16px';
-    restrictBox.innerHTML = `<strong>⚠️ 출생 시간 불확실성에 따른 결과 제한 안내 (단일 후보 미확정)</strong><br><div style="margin-top:6px">${candidateResult.restrictionReason}</div>`;
+    restrictBox.innerHTML = `<strong>⚠️ 출생 시간·계산 방식 불확실성에 따른 결과 제한 안내 (단일 후보 미확정)</strong><br><div style="margin-top:6px">${candidateResult.restrictionReason}</div>`;
     candidatesContainerEl.appendChild(restrictBox);
     return;
   }
@@ -2590,7 +3010,7 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
     if (!birthParams.timeKnown) {
       slotBox.textContent = '구매 시간대 후보: ‘출생 시간 모름’ 선택으로 시주와 구매 시간 후보를 제공하지 않습니다.';
     } else if (cand.slots.length === 0) {
-      slotBox.innerHTML = `<strong>구매 시간대 후보 (대한민국 내 구매 · KST 기준):</strong> 이 날짜에는 두드러진 특정 시간대 후보가 없습니다. 동행복권 판매 가능 시간 내 편한 시간대에 이용해 보세요.${excludedNoteHtml}<div class="slot-meta">구매 지역 및 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 대상 일진 KST 자정 전환 및 시진 KST 배정 · 동행복권 공식 판매 시간 반영).</div>`;
+      slotBox.innerHTML = `<strong>구매 시간대 후보 (대한민국 내 구매 · KST 기준):</strong> 이 날짜에는 두드러진 특정 시간대 후보가 없습니다. 동행복권 판매 가능 시간 내 편한 시간대에 이용해 보세요.${excludedNoteHtml}<div class="slot-meta">구매 지역 및 판매 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 동행복권 공식 판매 시간[매일 06:00~24:00 KST, 토요일 20:00 마감, 일요일 06:00 재개] 반영 · 개별 복권 판매점의 실제 영업시간은 매장마다 다를 수 있음).</div>`;
     } else {
       const slotTitle = document.createElement('div');
       slotTitle.innerHTML = '<strong>구매 시간대 후보 (대한민국 내 구매 · KST 2시간 시진 기준):</strong>';
@@ -2611,7 +3031,7 @@ function renderSajuResult(saju, daeunProfile, birthParams, convertedDesc, rangeS
 
       const meta = document.createElement('div');
       meta.className = 'slot-meta';
-      meta.innerHTML = `${excludedNoteHtml ? excludedNoteHtml + '<br>' : ''}구매 지역 및 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 대상 일진 KST 자정 전환 및 시진 KST 배정 · 시간대 내부 절입/대운 전환 구간 및 지난 시간·판매 마감 제외).`;
+      meta.innerHTML = `${excludedNoteHtml ? excludedNoteHtml + '<br>' : ''}구매 지역 및 판매 시간 기준: 현재 버전은 대한민국 내 구매만 지원하며 한국표준시(KST, UTC+9)로 표시합니다(출생지를 구매 지역으로 자동 간주하지 않음 · 동행복권 공식 판매 시간[매일 06:00~24:00 KST, 토요일 20:00 마감, 일요일 06:00 재개] 반영 · 개별 복권 판매점의 실제 영업시간은 매장마다 다를 수 있음 · 시간대 내부 절입/대운 전환 구간 제외).`;
       slotBox.append(slotTitle, slotList, meta);
     }
 
