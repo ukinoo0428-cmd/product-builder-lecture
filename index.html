@@ -3444,7 +3444,7 @@ function renderRecordList() {
       '제' + draw.round + '회 당첨 번호(' + draw.numbers.join(', ') + ' + 보너스 ' + draw.bonus + ') 대조: ' +
       indices.map(i => setName(i) + '세트 (' + (rec.purchased?.[i] ? '구매 표시한 번호' : '추천 번호 대조') +
         '): ' + evaluateSetMatch(rec.sets[i], draw)).join(' / ');
-    card.append(top, setsBox, checkBox, makeEntryView(rec.sets, indices, rec.selectedDate));
+    card.append(top, setsBox, checkBox);
     listEl.appendChild(card);
   }
   if (!visible) {
